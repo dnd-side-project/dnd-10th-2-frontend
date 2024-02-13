@@ -8,7 +8,7 @@ export const typo = {
     font-size: ${calcRem(46)};
     font-weight: 300;
     line-height: ${calcRem(52)};
-    letter-spacing: -0.6px
+    letter-spacing: -0.6px;
   `,
   T2: css`
     font-family: 'Pretendard', 'Apple SD Gothic Neo';
@@ -24,116 +24,116 @@ export const typo = {
     line-height: ${calcRem(30)};
     letter-spacing: -0.6px;
   `,
-   T4: css`
+  T4: css`
     font-family: 'Pretendard', 'Apple SD Gothic Neo';
     font-size: ${calcRem(20)};
     font-weight: 600;
     line-height: ${calcRem(28)};
     letter-spacing: -0.6px;
   `,
-   T5: css`
+  T5: css`
     font-family: 'Pretendard', 'Apple SD Gothic Neo';
     font-size: ${calcRem(18)};
     font-weight: 600;
     line-height: ${calcRem(24)};
     letter-spacing: -0.6px;
   `,
-   T6: css`
+  T6: css`
     font-family: 'Pretendard', 'Apple SD Gothic Neo';
     font-size: ${calcRem(18)};
     font-weight: 500;
     line-height: ${calcRem(28)};
     letter-spacing: -0.6px;
   `,
-   T7: css`
+  T7: css`
     font-family: 'Pretendard', 'Apple SD Gothic Neo';
     font-size: ${calcRem(16)};
     font-weight: 600;
     line-height: ${calcRem(28)};
     letter-spacing: -0.6px;
   `,
-   L: css`
+  L: css`
     font-family: 'Pretendard', 'Apple SD Gothic Neo';
     font-size: ${calcRem(18)};
     font-weight: 700;
     line-height: ${calcRem(28)};
     letter-spacing: -0.6px;
   `,
-   M1: css`
+  M1: css`
     font-family: 'Pretendard', 'Apple SD Gothic Neo';
     font-size: ${calcRem(16)};
     font-weight: 700;
     line-height: ${calcRem(24)};
     letter-spacing: -0.6px;
   `,
-   M2: css`
+  M2: css`
     font-family: 'Pretendard', 'Apple SD Gothic Neo';
     font-size: ${calcRem(14)};
     font-weight: 500;
     line-height: ${calcRem(28)};
     letter-spacing: -0.6px;
   `,
-   S: css`
+  S: css`
     font-family: 'Pretendard', 'Apple SD Gothic Neo';
     font-size: ${calcRem(12)};
     font-weight: 500;
     line-height: ${calcRem(18)};
     letter-spacing: -0.6px;
   `,
-   B1: css`
+  B1: css`
     font-family: 'Pretendard', 'Apple SD Gothic Neo';
     font-size: ${calcRem(16)};
     font-weight: 500;
     line-height: ${calcRem(20)};
     letter-spacing: -0.6px;
   `,
-   B2: css`
+  B2: css`
     font-family: 'Pretendard', 'Apple SD Gothic Neo';
     font-size: ${calcRem(14)};
     font-weight: 600;
     line-height: ${calcRem(18)};
     letter-spacing: -0.6px;
   `,
-   B3: css`
+  B3: css`
     font-family: 'Pretendard', 'Apple SD Gothic Neo';
     font-size: ${calcRem(14)};
     font-weight: 500;
     line-height: ${calcRem(20)};
     letter-spacing: -0.6px;
   `,
-   B4: css`
+  B4: css`
     font-family: 'Pretendard', 'Apple SD Gothic Neo';
     font-size: ${calcRem(14)};
     font-weight: 400;
     line-height: ${calcRem(18)};
     letter-spacing: -0.6px;
   `,
-   B5: css`
+  B5: css`
     font-family: 'Pretendard', 'Apple SD Gothic Neo';
     font-size: ${calcRem(13)};
     font-weight: 600;
     line-height: ${calcRem(18)};
     letter-spacing: -0.6px;
   `,
-   B6: css`
+  B6: css`
     font-family: 'Pretendard', 'Apple SD Gothic Neo';
     font-size: ${calcRem(12)};
     font-weight: 400;
     line-height: ${calcRem(14)};
     letter-spacing: -0.6px;
   `,
-   B7: css`
+  B7: css`
     font-family: 'Pretendard', 'Apple SD Gothic Neo';
     font-size: ${calcRem(12)};
     font-weight: 400;
     line-height: ${calcRem(20)};
     letter-spacing: -0.6px;
   `,
-   B8: css`
+  B8: css`
     font-family: 'Pretendard', 'Apple SD Gothic Neo';
     font-size: ${calcRem(11)};
     font-weight: 400;
     line-height: ${calcRem(14)};
     letter-spacing: -0.6px;
-  `,
+  `
 } as const;

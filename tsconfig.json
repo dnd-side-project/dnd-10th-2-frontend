@@ -20,6 +20,8 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
+    "esModuleInterop": true,
+
     /* Alias */
     "baseUrl": "./src",
     "paths": {
