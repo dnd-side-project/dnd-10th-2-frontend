@@ -62,7 +62,7 @@ const Chip = styled(Flex)`
   padding: 10px;
   border-radius: 8px;
 
-  position: fixed;
+  position: absolute;
   top: 79px;
 `;
 

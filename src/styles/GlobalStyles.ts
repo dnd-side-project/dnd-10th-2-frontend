@@ -4,13 +4,18 @@ import emotionReset from 'emotion-reset';
 export const GlobalStyle = css`
   ${emotionReset}
   body {
+    height: 100%;
     min-height: 100vh;
     @supports (-webkit-appearance: none) and (stroke-color: transparent) {
       min-height: -webkit-fill-available;
       scroll: smooth;
     }
+
     font-family: 'Pretendard';
+    background-color: gray;
+    overflow-x: hidden;
   }
+
   button {
     background: inherit;
     border: none;
