@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RecoilRoot } from 'recoil';
-import App from './App.tsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import Layout from './components/Layout';
 import { GlobalStyle } from './styles/GlobalStyles';
 import { Global, ThemeProvider } from '@emotion/react';
 import { theme } from './styles/theme';
+import { Routers } from '@/routes/index.tsx';
+import { Layout } from '@/components/layout';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -25,7 +25,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Global styles={GlobalStyle} />
         <ThemeProvider theme={theme}>
           <Layout>
-            <App />
+            <Routers />
           </Layout>
         </ThemeProvider>
       </RecoilRoot>

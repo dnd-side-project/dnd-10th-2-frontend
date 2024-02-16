@@ -27,6 +27,7 @@ module.exports = {
     ],
     'react/react-in-jsx-scope': 'off',
     'import/no-unresolved': 'off',
+    'import/named': 'off',
     'prettier/prettier': [
       'error',
       {

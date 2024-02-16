@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
-import { Flex } from './Wrapper';
+import { Flex } from '../Wrapper';
 import { ReactNode } from 'react';
 
-const Layout = ({ children }: { children: ReactNode }) => {
+export const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <Flex>
       {/* Header */}
@@ -10,7 +10,6 @@ const Layout = ({ children }: { children: ReactNode }) => {
     </Flex>
   );
 };
-export default Layout;
 
 const Wrapper = styled(Flex)`
   width: 375px;
