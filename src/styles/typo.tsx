@@ -111,8 +111,8 @@ export const typo = {
   B5: css`
     font-family: 'Pretendard', 'Apple SD Gothic Neo';
     font-size: ${calcRem(13)};
-    font-weight: 600;
-    line-height: ${calcRem(18)};
+    font-weight: 500;
+    line-height: ${calcRem(9)};
     letter-spacing: -0.6px;
   `,
   B6: css`

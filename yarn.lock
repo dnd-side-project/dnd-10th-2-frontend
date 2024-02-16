@@ -907,6 +907,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/luxon@npm:^3":
+  version: 3.4.2
+  resolution: "@types/luxon@npm:3.4.2"
+  checksum: d835467de3daf7e17ba78b50bb5a14efd94272439ca067990d71332a54b311544459c69623eddd243b511b28d70194c9591a9ee8cf9c038962c965f991affd7e
+  languageName: node
+  linkType: hard
+
 "@types/parse-json@npm:^4.0.0":
   version: 4.0.2
   resolution: "@types/parse-json@npm:4.0.2"
@@ -1918,6 +1925,7 @@ __metadata:
     "@tanstack/eslint-plugin-query": "npm:^5.17.20"
     "@tanstack/react-query": "npm:^5.17.19"
     "@tanstack/react-query-devtools": "npm:^5.17.21"
+    "@types/luxon": "npm:^3"
     "@types/react": "npm:^18.2.55"
     "@types/react-dom": "npm:^18.2.17"
     "@typescript-eslint/eslint-plugin": "npm:^6.19.1"
@@ -1934,9 +1942,11 @@ __metadata:
     eslint-plugin-react: "npm:^7.33.2"
     eslint-plugin-react-hooks: "npm:^4.6.0"
     eslint-plugin-react-refresh: "npm:^0.4.5"
+    luxon: "npm:^3.4.4"
     msw: "npm:^2.1.4"
     prettier: "npm:^3.2.5"
     react: "npm:^18.2.0"
+    react-countdown-circle-timer: "npm:^3.2.1"
     react-dom: "npm:^18.2.0"
     react-router-dom: "npm:^6.22.0"
     recoil: "npm:^0.7.7"
@@ -3634,6 +3644,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"luxon@npm:^3.4.4":
+  version: 3.4.4
+  resolution: "luxon@npm:3.4.4"
+  checksum: 02e26a0b039c11fd5b75e1d734c8f0332c95510f6a514a9a0991023e43fb233884da02d7f966823ffb230632a733fc86d4a4b1e63c3fbe00058b8ee0f8c728af
+  languageName: node
+  linkType: hard
+
 "make-fetch-happen@npm:^13.0.0":
   version: 13.0.0
   resolution: "make-fetch-happen@npm:13.0.0"
@@ -4273,6 +4290,15 @@ __metadata:
   version: 1.2.3
   resolution: "queue-microtask@npm:1.2.3"
   checksum: 900a93d3cdae3acd7d16f642c29a642aea32c2026446151f0778c62ac089d4b8e6c986811076e1ae180a694cedf077d453a11b58ff0a865629a4f82ab558e102
+  languageName: node
+  linkType: hard
+
+"react-countdown-circle-timer@npm:^3.2.1":
+  version: 3.2.1
+  resolution: "react-countdown-circle-timer@npm:3.2.1"
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 4e2e7c6a03ab4cc244efd4f603b64da43fb86662823b58ea23ed5a247dd6b1586bfeb4cf1ca0181eec51ea640c37504688aedd7f888ae69f757cf4c7edb77c0a
   languageName: node
   linkType: hard
 
