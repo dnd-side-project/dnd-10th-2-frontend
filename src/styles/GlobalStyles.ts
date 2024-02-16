@@ -25,6 +25,8 @@ export const GlobalStyle = css`
     ::-webkit-scrollbar {
       display: none;
     }
+    background-color: gray;
+    overflow-x: hidden;
   }
 
   button {
