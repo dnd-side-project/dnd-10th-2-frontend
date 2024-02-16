@@ -1,4 +1,5 @@
 import { Flex } from '@/components/Wrapper';
+<<<<<<< HEAD
 import { Timer } from '@/components/timer/Timer';
 
 function App() {
@@ -11,6 +12,11 @@ function App() {
 =======
   return <div>파이팅~~...</div>;
 >>>>>>> 0dfcdd0 (✨ feat: Input 컴포넌트 (#14))
+=======
+
+function App() {
+  return <Flex direction="column">...</Flex>;
+>>>>>>> 6ce395d (feat: timer 컴포넌트)
 }
 
 export default App;
