@@ -13,4 +13,5 @@ export const Layout = ({ children }: { children: ReactNode }) => {
 
 const Wrapper = styled(Flex)`
   width: 375px;
+  padding: 0px 20px 0px 20px;
 `;

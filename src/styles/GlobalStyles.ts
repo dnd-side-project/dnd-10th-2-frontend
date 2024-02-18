@@ -10,6 +10,12 @@ export const GlobalStyle = css`
       scroll: smooth;
     }
     font-family: 'Pretendard';
+
+    -ms-overflow-style: none;
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
   }
   button {
     background: inherit;
