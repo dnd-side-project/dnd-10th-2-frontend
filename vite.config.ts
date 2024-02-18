@@ -8,7 +8,7 @@ export default defineConfig({
   cacheDir: './.vite',
   resolve: {
     alias: {
-      '@': '/src',
-    },
-  },
+      '@': '/src'
+    }
+  }
 });
