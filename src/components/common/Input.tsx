@@ -68,6 +68,7 @@ export const Input = forwardRef<
               align="flex-end"
               gap={8}
               value={value}>
+              isError={isError}
               <StyledTextArea
                 {...props}
                 ref={ref as ForwardedRef<HTMLTextAreaElement>}
@@ -78,12 +79,13 @@ export const Input = forwardRef<
               />
               {maxLength && (
                 <p>
-                  {value === undefined ? '0' : value?.length}/{maxLength}
+                  <span>{value === undefined ? '0' : value?.length}</span>/
+                  {maxLength}
                 </p>
               )}
             </TextAreaContainer>
           ) : (
-            <InputContainer value={value}>
+            <InputContainer value={value} isError={isError}>
               <StyledInput
                 {...props}
                 ref={ref as ForwardedRef<HTMLInputElement>}
@@ -95,7 +97,8 @@ export const Input = forwardRef<
               {type === 'join' && <XCircle onClick={setValue} />}
               {maxLength && (
                 <p>
-                  {value === undefined ? '0' : value?.length}/{maxLength}
+                  <span>{value === undefined ? '0' : value?.length}</span>/
+                  {maxLength}
                 </p>
               )}
             </InputContainer>
@@ -125,27 +128,48 @@ const StyledHelperTextBox = styled.div`
 
 const TextAreaContainer = styled(Flex)<{
   value?: string | number | readonly string[] | undefined;
+  isError?: boolean;
 }>`
   position: relative;
   width: 100%;
 
   color: ${({ value }) =>
-    value !== undefined
-      ? theme.palette.middle_gray2
-      : theme.palette.light_gray3};
+    value ? theme.palette.middle_gray1 : theme.palette.light_gray3};
 
   p {
     position: absolute;
     right: 16px;
     bottom: 12px;
   }
+
+  span {
+    color: ${({ value, isError }) =>
+      isError
+        ? theme.palette.error
+        : value
+          ? theme.palette.dark_gray2
+          : theme.palette.light_gray3};
+  }
 `;
 
 const InputContainer = styled.div<{
-  value: string;
+  value?: string | number | readonly string[] | undefined;
+  isError?: boolean;
 }>`
   position: relative;
   width: 100%;
+
+  color: ${({ value }) =>
+    value ? theme.palette.middle_gray1 : theme.palette.light_gray3};
+
+  span {
+    color: ${({ value, isError }) =>
+      isError
+        ? theme.palette.error
+        : value
+          ? theme.palette.dark_gray2
+          : theme.palette.light_gray3};
+  }
 
   svg,
   p {
@@ -155,9 +179,6 @@ const InputContainer = styled.div<{
     transform: translateY(-50%);
 
     cursor: pointer;
-
-    color: ${({ value }) =>
-      value ? theme.palette.middle_gray2 : theme.palette.light_gray3};
   }
 
   p {
@@ -178,6 +199,7 @@ const StyledInput = styled.input<{
   height?: number;
 }>`
   width: 100%;
+  height: ${({ height }) => (height ? height : 50)}px;
   padding: 16px 59px 16px 12px;
 
   box-sizing: border-box;
@@ -195,8 +217,15 @@ const StyledInput = styled.input<{
   & + div {
     color: ${({ isError }) => (isError ? theme.palette.error : 'transparent')};
   }
-  border: 1px solid
-    ${({ isError }) => (isError ? theme.palette.error : 'transparent')};
+  border: ${({ isError }) =>
+    isError ? `1px solid ${theme.palette.error}` : 'none'};
+
+  :focus {
+    border: ${({ isError }) =>
+      isError
+        ? `1px solid ${theme.palette.error}`
+        : `1px solid ${theme.palette.light_gray3}`};
+  }
 
   ::placeholder {
     color: ${theme.palette.light_gray3};
@@ -222,6 +251,13 @@ const StyledTextArea = styled.textarea<{
 
   border: ${({ isError }) =>
     isError ? `1px solid ${theme.palette.error}` : 'none'};
+
+  :focus {
+    border: ${({ isError }) =>
+      isError
+        ? `1px solid ${theme.palette.error}`
+        : `1px solid ${theme.palette.light_gray3}`};
+  }
 
   ::placeholder {
     color: ${theme.palette.light_gray3};

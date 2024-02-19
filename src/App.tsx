@@ -22,12 +22,10 @@ function App() {
   return (
     <div>
       <Input
-        {...register('join', { required: '입력해 주세요', maxLength: 5 })}
+        {...register('join', { required: true, maxLength: 15 })}
         value={watch('join')}
         setValue={() => setValue('join', '')}
         type="default"
-        multiline
-        height={92}
         maxLength={15}
         isError={errors.join ? true : false}
         errorText={errors.join?.message as string}
