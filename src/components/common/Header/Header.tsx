@@ -30,7 +30,6 @@ const StyledHeaderLeft = styled.div`
   display: flex;
   justify-content: start;
   align-items: center;
-  /* background-color: indianred; */
 `;
 
 const StyledHeaderRight = styled.div`
@@ -38,14 +37,12 @@ const StyledHeaderRight = styled.div`
   justify-content: end;
   align-items: center;
   gap: 1rem;
-  /* background-color: indianred; */
 `;
 
 const StyledHeaderCenter = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  /* background-color: tomato; */
 `;
 
 Header.Left = HeaderLeft;
