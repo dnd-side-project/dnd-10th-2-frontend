@@ -9,6 +9,7 @@ export const Flex = styled.div<{
   gap?: number;
 }>`
   display: flex;
+  width: 100%;
   flex-direction: ${({ direction }) => (direction ? `${direction}` : 'row')};
   justify-content: ${({ justify }) => (justify ? `${justify}` : 'center')};
   align-items: ${({ align }) => (align ? `${align}` : 'center')};
