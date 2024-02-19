@@ -16,7 +16,7 @@ export type InputVariant = 'default' | 'join';
 
 interface InputProps
   extends InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
-  value?: string;
+  value: string;
   setValue?: () => void;
   type: InputVariant;
   errorText?: string;
@@ -56,14 +56,18 @@ export const Input = forwardRef<
     ref
   ) => {
     useEffect(() => {
-      console.log(value);
+      console.log(typeof value);
     }, [value]);
 
     return (
       <Container>
         <Flex align="flex-start">
           {multiline ? (
-            <TextAreaContainer value={value}>
+            <TextAreaContainer
+              direction="column"
+              align="flex-end"
+              gap={8}
+              value={value}>
               <StyledTextArea
                 {...props}
                 ref={ref as ForwardedRef<HTMLTextAreaElement>}
@@ -118,7 +122,7 @@ const StyledHelperTextBox = styled.div`
   color: ${theme.palette.error};
 `;
 
-const TextAreaContainer = styled.div<{
+const TextAreaContainer = styled(Flex)<{
   value?: string | number | readonly string[] | undefined;
 }>`
   position: relative;
@@ -130,22 +134,15 @@ const TextAreaContainer = styled.div<{
       : theme.palette.light_gray3};
 
   p {
-    position: absolute;
-    right: 16px;
-    bottom: 15px;
+    right: 0px;
   }
 `;
 
 const InputContainer = styled.div<{
-  value?: string | number | readonly string[] | undefined;
+  value: string;
 }>`
   position: relative;
   width: 100%;
-
-  color: ${({ value }) =>
-    value !== undefined
-      ? theme.palette.middle_gray2
-      : theme.palette.light_gray3};
 
   svg,
   p {
@@ -155,6 +152,9 @@ const InputContainer = styled.div<{
     transform: translateY(-50%);
 
     cursor: pointer;
+
+    color: ${({ value }) =>
+      value ? theme.palette.middle_gray2 : theme.palette.light_gray3};
   }
 
   p {

@@ -9,23 +9,24 @@ function App() {
     setValue,
     formState: { errors }
   } = useForm({
-    mode: 'onChange' // 폼 필드 값 변경 시 유효성 검사를 트리거합니다.
+    defaultValues: {
+      join: ''
+    },
+    mode: 'onChange'
   });
 
   useEffect(() => {
-    console.log(errors.firsstName);
+    console.log(errors.join);
   }, [errors]);
 
   return (
     <div>
       <Input
-        {...register('join', { required: '필요', maxLength: 5 })}
+        {...register('join', { required: '입력해 주세요', maxLength: 5 })}
         value={watch('join')}
         setValue={() => setValue('join', '')}
-        multiline
-        height={100}
-        maxLength={12}
         type="default"
+        maxLength={15}
         isError={errors.join ? true : false}
         errorText={errors.join?.message as string}
       />
