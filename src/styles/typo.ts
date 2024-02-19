@@ -1,7 +1,5 @@
 import { css } from '@emotion/react';
 
-export const calcRem = (px: number) => `${px / 16}rem`;
-
 export const typo = {
   T1: css`
     font-family: 'Pretendard', 'Apple SD Gothic Neo';
