@@ -112,11 +112,9 @@ export const Input = forwardRef<
             </InputContainer>
           )}
         </Flex>
-        {errorText && (
-          <StyledHelperTextBox>
-            <StyledHelperText>{errorText}</StyledHelperText>
-          </StyledHelperTextBox>
-        )}
+        <StyledHelperTextBox type={type}>
+          {errorText && <StyledHelperText>{errorText}</StyledHelperText>}
+        </StyledHelperTextBox>
       </Container>
     );
   }
@@ -129,9 +127,22 @@ const Container = styled(Flex)`
   align-items: flex-start;
 `;
 
-const StyledHelperTextBox = styled.div`
+const StyledHelperTextBox = styled.div<{
+  type: InputVariant;
+}>`
   margin-top: 6px;
   color: ${theme.palette.error};
+
+  ${({ type }) =>
+    type === 'meeting'
+      ? css`
+          height: 0px;
+          position: relative;
+          bottom: 2.4rem;
+        `
+      : css`
+          height: 2rem;
+        `};
 `;
 
 const TextAreaContainer = styled(Flex)<{
