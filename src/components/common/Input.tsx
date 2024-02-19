@@ -73,6 +73,7 @@ export const Input = forwardRef<
                 ref={ref as ForwardedRef<HTMLTextAreaElement>}
                 placeholder={placeholder}
                 spellCheck={false}
+                isError={isError}
                 height={height}
               />
               {maxLength && (
@@ -134,7 +135,9 @@ const TextAreaContainer = styled(Flex)<{
       : theme.palette.light_gray3};
 
   p {
-    right: 0px;
+    position: absolute;
+    right: 16px;
+    bottom: 12px;
   }
 `;
 
@@ -189,14 +192,11 @@ const StyledInput = styled.input<{
     color: ${theme.palette.dark_gray2};
   }
 
-  :focus {
-    & + div {
-      color: ${({ isError }) =>
-        isError ? theme.palette.error : 'transparent'};
-    }
-    border: 1px solid
-      ${({ isError }) => (isError ? theme.palette.error : 'transparent')};
+  & + div {
+    color: ${({ isError }) => (isError ? theme.palette.error : 'transparent')};
   }
+  border: 1px solid
+    ${({ isError }) => (isError ? theme.palette.error : 'transparent')};
 
   ::placeholder {
     color: ${theme.palette.light_gray3};
@@ -220,10 +220,8 @@ const StyledTextArea = styled.textarea<{
   ${theme.typo.B1};
   color: ${theme.palette.dark_gray2};
 
-  :focus {
-    border: 1px solid
-      ${({ isError }) => (isError ? theme.palette.error : 'none')};
-  }
+  border: ${({ isError }) =>
+    isError ? `1px solid ${theme.palette.error}` : 'none'};
 
   ::placeholder {
     color: ${theme.palette.light_gray3};

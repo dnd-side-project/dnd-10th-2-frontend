@@ -26,6 +26,8 @@ function App() {
         value={watch('join')}
         setValue={() => setValue('join', '')}
         type="default"
+        multiline
+        height={92}
         maxLength={15}
         isError={errors.join ? true : false}
         errorText={errors.join?.message as string}
