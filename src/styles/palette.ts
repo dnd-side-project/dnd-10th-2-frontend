@@ -27,6 +27,7 @@ export const palette = {
   play: '#5C6988',
   chip: '#EDEFF3',
   box_stroke: '#D3D9EE',
+  kakao_yellow: 'FEE500',
 
   error: '#FF533C',
   white: '#FFFFFF',
