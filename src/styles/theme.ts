@@ -8,7 +8,7 @@ export interface TypeOfTheme {
 
 export const theme: TypeOfTheme = {
   typo,
-  palette,
+  palette
 };
 
 export type TypeOfPalette = typeof palette;

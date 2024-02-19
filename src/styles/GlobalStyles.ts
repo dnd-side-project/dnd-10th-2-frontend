@@ -3,6 +3,11 @@ import emotionReset from 'emotion-reset';
 
 export const GlobalStyle = css`
   ${emotionReset}
+
+  html {
+    font-size: 62.5%;
+  }
+
   body {
     min-height: 100vh;
     @supports (-webkit-appearance: none) and (stroke-color: transparent) {
@@ -10,6 +15,12 @@ export const GlobalStyle = css`
       scroll: smooth;
     }
     font-family: 'Pretendard';
+
+    -ms-overflow-style: none;
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
   }
   button {
     background: inherit;

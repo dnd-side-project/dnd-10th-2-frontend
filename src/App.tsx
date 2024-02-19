@@ -1,5 +1,5 @@
 function App() {
-  return <>파이팅 ~...</>;
+  return <div>파이팅~~...</div>;
 }
 
 export default App;
