@@ -60,10 +60,6 @@ export const Input = forwardRef<
     },
     ref
   ) => {
-    useEffect(() => {
-      console.log(typeof value);
-    }, [value]);
-
     return (
       <Container>
         <Flex align="flex-start">
