@@ -11,8 +11,9 @@ import styled from '@emotion/styled';
 import { theme } from '@/styles';
 import { Flex } from '@/components/Wrapper';
 import { XCircle } from '@/assets/XCircle';
+import { css } from '@emotion/react';
 
-export type InputVariant = 'default' | 'join';
+export type InputVariant = 'default' | 'join' | 'meeting';
 
 interface InputProps
   extends InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
@@ -30,11 +31,15 @@ interface InputProps
 /**
  * @default {HTMLInputElement} or {HTMLTextAreaElement}
  *
+ * @param {string} value: input value
+ * @param {() => void} setValue?: 'join' type 사용할 경우
+ * @param {InputVariant} type: input type 'default' | 'join' | 'meeting'
  * @param {string} errorText?: 에러 메시지
  * @param {boolean} isError?: 에러 여부
  * @param {number} height?: 높이 (defult: 52px)
  * @param {boolean} multiline?: 여러 줄 (default: false)
  * @param {ReactNode} rightElement?: 오른쪽에 들어갈 수 있는 element
+ * @param {number} maxLength?: 최대 글자수
  */
 export const Input = forwardRef<
   HTMLInputElement | HTMLTextAreaElement,
@@ -67,8 +72,9 @@ export const Input = forwardRef<
               direction="column"
               align="flex-end"
               gap={8}
-              value={value}>
+              value={value}
               isError={isError}
+              type={type}>
               <StyledTextArea
                 {...props}
                 ref={ref as ForwardedRef<HTMLTextAreaElement>}
@@ -129,6 +135,7 @@ const StyledHelperTextBox = styled.div`
 const TextAreaContainer = styled(Flex)<{
   value?: string | number | readonly string[] | undefined;
   isError?: boolean;
+  type: InputVariant;
 }>`
   position: relative;
   width: 100%;
@@ -137,9 +144,16 @@ const TextAreaContainer = styled(Flex)<{
     value ? theme.palette.middle_gray1 : theme.palette.light_gray3};
 
   p {
-    position: absolute;
-    right: 16px;
-    bottom: 12px;
+    ${({ type }) =>
+      type === 'meeting'
+        ? css`
+            position: relative;
+          `
+        : css`
+            position: absolute;
+            right: 16px;
+            bottom: 12px;
+          `};
   }
 
   span {

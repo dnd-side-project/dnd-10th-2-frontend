@@ -25,7 +25,9 @@ function App() {
         {...register('join', { required: true, maxLength: 15 })}
         value={watch('join')}
         setValue={() => setValue('join', '')}
-        type="default"
+        height={92}
+        type="meeting"
+        multiline
         maxLength={15}
         isError={errors.join ? true : false}
         errorText={errors.join?.message as string}
