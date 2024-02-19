@@ -20,19 +20,19 @@ function App() {
   }, [errors]);
 
   return (
-    <div>
+    <>
       <Input
         {...register('join', { required: true, maxLength: 15 })}
         value={watch('join')}
         setValue={() => setValue('join', '')}
         height={92}
-        type="meeting"
+        type="join"
         multiline
         maxLength={15}
         isError={errors.join ? true : false}
         errorText={errors.join?.message as string}
       />
-    </div>
+    </>
   );
 }
 

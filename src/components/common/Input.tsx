@@ -85,7 +85,8 @@ export const Input = forwardRef<
               />
               {maxLength && (
                 <p>
-                  <span>{value === undefined ? '0' : value?.length}</span>/
+                  <span>{value === undefined ? '0' : value?.length}</span>
+                  &nbsp;/&nbsp;
                   {maxLength}
                 </p>
               )}
@@ -103,7 +104,8 @@ export const Input = forwardRef<
               {type === 'join' && <XCircle onClick={setValue} />}
               {maxLength && (
                 <p>
-                  <span>{value === undefined ? '0' : value?.length}</span>/
+                  <span>{value === undefined ? '0' : value?.length}</span>
+                  &nbsp;/&nbsp;
                   {maxLength}
                 </p>
               )}
@@ -144,6 +146,7 @@ const TextAreaContainer = styled(Flex)<{
     value ? theme.palette.middle_gray1 : theme.palette.light_gray3};
 
   p {
+    ${theme.typo.B7};
     ${({ type }) =>
       type === 'meeting'
         ? css`
@@ -191,6 +194,7 @@ const InputContainer = styled.div<{
     right: 23px;
     top: 50%;
     transform: translateY(-50%);
+    ${theme.typo.B7};
 
     cursor: pointer;
   }
