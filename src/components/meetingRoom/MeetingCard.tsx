@@ -13,6 +13,14 @@ interface MeetingCardProps {
   actualTotalDuration: string;
 }
 
+/**
+ * @param {string} date 날짜
+ * @param {boolean} isHost 방장 여부
+ * @param {string} title 회의 제목
+ * @param {() => void} onClickuserList 회의 참여자 목록 클릭 핸들러
+ * @param {string} description? 회의 공지 사항
+ * @param {string} actualTotalDuration 회의 시작 이후 흐른 시간
+ */
 export const MeetingCard = ({
   date,
   isHost,
