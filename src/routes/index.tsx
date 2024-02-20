@@ -22,11 +22,6 @@ const routeChildren: RouteChildren[] = [
     path: '/signup',
     element: <Signup />,
     auth: false
-  },
-  {
-    path: '/signup/complete',
-    element: <SignupComplete />,
-    auth: false
   }
 ];
 
