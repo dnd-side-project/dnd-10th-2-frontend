@@ -1,71 +1,61 @@
 import styled from '@emotion/styled';
-import {
-  BackgroundColor,
-  BorderRadius,
-  Height,
-  TextColor,
-  Typo
-} from './types';
+import { Size, BackgroundColor, TextColor } from './types';
 
 interface ButtonProps {
-  text: string;
-  typo: Typo;
-  width: string;
-  height: Height;
+  children: React.ReactNode;
+  size: Size;
+  fullWidth?: boolean;
   backgroundColor: BackgroundColor;
-  textColor: TextColor;
-  borderRadius: BorderRadius;
-  isFixed?: boolean;
+  textColor?: TextColor;
+  disabled?: boolean;
+  onClick: () => void;
 }
 
 export const Button = ({
-  text,
-  typo,
-  width,
-  height,
+  children,
+  size,
+  fullWidth = true,
   backgroundColor,
-  textColor,
-  borderRadius,
-  isFixed = false
+  textColor = 'white',
+  disabled = false,
+  onClick
 }: ButtonProps) => {
   return (
     <StyledButton
-      typo={typo}
-      width={width}
-      height={height}
+      size={size}
+      fullWidth={fullWidth}
       backgroundColor={backgroundColor}
       textColor={textColor}
-      borderRadius={borderRadius}
-      isFixed={isFixed}>
-      {text}
+      disabled={disabled}
+      onClick={onClick}>
+      {children}
     </StyledButton>
   );
 };
 
 const StyledButton = styled.button<{
-  typo: Typo;
-  width: string;
-  height: Height;
+  size: 'lg' | 'md' | 'sm';
+  fullWidth?: boolean;
   backgroundColor: BackgroundColor;
   textColor: TextColor;
-  borderRadius: BorderRadius;
-  isFixed: boolean;
+  disabled?: boolean;
 }>`
   ${(props) =>
-    props.isFixed &&
-    `position: fixed;
-     bottom: 44px;
-     left: 50%;
-     transform: translateX(-50%);
-  `}
-  ${(props) => props.theme.typo[props.typo]}
+    props.size === 'lg'
+      ? props.theme.typo.BL
+      : props.size === 'md'
+        ? props.theme.typo.BM1
+        : props.theme.typo.BM3}
   display: flex;
   justify-content: center;
   align-items: center;
-  width: ${(props) => props.width};
-  height: ${(props) => props.height / 10}rem;
-  border-radius: ${(props) => props.borderRadius / 10}rem;
-  background-color: ${(props) => props.theme.palette[props.backgroundColor]};
+  width: ${(props) => (props.fullWidth ? '100%' : 'auto')};
+  padding: 1.4rem 0;
+  border-radius: 1.2rem;
+  background-color: ${(props) =>
+    props.disabled
+      ? props.theme.palette.light_gray3
+      : props.theme.palette[props.backgroundColor]};
   color: ${(props) => props.theme.palette[props.textColor]};
   transition: opacity 0.1s ease-in-out;
   &:hover,
