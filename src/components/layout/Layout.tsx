@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import { Flex } from '../Wrapper';
 import { ReactNode } from 'react';
-import { theme } from '@/styles';
 
 export const Layout = ({ children }: { children: ReactNode }) => {
   return (
