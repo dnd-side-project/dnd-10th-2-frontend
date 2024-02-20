@@ -25,6 +25,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "7.43.9",
     "react-router-dom": "^6.22.0",
+    "react-spring-bottom-sheet": "^3.4.1",
     "svg-sprite": "^2.0.2",
     "vite-tsconfig-paths": "^4.3.1"
   },
