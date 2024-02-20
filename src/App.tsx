@@ -5,6 +5,7 @@ import { Timer } from '@/components/timer/Timer';
 
 function App() {
 <<<<<<< HEAD
+<<<<<<< HEAD
   return (
     <Flex direction="column">
       <Timer serverTime={new Date()} time={30} />
@@ -28,6 +29,9 @@ function App() {
     </Flex>
   );
 >>>>>>> f098185 (fix: timer chip position)
+=======
+  return <div>파이팅~~...</div>;
+>>>>>>> origin
 }
 
 export default App;
