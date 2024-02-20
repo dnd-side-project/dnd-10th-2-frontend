@@ -1,50 +1,71 @@
 import styled from '@emotion/styled';
-import type { PropsWithChildren } from 'react';
+import { SvgIcon } from '../SvgIcon';
 
-export const Header = ({ children }: PropsWithChildren) => {
-  return <StyledHeader>{children}</StyledHeader>;
+interface HeaderProps {
+  title?: string;
+  iconLeftId?: 'arrow_left' | 'hamburger_menu';
+  iconRightId1?: 'x' | 'memo';
+  iconRightId2?: 'share';
+  onClickIconLeft?: () => void;
+  onClickIconRight1?: () => void;
+  onClickIconRight2?: () => void;
+}
+
+export const Header = ({
+  title,
+  iconLeftId,
+  iconRightId1,
+  iconRightId2,
+  onClickIconLeft,
+  onClickIconRight1,
+  onClickIconRight2
+}: HeaderProps) => {
+  return (
+    <StyledHeader>
+      <StyledIconLeft>
+        {iconLeftId && <SvgIcon id={iconLeftId} onClick={onClickIconLeft} />}
+      </StyledIconLeft>
+
+      <StyledTitle>{title}</StyledTitle>
+
+      <StyledIconRight>
+        {iconRightId1 && (
+          <SvgIcon id={iconRightId1} onClick={onClickIconRight1} />
+        )}
+        {iconRightId2 && (
+          <SvgIcon id={iconRightId2} onClick={onClickIconRight2} />
+        )}
+      </StyledIconRight>
+    </StyledHeader>
+  );
 };
-
-const HeaderLeft = ({ children }: PropsWithChildren) => (
-  <StyledHeaderLeft>{children}</StyledHeaderLeft>
-);
-
-const HeaderRight = ({ children }: PropsWithChildren) => (
-  <StyledHeaderRight>{children}</StyledHeaderRight>
-);
-
-const HeaderCenter = ({ children }: PropsWithChildren) => (
-  <StyledHeaderCenter>{children}</StyledHeaderCenter>
-);
 
 const StyledHeader = styled.header`
   ${(props) => props.theme.typo.T7}
   color: ${(props) => props.theme.palette.dark_gray1};
-  display: grid;
-  grid-template-columns: 1fr 3fr 1fr;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   height: 5.6rem;
-  padding: 0 2rem;
 `;
 
-const StyledHeaderLeft = styled.div`
-  display: flex;
-  justify-content: start;
-  align-items: center;
+const StyledTitle = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
-const StyledHeaderRight = styled.div`
+const StyledIconLeft = styled.div`
+  position: absolute;
+  left: 2rem;
   display: flex;
-  justify-content: end;
-  align-items: center;
+`;
+
+const StyledIconRight = styled.div`
+  position: absolute;
+  right: 2rem;
+  display: flex;
   gap: 1rem;
 `;
-
-const StyledHeaderCenter = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-Header.Left = HeaderLeft;
-Header.Right = HeaderRight;
-Header.Center = HeaderCenter;
