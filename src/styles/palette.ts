@@ -16,6 +16,8 @@ export const palette = {
 
   main: '#353C49',
   main_blue: '#5784FD',
+  timer_trail: '#E8ECF2',
+  timer_typo: '#48556D',
   timer_liner:
     'linear-gradient(to right, rgba(87, 132, 253, 1) 0%, rgba(209, 222, 255, 1) 100%)',
   main_blue_dark: '#4976F0',

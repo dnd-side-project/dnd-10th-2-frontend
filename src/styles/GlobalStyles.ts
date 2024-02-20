@@ -9,12 +9,16 @@ export const GlobalStyle = css`
   }
 
   body {
+    height: 100%;
     min-height: 100vh;
     @supports (-webkit-appearance: none) and (stroke-color: transparent) {
       min-height: -webkit-fill-available;
       scroll: smooth;
     }
+
     font-family: 'Pretendard';
+    background-color: gray;
+    overflow-x: hidden;
 
     -ms-overflow-style: none;
 
@@ -22,6 +26,7 @@ export const GlobalStyle = css`
       display: none;
     }
   }
+
   button {
     background: inherit;
     border: none;

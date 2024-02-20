@@ -1,5 +1,7 @@
+import { Flex } from '@/components/Wrapper';
+
 function App() {
-  return <div>파이팅~~...</div>;
+  return <Flex direction="column">...</Flex>;
 }
 
 export default App;
