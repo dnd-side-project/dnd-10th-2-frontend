@@ -11,6 +11,18 @@ interface HeaderProps {
   onClickIconRight2?: () => void;
 }
 
+/**
+ * Header 컴포넌트 props 리스트
+ * @default {HTMLHeaderElement}
+ *
+ * @param {string} [title]  제목
+ * @param {string} [iconLeftId] 왼쪽 아이콘('arrow_left' | 'hamburger_menu')
+ * @param {string} [iconRightId1] 오른쪽 아이콘 1('x' | 'memo')
+ * @param {string} [iconRightId2] 오늘쪽 아이콘 2('share')
+ * @param {() => void} [onClickIconLeft] 왼쪽 아이콘 클릭 시 발생하는 handler
+ * @param {() => void} [onClickIconRight1] 오른쪽 아이콘 1 클릭 시 발생하는 handler
+ * @param {() => void} [onClickIconRight2] 오른쪽 아이콘 2 클릭 시 발생하는 handler
+ */
 export const Header = ({
   title,
   iconLeftId,
