@@ -1,7 +1,6 @@
 import App from '@/App';
 import { LoginLayout } from '@/components/layout';
-import Signup from '@/pages/signup';
-import SignupComplete from '@/pages/signup/complete';
+import Join from '@/pages/join';
 import {
   createBrowserRouter,
   RouteObject,
@@ -19,8 +18,8 @@ const routeChildren: RouteChildren[] = [
     auth: false
   },
   {
-    path: '/signup',
-    element: <Signup />,
+    path: '/join',
+    element: <Join />,
     auth: false
   }
 ];
