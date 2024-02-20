@@ -1,5 +1,6 @@
 import App from '@/App';
 import { LoginLayout } from '@/components/layout';
+import { MeetingRoom } from '@/pages/meetingroom';
 import {
   createBrowserRouter,
   RouteObject,
@@ -15,6 +16,11 @@ const routeChildren: RouteChildren[] = [
     path: '/',
     element: <App />,
     auth: false
+  },
+  {
+    path: '/meetingroom/:meetingId',
+    element: <MeetingRoom />,
+    auth: true
   }
 ];
 
