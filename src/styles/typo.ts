@@ -50,11 +50,39 @@ export const typo = {
     line-height: 2.8rem;
     letter-spacing: -0.6px;
   `,
-  L: css`
+  BL: css`
     font-family: 'Pretendard', 'Apple SD Gothic Neo';
     font-size: 1.8rem;
     font-weight: 700;
     line-height: 2.8rem;
+    letter-spacing: -0.6px;
+  `,
+  BM1: css`
+    font-family: 'Pretendard', 'Apple SD Gothic Neo';
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 2.4rem;
+    letter-spacing: -0.6px;
+  `,
+  BM2: css`
+    font-family: 'Pretendard', 'Apple SD Gothic Neo';
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 2.8rem;
+    letter-spacing: -0.6px;
+  `,
+  BM3: css`
+    font-family: 'Pretendard', 'Apple SD Gothic Neo';
+    font-size: 1.4rem;
+    font-weight: 500;
+    line-height: 2rem;
+    letter-spacing: -0.6px;
+  `,
+  BS: css`
+    font-family: 'Pretendard', 'Apple SD Gothic Neo';
+    font-size: 1.2rem;
+    font-weight: 500;
+    line-height: 1.8rem;
     letter-spacing: -0.6px;
   `,
   M1: css`
@@ -67,6 +95,13 @@ export const typo = {
   M2: css`
     font-family: 'Pretendard', 'Apple SD Gothic Neo';
     font-size: 1.4rem;
+    font-weight: 500;
+    line-height: 2.8rem;
+    letter-spacing: -0.6px;
+  `,
+  S1: css`
+    font-family: 'Pretendard', 'Apple SD Gothic Neo';
+    font-size: 1.2rem;
     font-weight: 500;
     line-height: 2.8rem;
     letter-spacing: -0.6px;
@@ -132,6 +167,41 @@ export const typo = {
     font-size: 1.1rem;
     font-weight: 400;
     line-height: 1.4rem;
+    letter-spacing: -0.6px;
+  `,
+  BL: css`
+    font-family: 'Pretendard', 'Apple SD Gothic Neo';
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 2.8rem;
+    letter-spacing: -0.6px;
+  `,
+  BM1: css`
+    font-family: 'Pretendard', 'Apple SD Gothic Neo';
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 2.4rem;
+    letter-spacing: -0.6px;
+  `,
+  BM2: css`
+    font-family: 'Pretendard', 'Apple SD Gothic Neo';
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 2.8rem;
+    letter-spacing: -0.6px;
+  `,
+  BM3: css`
+    font-family: 'Pretendard', 'Apple SD Gothic Neo';
+    font-size: 1.4rem;
+    font-weight: 500;
+    line-height: 2%.0rem;
+    letter-spacing: -0.6px;
+  `,
+  BS: css`
+    font-family: 'Pretendard', 'Apple SD Gothic Neo';
+    font-size: 1.2rem;
+    font-weight: 500;
+    line-height: 1.8rem;
     letter-spacing: -0.6px;
   `
 } as const;
