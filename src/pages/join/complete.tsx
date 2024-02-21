@@ -51,7 +51,7 @@ const StyledGraphic = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
-  width: calc(37.5rem + 4rem);
+  width: 37.5rem;
   margin-left: -2rem;
 `;
 
@@ -70,7 +70,7 @@ const StyledButton = styled.div`
   position: absolute;
   bottom: 4.4rem;
   width: 100%;
-  max-width: 37.5rem;
+  max-width: calc(37.5rem - 4rem);
 `;
 
 export default JoinComplete;
