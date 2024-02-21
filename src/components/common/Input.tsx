@@ -9,8 +9,8 @@ import {
 import styled from '@emotion/styled';
 import { theme } from '@/styles';
 import { Flex } from '@/components/Wrapper';
-import { XCircle } from '@/assets/XCircle';
 import { css } from '@emotion/react';
+import { SvgIcon } from './SvgIcon';
 
 export type InputVariant = 'default' | 'join' | 'meeting';
 
@@ -96,7 +96,14 @@ export const Input = forwardRef<
                 isError={isError}
                 height={height}
               />
-              {type === 'join' && <XCircle onClick={setValue} />}
+              {type === 'join' && (
+                <SvgIcon
+                  id="x_circle"
+                  size={16}
+                  // fill="#C7CCD6"
+                  onClick={setValue}
+                />
+              )}
               {maxLength && (
                 <p>
                   <span>{value === undefined ? '0' : value?.length}</span>

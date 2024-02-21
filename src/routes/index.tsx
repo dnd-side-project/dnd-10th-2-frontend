@@ -1,6 +1,9 @@
 import App from '@/App';
 import { LoginLayout } from '@/components/layout';
+import Join from '@/pages/join';
+import JoinComplete from '@/pages/join/complete';
 import { MeetingRoom } from '@/pages/meetingroom';
+
 import {
   createBrowserRouter,
   RouteObject,
@@ -15,6 +18,16 @@ const routeChildren: RouteChildren[] = [
   {
     path: '/',
     element: <App />,
+    auth: false
+  },
+  {
+    path: '/join',
+    element: <Join />,
+    auth: false
+  },
+  {
+    path: '/join/complete',
+    element: <JoinComplete />,
     auth: false
   },
   {
