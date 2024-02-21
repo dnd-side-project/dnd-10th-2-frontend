@@ -4,6 +4,7 @@ import { Header } from '@/components/common/Header';
 import { Input } from '@/components/common/Input';
 import styled from '@emotion/styled';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 const Join = () => {
   const {
@@ -18,12 +19,23 @@ const Join = () => {
     },
     mode: 'onChange'
   });
-  const handleJoin = () => {
-    console.log(getValues('join'));
+  const navigate = useNavigate();
+
+  const handleJoin = async () => {
+    try {
+      await console.log(getValues('join'));
+      navigate('/join/complete');
+    } catch {
+      console.log('error');
+    }
   };
   return (
     <StyledContainer>
-      <Header iconLeftId="arrow_left" title="개인정보 입력" />
+      <Header
+        iconLeftId="arrow_left"
+        title="개인정보 입력"
+        onClickIconLeft={() => navigate('/onboarding')}
+      />
 
       <Space height={22} />
 
@@ -69,13 +81,9 @@ const Join = () => {
   );
 };
 
-export default Join;
-
 const StyledContainer = styled.div`
   width: 100%;
   height: 100vh;
-  /* padding: 0 20px; */
-  background-color: white;
 `;
 
 const StyledTitle = styled.div`
@@ -83,17 +91,13 @@ const StyledTitle = styled.div`
   color: ${(props) => props.theme.palette.main};
 `;
 
-// const StyledInput = styled.div`
-//   height: 50px;
-//   background-color: ${(props) => props.theme.palette.light_white};
-//   border-radius: 8px;
-// `;
-
 const StyledButton = styled.div`
   position: fixed;
   bottom: 1.6rem;
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
-  max-width: calc(37.5rem);
+  max-width: 37.5rem;
 `;
+
+export default Join;

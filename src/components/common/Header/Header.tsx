@@ -71,11 +71,13 @@ const StyledTitle = styled.div`
 
 const StyledIconLeft = styled.div`
   position: absolute;
+  left: 0;
   display: flex;
 `;
 
 const StyledIconRight = styled.div`
   position: absolute;
+  right: 0;
   display: flex;
   gap: 1rem;
 `;
