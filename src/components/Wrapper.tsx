@@ -39,3 +39,9 @@ export const Text = styled.p<{
   margin: 0;
   padding: 0;
 `;
+
+export const ButtonWrapper = styled.div<{
+  width: number;
+}>`
+  width: ${({ width }) => `${width}px`};
+`;

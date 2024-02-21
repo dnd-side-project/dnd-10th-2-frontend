@@ -18,3 +18,11 @@ export type KeyofTheme = keyof typeof theme;
 
 export type TypeOfTypo = typeof typo;
 export type KeyOfTypo = keyof typeof typo;
+
+export const customMediaQuery = (minWidth: number): string =>
+  `@media (min-width: ${minWidth}px)`;
+export const media = {
+  custom: customMediaQuery,
+  pc: customMediaQuery(988),
+  mobile: `@media (max-width : 988px)`
+};
