@@ -4,8 +4,7 @@ import {
   ForwardedRef,
   InputHTMLAttributes,
   ReactNode,
-  forwardRef,
-  useEffect
+  forwardRef
 } from 'react';
 import styled from '@emotion/styled';
 import { theme } from '@/styles';
