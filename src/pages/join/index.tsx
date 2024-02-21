@@ -97,7 +97,7 @@ const StyledButton = styled.div`
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
-  max-width: 37.5rem;
+  max-width: calc(37.5rem - 4rem);
 `;
 
 export default Join;
