@@ -6,11 +6,12 @@ import './customBottomSheet.css';
 import useBottomSheet from '@/hooks/useBottomSheet';
 
 export const GlobalBottomSheet = () => {
-  const { isOpen, bottomSheet } = useBottomSheet();
+  const { isOpen, bottomSheet, closeGlobalSheet } = useBottomSheet();
   return (
     <>
       <StyledSheet
         open={isOpen}
+        onDismiss={closeGlobalSheet}
         snapPoints={({ maxHeight }) => [336, maxHeight * 0.6]}>
         {bottomSheet?.content}
       </StyledSheet>

@@ -59,7 +59,12 @@ const StyledHeader = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
   height: 5.6rem;
+
+  svg {
+    cursor: pointer;
+  }
 `;
 
 const StyledTitle = styled.div`
@@ -71,13 +76,13 @@ const StyledTitle = styled.div`
 
 const StyledIconLeft = styled.div`
   position: absolute;
-  left: 2rem;
+  left: 0rem;
   display: flex;
 `;
 
 const StyledIconRight = styled.div`
   position: absolute;
-  right: 2rem;
+  right: 0rem;
   display: flex;
   gap: 1rem;
 `;
