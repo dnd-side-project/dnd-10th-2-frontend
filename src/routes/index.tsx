@@ -2,6 +2,8 @@ import App from '@/App';
 import { LoginLayout } from '@/components/layout';
 import Join from '@/pages/join';
 import JoinComplete from '@/pages/join/complete';
+import { MeetingRoom } from '@/pages/meetingroom';
+
 import {
   createBrowserRouter,
   RouteObject,
@@ -27,6 +29,11 @@ const routeChildren: RouteChildren[] = [
     path: '/join/complete',
     element: <JoinComplete />,
     auth: false
+  },
+  {
+    path: '/meetingroom/:meetingId',
+    element: <MeetingRoom />,
+    auth: true
   }
 ];
 

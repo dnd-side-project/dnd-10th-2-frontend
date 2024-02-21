@@ -14,8 +14,14 @@ export const Layout = ({ children }: { children: ReactNode }) => {
 
 const Wrapper = styled(Flex)`
   min-height: 100vh;
-  width: 375px;
+  width: 100%;
 
   background-color: ${theme.palette.white};
   padding: 0px 20px 0px 20px;
+
+  box-sizing: border-box;
+
+  @media (min-width: 768px) {
+    width: 375px;
+  }
 `;
