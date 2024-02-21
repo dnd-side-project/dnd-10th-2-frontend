@@ -32,6 +32,7 @@ const Join = () => {
     if (token) {
       try {
         await userApi.addNickname(nickname, token);
+        document.cookie = `token=${token}`;
         navigate('/join/complete');
       } catch {
         navigate('/onboarding');
