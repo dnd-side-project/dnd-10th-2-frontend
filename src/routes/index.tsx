@@ -3,6 +3,7 @@ import { LoginLayout } from '@/components/layout';
 import Join from '@/pages/join';
 import JoinComplete from '@/pages/join/complete';
 import { MeetingRoom } from '@/pages/meetingroom';
+import Onboarding from '@/pages/onboarding';
 
 import {
   createBrowserRouter,
@@ -18,6 +19,11 @@ const routeChildren: RouteChildren[] = [
   {
     path: '/',
     element: <App />,
+    auth: false
+  },
+  {
+    path: '/onboarding',
+    element: <Onboarding />,
     auth: false
   },
   {
