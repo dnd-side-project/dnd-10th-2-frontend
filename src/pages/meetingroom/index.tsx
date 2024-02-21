@@ -2,16 +2,67 @@
 import { ButtonWrapper, Flex, Space, Text } from '@/components/Wrapper';
 import { Button } from '@/components/common/Button';
 import { Header } from '@/components/common/Header';
+import { Input } from '@/components/common/Input';
+import { MeetingRoomModal } from '@/components/common/Modal/MeetingRoomModal';
+import ModalPortal from '@/components/common/Modal/MordalPortal';
 import { MeetingCard } from '@/components/meetingRoom/MeetingCard';
 import { TimeLineButton } from '@/components/meetingRoom/TimeLineButton';
 import useBottomSheet from '@/hooks/useBottomSheet';
 import { media, theme } from '@/styles';
 import styled from '@emotion/styled';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 export const MeetingRoom = () => {
   const { openGlobalSheet } = useBottomSheet();
+  const [modalOn, setModalOn] = useState(false);
+  const {
+    register,
+    watch,
+    formState: { errors }
+  } = useForm({
+    defaultValues: {
+      agenda: '',
+      time: ''
+    },
+    mode: 'onChange'
+  });
 
-  const openUserList = {
+  const handleModal = () => {
+    setModalOn(!modalOn);
+  };
+
+  const agendaSheet = {
+    isOpen: true,
+    content: (
+      <Flex direction="column" align="flex-start">
+        <Text typo="T5" color="dark_gray2">
+          첫 번째 안건을 알려주세요
+        </Text>
+        <Space height={16} />
+        <Input
+          {...register('agenda', { required: true })}
+          placeholder="안건 입력"
+          value={watch('agenda')}
+          type="default"
+          height={60}
+          isError={errors.agenda ? true : false}
+          errorText={errors.agenda?.message as string}
+        />
+        <Text typo="T5" color="dark_gray2">
+          타이머를 맞춰주세요
+        </Text>
+        <Space height={16} />
+      </Flex>
+    )
+  };
+
+  const breakTimeSheet = {
+    isOpen: true,
+    content: <div>hi</div>
+  };
+
+  const userListSheet = {
     isOpen: true,
     content: (
       <Flex justify="flex-start">
@@ -35,11 +86,11 @@ export const MeetingRoom = () => {
         date={'2024년 2월 11일'}
         isHost={true}
         title={'DND 2조 3차 회의'}
-        onClickUserList={() => openGlobalSheet(openUserList)}
+        onClickUserList={() => openGlobalSheet(userListSheet)}
         actualTotalDuration={'01:01:02'}
       />
       <Space height={20} />
-      <TimeLineButton />
+      <TimeLineButton onClick={handleModal} />
       <Space height={14} />
       <Flex justify="space-between" align="flex-start">
         <Flex direction="column" align="flex-start" gap={6}>
@@ -58,6 +109,15 @@ export const MeetingRoom = () => {
         </Flex>
         <ExitButton>회의실 나가기</ExitButton>
       </Flex>
+      <ModalPortal>
+        {modalOn && (
+          <MeetingRoomModal
+            onAgendaClick={() => openGlobalSheet(agendaSheet)}
+            onBreakTimeClick={() => openGlobalSheet(breakTimeSheet)}
+            closeModal={handleModal}
+          />
+        )}
+      </ModalPortal>
     </Wrapper>
   );
 };
