@@ -2,6 +2,7 @@ import { Space } from '@/components/Wrapper';
 import { Button } from '@/components/common/Button';
 import { Header } from '@/components/common/Header';
 import { Input } from '@/components/common/Input';
+import { media } from '@/styles';
 import styled from '@emotion/styled';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -98,6 +99,10 @@ const StyledButton = styled.div`
   transform: translateX(-50%);
   width: 100%;
   max-width: calc(37.5rem - 4rem);
+
+  ${media.mobile} {
+    max-width: calc(100% - 4rem);
+  }
 `;
 
 export default Join;

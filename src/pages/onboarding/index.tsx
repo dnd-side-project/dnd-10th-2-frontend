@@ -1,15 +1,26 @@
 import { IconOnboardingBackground } from '@/assets/IconOnboardingBackground';
 import { SvgIcon } from '@/components/common/SvgIcon';
+import { media } from '@/styles';
 import styled from '@emotion/styled';
 
 const Onboarding = () => {
+  const handleLogin = async () => {
+    const response = await fetch(
+      'http://facerain-dev.iptime.org:8080/oauth2/authorization/kakao?redirect_uri=http://localhost:5173/join',
+      {
+        method: 'GET'
+      }
+    );
+    const data = await response.json();
+    console.log(data);
+  };
   return (
     <StyledContainer>
       <StyledGraphic>
         <IconOnboardingBackground />
       </StyledGraphic>
 
-      <StyledButton>
+      <StyledButton onClick={handleLogin}>
         <SvgIcon id="kakao" /> 카카오로 계속하기
       </StyledButton>
     </StyledContainer>
@@ -24,11 +35,15 @@ const StyledContainer = styled.div`
 const StyledGraphic = styled.div`
   width: 37.5rem;
   margin-left: -2rem;
-  height: 300px;
+  /* height: 300px; */
+
+  ${media.mobile} {
+    width: 100vw;
+  }
 `;
 
 const StyledButton = styled.button`
-  position: absolute;
+  position: fixed;
   bottom: 4.4rem;
   display: flex;
   justify-content: center;
@@ -45,6 +60,10 @@ const StyledButton = styled.button`
   &:hover,
   &:focus {
     opacity: 0.8;
+  }
+
+  ${media.mobile} {
+    max-width: calc(100% - 4rem);
   }
 `;
 
