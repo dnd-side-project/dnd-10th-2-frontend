@@ -28,14 +28,12 @@ export const TimePicker = ({ value, setValue }: TimePickerProps) => {
     minute: Array.from(new Array(60), (_, index) => index)
   });
 
-  useEffect(() => {
-    setValue({
-      ...valueGroups
-    });
-  }, [valueGroups]);
-
   const handleChange = (name: keyof TimePickerValueGroups, value: number) => {
     setValueGroups({
+      ...valueGroups,
+      [name]: value
+    });
+    setValue({
       ...valueGroups,
       [name]: value
     });
