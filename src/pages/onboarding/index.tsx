@@ -1,6 +1,9 @@
+import { userApi } from '@/apis/user';
 import { IconOnboardingBackground } from '@/assets/IconOnboardingBackground';
 import { SvgIcon } from '@/components/common/SvgIcon';
+import { media } from '@/styles';
 import styled from '@emotion/styled';
+import { Link } from 'react-router-dom';
 
 const Onboarding = () => {
   return (
@@ -9,9 +12,11 @@ const Onboarding = () => {
         <IconOnboardingBackground />
       </StyledGraphic>
 
-      <StyledButton>
-        <SvgIcon id="kakao" /> 카카오로 계속하기
-      </StyledButton>
+      <Link to={userApi.kakaoLogin}>
+        <StyledButton>
+          <SvgIcon id="kakao" /> 카카오로 계속하기
+        </StyledButton>
+      </Link>
     </StyledContainer>
   );
 };
@@ -24,11 +29,14 @@ const StyledContainer = styled.div`
 const StyledGraphic = styled.div`
   width: 37.5rem;
   margin-left: -2rem;
-  height: 300px;
+
+  ${media.mobile} {
+    width: 100vw;
+  }
 `;
 
 const StyledButton = styled.button`
-  position: absolute;
+  position: fixed;
   bottom: 4.4rem;
   display: flex;
   justify-content: center;
@@ -45,6 +53,10 @@ const StyledButton = styled.button`
   &:hover,
   &:focus {
     opacity: 0.8;
+  }
+
+  ${media.mobile} {
+    max-width: calc(100% - 4rem);
   }
 `;
 

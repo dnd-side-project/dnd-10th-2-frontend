@@ -1,10 +1,13 @@
+import { userApi } from '@/apis/user';
 import { Space } from '@/components/Wrapper';
 import { Button } from '@/components/common/Button';
 import { Header } from '@/components/common/Header';
 import { Input } from '@/components/common/Input';
+import { media } from '@/styles';
 import styled from '@emotion/styled';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const Join = () => {
   const {
@@ -20,15 +23,42 @@ const Join = () => {
     mode: 'onChange'
   });
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get('code');
 
   const handleJoin = async () => {
-    try {
-      await console.log(getValues('join'));
-      navigate('/join/complete');
-    } catch {
-      console.log('error');
+    const nickname = getValues('join');
+
+    if (token) {
+      try {
+        await userApi.addNickname(nickname, token);
+        document.cookie = `token=${token}`;
+        navigate('/join/complete');
+      } catch {
+        navigate('/onboarding');
+      }
+    } else {
+      navigate('/onboarding');
     }
   };
+
+  const getUserData = async () => {
+    if (token) {
+      try {
+        const { data } = await userApi.getInfo(token);
+        const nickname = data?.response?.nickname;
+        setValue('join', nickname);
+      } catch {
+        navigate('/onboarding');
+      }
+    } else {
+      navigate('/onboarding');
+    }
+  };
+
+  useEffect(() => {
+    getUserData();
+  }, []);
   return (
     <StyledContainer>
       <Header
@@ -98,6 +128,10 @@ const StyledButton = styled.div`
   transform: translateX(-50%);
   width: 100%;
   max-width: calc(37.5rem - 4rem);
+
+  ${media.mobile} {
+    max-width: calc(100% - 4rem);
+  }
 `;
 
 export default Join;
