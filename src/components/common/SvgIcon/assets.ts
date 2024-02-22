@@ -16,8 +16,12 @@ export { default as star } from '@public/icons/star.svg';
 export { default as warning } from '@public/icons/warning.svg';
 export { default as x_circle } from '@public/icons/x_circle.svg';
 export { default as x } from '@public/icons/x.svg';
+export { default as plus } from '@public/icons/plus.svg';
+export { default as agenda } from '@public/icons/agenda.svg';
+export { default as play } from '@public/icons/play.svg';
+export { default as play_disabled } from '@public/icons/play_disabled.svg';
+export { default as dots_mono } from '@public/icons/dots_mono.svg';
 export { default as kakao } from '@public/icons/kakao.svg';
-
 // grahpics
 export { default as onboarding_background } from '@public/graphics/onboarding_background.svg';
 export { default as join_complete } from '@public/graphics/join_complete.svg';

@@ -18,13 +18,6 @@ export const GlobalStyle = css`
 
     font-family: 'Pretendard';
     background-color: gray;
-    overflow-x: hidden;
-
-    -ms-overflow-style: none;
-
-    ::-webkit-scrollbar {
-      display: none;
-    }
   }
 
   button {

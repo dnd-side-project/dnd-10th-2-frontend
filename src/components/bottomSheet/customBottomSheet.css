@@ -12,6 +12,8 @@
   transform: translate3d(0, 0px, 0);
   transform: translate3d(0, var(--rsbs-overlay-translate-y, 0px), 0);
   will-change: height;
+
+  position: fixed !important;
 }
 
 [data-rsbs-overlay]:focus {
@@ -43,6 +45,7 @@
 
 [data-rsbs-backdrop],
 [data-rsbs-root]:after {
+  background-color: rgba(10, 17, 28, 0.6);
   z-index: 3;
   -ms-scroll-chaining: none;
   overscroll-behavior: none;
@@ -85,13 +88,15 @@
 }
 
 [data-rsbs-backdrop] {
-  top: -60px;
-  bottom: -60px;
+  top: 0px;
+  bottom: 0px;
   background-color: rgba(10, 17, 28, 0.6);
   background-color: var(--rsbs-backdrop-bg, rgba(10, 17, 28, 0.6));
   will-change: opacity;
   cursor: pointer;
   opacity: 1;
+
+  height: 100%;
 }
 
 [data-rsbs-is-dismissable='false'] [data-rsbs-backdrop] {
@@ -236,4 +241,17 @@
 [data-rsbs-state='closing'] {
   /* Allows interactions on the rest of the page before the close transition is finished */
   pointer-events: none;
+}
+
+[data-rsbs-root] {
+  position: fixed;
+  height: 100%;
+  bottom: 0px !important;
+  width: 100vw !important;
+}
+
+[data-rsbs-backdrop] {
+  height: 100%;
+  position: fixed;
+  bottom: 0px !important;
 }

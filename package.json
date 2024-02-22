@@ -24,7 +24,10 @@
     "react-countdown-circle-timer": "^3.2.1",
     "react-dom": "^18.2.0",
     "react-hook-form": "7.43.9",
+    "react-mobile-datepicker": "^4.0.2",
+    "react-mobile-picker-scroll": "^0.2.14",
     "react-router-dom": "^6.22.0",
+    "react-scroll": "^1.9.0",
     "react-spring-bottom-sheet": "^3.4.1",
     "svg-sprite": "^2.0.2",
     "vite-tsconfig-paths": "^4.3.1"
@@ -34,6 +37,7 @@
     "@types/luxon": "^3",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.17",
+    "@types/react-scroll": "^1",
     "@typescript-eslint/eslint-plugin": "^6.19.1",
     "@typescript-eslint/parser": "^6.21.0",
     "@vitejs/plugin-react-swc": "^3.5.0",

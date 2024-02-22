@@ -30,6 +30,7 @@ export const Space = styled.div<{
 export const Text = styled.p<{
   typo: KeyOfTypo;
   color: KeyOfPalette;
+  height?: number;
 }>`
   ${({ typo }) => theme.typo[typo]};
   color: ${({ color }) => theme.palette[color]};
@@ -38,4 +39,11 @@ export const Text = styled.p<{
   white-space: pre-wrap;
   margin: 0;
   padding: 0;
+  height: ${({ height }) => (height ? `${height}px` : 'auto')};
+`;
+
+export const ButtonWrapper = styled.div<{
+  width: number;
+}>`
+  width: ${({ width }) => `${width}px`};
 `;
