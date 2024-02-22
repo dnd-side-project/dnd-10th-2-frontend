@@ -12,7 +12,10 @@ export const GlobalBottomSheet = () => {
       <StyledSheet
         open={isOpen}
         onDismiss={closeGlobalSheet}
-        snapPoints={({ maxHeight }) => [336, maxHeight * 0.6]}>
+        snapPoints={({ maxHeight }) => [
+          400, //최소
+          maxHeight * 0.7 //최대
+        ]}>
         {bottomSheet?.content}
       </StyledSheet>
     </>

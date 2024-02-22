@@ -5,6 +5,11 @@ import { Header } from '@/components/common/Header';
 import { Input } from '@/components/common/Input';
 import { MeetingRoomModal } from '@/components/common/Modal/MeetingRoomModal';
 import ModalPortal from '@/components/common/Modal/MordalPortal';
+import {
+  TimePicker,
+  TimePickerValueGroups
+} from '@/components/common/TimePicker/TimePicker';
+import { AgendaCard } from '@/components/meetingRoom/AgendaCard';
 import { MeetingCard } from '@/components/meetingRoom/MeetingCard';
 import { TimeLineButton } from '@/components/meetingRoom/TimeLineButton';
 import useBottomSheet from '@/hooks/useBottomSheet';
@@ -19,11 +24,19 @@ export const MeetingRoom = () => {
   const {
     register,
     watch,
+    setValue,
     formState: { errors }
   } = useForm({
     defaultValues: {
       agenda: '',
-      time: ''
+      agendaTime: {
+        hour: 0,
+        minute: 0
+      },
+      breakTimeTime: {
+        hour: 0,
+        minute: 0
+      }
     },
     mode: 'onChange'
   });
@@ -53,13 +66,46 @@ export const MeetingRoom = () => {
           타이머를 맞춰주세요
         </Text>
         <Space height={16} />
+        <TimePicker
+          value={watch('agendaTime')}
+          setValue={(value: TimePickerValueGroups) =>
+            setValue('agendaTime', value)
+          }
+        />
+        <Space height={16} />
+        <Button
+          size={'lg'}
+          backgroundColor={'main'}
+          onClick={() => console.log(watch('agenda'), watch('agendaTime'))}>
+          완료하기
+        </Button>
       </Flex>
     )
   };
 
   const breakTimeSheet = {
     isOpen: true,
-    content: <div>hi</div>
+    content: (
+      <Flex direction="column" align="flex-start">
+        <Text typo="T5" color="dark_gray2">
+          타이머를 맞춰주세요
+        </Text>
+        <Space height={16} />
+        <TimePicker
+          value={watch('breakTimeTime')}
+          setValue={(value: TimePickerValueGroups) =>
+            setValue('breakTimeTime', value)
+          }
+        />
+        <Space height={16} />
+        <Button
+          size={'lg'}
+          backgroundColor={'main'}
+          onClick={() => console.log(watch('breakTimeTime'))}>
+          완료하기
+        </Button>
+      </Flex>
+    )
   };
 
   const userListSheet = {
@@ -90,6 +136,40 @@ export const MeetingRoom = () => {
         actualTotalDuration={'01:01:02'}
       />
       <Space height={20} />
+      <AgendaCard
+        type="agenda"
+        time="00:10:00"
+        title="아이스브레이킹"
+        currentOrder={2}
+        agendaOrder={1}
+        isDone
+      />
+      <Space height={10} />
+      <AgendaCard
+        type="breakTime"
+        time="00:10:00"
+        title="아이스브레이킹"
+        currentOrder={2}
+        agendaOrder={2}
+        isDone
+      />
+      <Space height={10} />
+      <AgendaCard
+        type="agenda"
+        time="00:10:00"
+        title="아이스브레이킹"
+        currentOrder={2}
+        agendaOrder={2}
+      />
+      <Space height={10} />
+      <AgendaCard
+        type="breakTime"
+        time="00:10:00"
+        title="아이스브레이킹"
+        currentOrder={2}
+        agendaOrder={3}
+      />
+      <Space height={10} />
       <TimeLineButton onClick={handleModal} />
       <Space height={14} />
       <Flex justify="space-between" align="flex-start">
@@ -108,7 +188,9 @@ export const MeetingRoom = () => {
           </ExitButtonChip>
         </Flex>
         <ExitButton>회의실 나가기</ExitButton>
+        <Space height={220} />
       </Flex>
+
       <ModalPortal>
         {modalOn && (
           <MeetingRoomModal
