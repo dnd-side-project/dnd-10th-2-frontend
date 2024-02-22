@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { theme } from '@/styles';
 import { Flex } from '@/components/Wrapper';
@@ -23,17 +23,19 @@ interface TimePickerProps {
 export const TimePicker = ({ value, setValue }: TimePickerProps) => {
   const [valueGroups, setValueGroups] = useState<TimePickerValueGroups>(value);
 
-  const [optionGroups, setOptionGroups] = useState<TimePickerOptionGroups>({
+  const [optionGroups] = useState<TimePickerOptionGroups>({
     hour: Array.from(new Array(24), (_, index) => index),
     minute: Array.from(new Array(60), (_, index) => index)
   });
 
-  const handleChange = (name: keyof TimePickerValueGroups, value: string) => {
-    setValueGroups({
-      ...valueGroups,
-      [name]: value
-    });
+  useEffect(() => {
     setValue({
+      ...valueGroups
+    });
+  }, [valueGroups]);
+
+  const handleChange = (name: keyof TimePickerValueGroups, value: number) => {
+    setValueGroups({
       ...valueGroups,
       [name]: value
     });
@@ -78,6 +80,7 @@ const Wrapper = styled.div`
 
     width: auto;
     padding: 0;
+    margin-right: 15px;
 
     gap: 46px;
   }
@@ -117,6 +120,7 @@ const HighlightBox = styled.div`
   width: 100%;
   position: absolute;
 
+  border-radius: 8px;
   height: 40px;
   background-color: ${theme.palette.white};
 
@@ -129,6 +133,6 @@ const HighlightBox = styled.div`
 
   div {
     width: 80px;
-    margin-left: 46px;
+    margin-left: 35px;
   }
 `;
