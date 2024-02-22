@@ -29,11 +29,12 @@ export const palette = {
   play: '#5C6988',
   chip: '#EDEFF3',
   box_stroke: '#D3D9EE',
-  kakao_yellow: 'FEE500',
+  kakao_yellow: '#FEE500',
 
   error: '#FF533C',
   white: '#FFFFFF',
   gray: '#F7F8F9',
+  black: '#000000',
 
   light_red: '#FFD7CE'
 };

@@ -1,3 +1,4 @@
+// icons
 export { default as arrow_back_circle } from '@public/icons/arrow_back_circle.svg';
 export { default as arrow_back } from '@public/icons/arrow_back.svg';
 export { default as arrow_left } from '@public/icons/arrow_left.svg';
@@ -20,3 +21,7 @@ export { default as agenda } from '@public/icons/agenda.svg';
 export { default as play } from '@public/icons/play.svg';
 export { default as play_disabled } from '@public/icons/play_disabled.svg';
 export { default as dots_mono } from '@public/icons/dots_mono.svg';
+export { default as kakao } from '@public/icons/kakao.svg';
+// grahpics
+export { default as onboarding_background } from '@public/graphics/onboarding_background.svg';
+export { default as join_complete } from '@public/graphics/join_complete.svg';
