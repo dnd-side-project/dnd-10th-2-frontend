@@ -13,6 +13,7 @@ export { default as memo } from '@public/icons/memo.svg';
 export { default as pencil } from '@public/icons/pencil.svg';
 export { default as share } from '@public/icons/share.svg';
 export { default as star } from '@public/icons/star.svg';
+export { default as star_orange } from '@public/icons/star_orange.svg';
 export { default as warning } from '@public/icons/warning.svg';
 export { default as x_circle } from '@public/icons/x_circle.svg';
 export { default as x } from '@public/icons/x.svg';
