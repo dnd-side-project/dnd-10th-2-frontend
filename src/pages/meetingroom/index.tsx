@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ButtonWrapper, Flex, Space, Text } from '@/components/Wrapper';
-import { Button } from '@/components/common/Button';
-import { Header } from '@/components/common/Header';
-import { Input } from '@/components/common/Input';
+import { Button } from '@/components/common/Button/Button';
+import { Header } from '@/components/common/Header/Header';
+import { Input } from '@/components/common/Input/Input';
 import { MeetingRoomModal } from '@/components/common/Modal/MeetingRoomModal';
 import ModalPortal from '@/components/common/Modal/MordalPortal';
 import {

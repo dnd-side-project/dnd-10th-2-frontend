@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable react/display-name */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
@@ -10,7 +11,7 @@ import styled from '@emotion/styled';
 import { theme } from '@/styles';
 import { Flex } from '@/components/Wrapper';
 import { css } from '@emotion/react';
-import { SvgIcon } from './SvgIcon';
+import { SvgIcon } from '../SvgIcon/SvgIcon';
 
 export type InputVariant = 'default' | 'join' | 'meeting';
 
@@ -61,11 +62,11 @@ export const Input = forwardRef<
   ) => {
     return (
       <Container>
-        <Flex align="flex-start">
+        <Flex align='flex-start'>
           {multiline ? (
             <TextAreaContainer
-              direction="column"
-              align="flex-end"
+              direction='column'
+              align='flex-end'
               gap={8}
               value={value}
               isError={isError}
@@ -98,7 +99,7 @@ export const Input = forwardRef<
               />
               {type === 'join' && (
                 <SvgIcon
-                  id="x_circle"
+                  id='x_circle'
                   size={16}
                   // fill="#C7CCD6"
                   onClick={setValue}

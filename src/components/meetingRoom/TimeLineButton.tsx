@@ -1,5 +1,5 @@
 import { Text } from '@/components/Wrapper';
-import { SvgIcon } from '@/components/common/SvgIcon';
+import { SvgIcon } from '@/components/common/SvgIcon/SvgIcon';
 import { theme } from '@/styles';
 import styled from '@emotion/styled';
 import { ButtonHTMLAttributes } from 'react';

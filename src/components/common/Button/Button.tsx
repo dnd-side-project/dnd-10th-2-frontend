@@ -1,12 +1,14 @@
+import { KeyOfPalette } from '@/styles';
 import styled from '@emotion/styled';
-import { Size, BackgroundColor, TextColor } from './types';
+
+export type Size = 'lg' | 'md' | 'sm';
 
 interface ButtonProps {
   children: React.ReactNode;
   size: Size;
   fullWidth?: boolean;
-  backgroundColor: BackgroundColor;
-  textColor?: TextColor;
+  backgroundColor: KeyOfPalette;
+  textColor?: KeyOfPalette;
   disabled?: boolean;
   onClick: () => void;
 }
@@ -36,8 +38,8 @@ export const Button = ({
 const StyledButton = styled.button<{
   size: 'lg' | 'md' | 'sm';
   fullWidth?: boolean;
-  backgroundColor: BackgroundColor;
-  textColor: TextColor;
+  backgroundColor: KeyOfPalette;
+  textColor: KeyOfPalette;
   disabled?: boolean;
 }>`
   ${(props) =>
