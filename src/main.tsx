@@ -7,7 +7,7 @@ import { Global, ThemeProvider } from '@emotion/react';
 import { theme } from './styles/theme';
 import { Routers } from '@/routes/index.tsx';
 import { Layout } from '@/components/layout';
-import { GlobalBottomSheet } from '@/components/bottomSheet/GlobalBottomSheet';
+import { GlobalBottomSheet } from '@/components/common/BottomSheet/GlobalBottomSheet';
 
 const queryClient = new QueryClient({
   defaultOptions: {
