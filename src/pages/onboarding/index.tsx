@@ -12,7 +12,7 @@ const Onboarding = () => {
         <IconOnboardingBackground />
       </StyledGraphic>
 
-      <Link to={userApi.kakaoLogin}>
+      <Link to={userApi.GET_KAKAO_LOGIN}>
         <StyledButton>
           <SvgIcon id="kakao" /> 카카오로 계속하기
         </StyledButton>

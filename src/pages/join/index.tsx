@@ -31,7 +31,7 @@ const Join = () => {
 
     if (token) {
       try {
-        await userApi.addNickname(nickname, token);
+        await userApi.PATCH_NICKNAME(nickname, token);
         document.cookie = `token=${token}`;
         navigate('/join/complete');
       } catch {
@@ -45,7 +45,7 @@ const Join = () => {
   const getUserData = async () => {
     if (token) {
       try {
-        const { data } = await userApi.getInfo(token);
+        const { data } = await userApi.GET_MEMBERS(token);
         const nickname = data?.response?.nickname;
         setValue('join', nickname);
       } catch {
