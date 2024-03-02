@@ -2,7 +2,7 @@ import App from '@/App';
 import { LoginLayout } from '@/components/layout';
 import Join from '@/pages/join';
 import JoinComplete from '@/pages/join/complete';
-import { MeetingRoom } from '@/pages/meetingroom';
+import { MeetingRoom } from '@/pages/meetingRoom';
 import Onboarding from '@/pages/onboarding';
 
 import {
@@ -37,7 +37,7 @@ const routeChildren: RouteChildren[] = [
     auth: false
   },
   {
-    path: '/meetingroom/:meetingId',
+    path: '/meeting-room/:meetingId',
     element: <MeetingRoom />,
     auth: true
   }
