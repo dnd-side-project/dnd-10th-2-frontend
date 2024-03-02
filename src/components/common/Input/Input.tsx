@@ -62,11 +62,11 @@ export const Input = forwardRef<
   ) => {
     return (
       <Container>
-        <Flex align='flex-start'>
+        <Flex align="flex-start">
           {multiline ? (
             <TextAreaContainer
-              direction='column'
-              align='flex-end'
+              direction="column"
+              align="flex-end"
               gap={8}
               value={value}
               isError={isError}
@@ -99,7 +99,7 @@ export const Input = forwardRef<
               />
               {type === 'join' && (
                 <SvgIcon
-                  id='x_circle'
+                  id="x_circle"
                   size={16}
                   // fill="#C7CCD6"
                   onClick={setValue}
