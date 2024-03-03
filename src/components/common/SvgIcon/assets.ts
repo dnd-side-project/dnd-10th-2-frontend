@@ -23,6 +23,14 @@ export { default as play } from '@public/icons/play.svg';
 export { default as play_disabled } from '@public/icons/play_disabled.svg';
 export { default as dots_mono } from '@public/icons/dots_mono.svg';
 export { default as kakao } from '@public/icons/kakao.svg';
+export { default as meeting_room_thumbnail_1 } from '@public/icons/meeting_room_thumbnail_1.svg';
+export { default as meeting_room_thumbnail_2 } from '@public/icons/meeting_room_thumbnail_2.svg';
+export { default as meeting_room_thumbnail_3 } from '@public/icons/meeting_room_thumbnail_3.svg';
+export { default as meeting_room_thumbnail_4 } from '@public/icons/meeting_room_thumbnail_4.svg';
+export { default as meeting_room_thumbnail_5 } from '@public/icons/meeting_room_thumbnail_5.svg';
+export { default as meeting_room_thumbnail_6 } from '@public/icons/meeting_room_thumbnail_6.svg';
+export { default as meeting_room_thumbnail_7 } from '@public/icons/meeting_room_thumbnail_7.svg';
+export { default as meeting_room_thumbnail_8 } from '@public/icons/meeting_room_thumbnail_8.svg';
 // grahpics
 export { default as onboarding_background } from '@public/graphics/onboarding_background.svg';
 export { default as join_complete } from '@public/graphics/join_complete.svg';
