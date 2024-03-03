@@ -3,7 +3,7 @@ import { BreakTime, BreakTimeDisabled } from '@/assets/BreakTime';
 import { Flex, Space, Text } from '@/components/Wrapper';
 import { theme } from '@/styles';
 import styled from '@emotion/styled';
-import { SvgIcon } from '@/components/common/SvgIcon';
+import { SvgIcon } from '@/components/common/SvgIcon/SvgIcon';
 import { css } from '@emotion/react';
 
 interface AgendaCardProps {

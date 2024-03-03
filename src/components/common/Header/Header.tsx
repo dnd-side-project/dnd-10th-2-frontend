@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { SvgIcon } from '../SvgIcon';
+import { SvgIcon } from '@/components/common/SvgIcon/SvgIcon';
 
 interface HeaderProps {
   title?: string;

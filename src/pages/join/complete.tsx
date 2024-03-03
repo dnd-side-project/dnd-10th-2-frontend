@@ -1,7 +1,6 @@
 import { IconJoinComplete } from '@/assets/IconJoinComplete';
 import { Space } from '@/components/Wrapper';
-import { Button } from '@/components/common/Button';
-import { Header } from '@/components/common/Header';
+import { Button, Header } from '@/components/common';
 import { media } from '@/styles';
 import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';

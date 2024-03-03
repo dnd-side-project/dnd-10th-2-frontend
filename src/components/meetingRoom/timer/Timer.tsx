@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { formatSeconds } from '../../utils/formatSeconds';
+import { formatSeconds } from '@/utils';
 import {
   ColorFormat,
   CountdownCircleTimer

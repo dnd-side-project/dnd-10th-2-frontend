@@ -1,17 +1,18 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ButtonWrapper, Flex, Space, Text } from '@/components/Wrapper';
-import { Button } from '@/components/common/Button';
-import { Header } from '@/components/common/Header';
-import { Input } from '@/components/common/Input';
-import { MeetingRoomModal } from '@/components/common/Modal/MeetingRoomModal';
-import ModalPortal from '@/components/common/Modal/MordalPortal';
 import {
+  Button,
+  Header,
+  Input,
+  MeetingRoomModal,
+  ModalPortal,
   TimePicker,
   TimePickerValueGroups
-} from '@/components/common/TimePicker/TimePicker';
-import { AgendaCard } from '@/components/meetingRoom/AgendaCard';
-import { MeetingCard } from '@/components/meetingRoom/MeetingCard';
-import { TimeLineButton } from '@/components/meetingRoom/TimeLineButton';
+} from '@/components/common';
+import {
+  AgendaCard,
+  MeetingCard,
+  TimeLineButton
+} from '@/components/meetingRoom';
 import useBottomSheet from '@/hooks/useBottomSheet';
 import { media, theme } from '@/styles';
 import styled from '@emotion/styled';

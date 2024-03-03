@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable react/display-name */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
@@ -10,7 +11,7 @@ import styled from '@emotion/styled';
 import { theme } from '@/styles';
 import { Flex } from '@/components/Wrapper';
 import { css } from '@emotion/react';
-import { SvgIcon } from './SvgIcon';
+import { SvgIcon } from '../SvgIcon/SvgIcon';
 
 export type InputVariant = 'default' | 'join' | 'meeting';
 

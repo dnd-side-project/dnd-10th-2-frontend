@@ -1,6 +1,6 @@
 import { userApi } from '@/apis/user';
 import { IconOnboardingBackground } from '@/assets/IconOnboardingBackground';
-import { SvgIcon } from '@/components/common/SvgIcon';
+import { SvgIcon } from '@/components/common';
 import { media } from '@/styles';
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
@@ -12,7 +12,7 @@ const Onboarding = () => {
         <IconOnboardingBackground />
       </StyledGraphic>
 
-      <Link to={userApi.kakaoLogin}>
+      <Link to={userApi.GET_KAKAO_LOGIN}>
         <StyledButton>
           <SvgIcon id="kakao" /> 카카오로 계속하기
         </StyledButton>
