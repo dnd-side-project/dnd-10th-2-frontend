@@ -613,12 +613,7 @@ export const Thumbnail4 = () => (
   </svg>
 );
 export const Thumbnail5 = () => (
-  <svg
-    width="77"
-    height="76"
-    viewBox="0 0 77 76"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 77 76" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M0.46875 12C0.46875 5.37258 5.84133 0 12.4688 0H64.4688C71.0962 0 76.4688 5.37258 76.4688 12V64C76.4688 70.6274 71.0962 76 64.4688 76H12.4688C5.84133 76 0.46875 70.6274 0.46875 64V12Z"
       fill="#C3DBFF"
