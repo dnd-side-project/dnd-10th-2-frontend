@@ -65,7 +65,8 @@
     "recoil": "^0.7.7",
     "storybook": "^7.6.17",
     "typescript": "^5.2.2",
-    "vite": "^5.0.8"
+    "vite": "^5.0.8",
+    "zustand": "^4.5.2"
   },
   "packageManager": "yarn@4.0.2"
 }
