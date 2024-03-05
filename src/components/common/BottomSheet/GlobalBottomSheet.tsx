@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { BottomSheet } from 'react-spring-bottom-sheet';
 import './customBottomSheet.css';
 import useBottomSheet from '@/hooks/useBottomSheet';
