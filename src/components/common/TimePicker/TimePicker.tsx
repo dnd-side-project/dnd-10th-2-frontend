@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from 'react';
 import styled from '@emotion/styled';
 import { theme } from '@/styles';
