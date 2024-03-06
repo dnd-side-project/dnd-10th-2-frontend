@@ -27,8 +27,7 @@ const CreateMeetingRoom = () => {
   const {
     register,
     watch,
-    // getValues,
-    // setValue,
+    getValues,
     formState: { errors }
   } = useForm({
     defaultValues: {
@@ -39,6 +38,15 @@ const CreateMeetingRoom = () => {
   });
 
   const [thumbnailNumber, setThumbnailNumber] = useState<number | null>(null);
+
+  const handleButton = () => {
+    setCurrentStep((prev) => prev + 1);
+    console.log(
+      getValues('meetingRoomName'),
+      getValues('meetingRoomNotice'),
+      thumbnailNumber
+    );
+  };
   return (
     <Flex
       direction="column"
@@ -79,13 +87,13 @@ const CreateMeetingRoom = () => {
         />
       </div>
 
-      <StyledButton onClick={() => setCurrentStep(1)}>
+      <StyledButton>
         <Button
           size="lg"
           backgroundColor="main"
           disabled={false}
-          onClick={() => console.log('click')}>
-          완료하기
+          onClick={handleButton}>
+          다음으로
         </Button>
       </StyledButton>
     </Flex>
