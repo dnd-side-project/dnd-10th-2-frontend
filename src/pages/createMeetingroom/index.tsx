@@ -9,16 +9,12 @@ import {
   Thumbnail8
 } from '@/assets/MeetingRoom/Thumbnail';
 import { Flex, Space } from '@/components/Wrapper';
-import { Header } from '@/components/common/Header';
-import { Input } from '@/components/common/Input';
-import { SvgIcon } from '@/components/common/SvgIcon';
+import { Header, Input, SvgIcon } from '@/components/common';
 import styled from '@emotion/styled';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { KeyOfPalette } from '@/styles';
 
 const CreateMeetingRoom = () => {
-  console.log(KeyOfPalette);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const stepList = [
     {
