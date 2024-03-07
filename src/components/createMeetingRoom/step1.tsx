@@ -2,6 +2,7 @@
 import { thumbnailList } from '@/assets/MeetingRoom/thumbnailList';
 import { Flex, Space } from '@/components/Wrapper';
 import { Input, SvgIcon } from '@/components/common';
+import { theme } from '@/styles';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { FieldErrors, UseFormRegister, UseFormWatch } from 'react-hook-form';
@@ -26,7 +27,10 @@ const Step1 = ({
 }: Step1Props) => {
   return (
     <Flex direction="column" align="flex-start">
-      <div style={{ width: '100%' }}>
+      <div
+        css={css`
+          width: 100%;
+        `}>
         <StyledLabel>
           회의 이름을 알려주세요 <SvgIcon id="star_orange" size={18} />
         </StyledLabel>
@@ -79,7 +83,7 @@ const Step1 = ({
               onClick={() => setThumbnailNumber(thumbnail.id + 1)}
               css={css`
                 border: ${thumbnail.id + 1 === thumbnailNumber &&
-                '2px solid #5784FD'};
+                `2px solid ${theme.palette.main_blue}`};
                 border-radius: 14px;
               `}>
               {thumbnail.icon()}

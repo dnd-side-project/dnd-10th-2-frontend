@@ -4,8 +4,8 @@ import { Button, Header } from '@/components/common';
 import styled from '@emotion/styled';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import Step1 from './step1';
 import { css } from '@emotion/react';
+import Step1 from '@/components/createMeetingRoom/step1';
 
 const CreateMeetingRoom = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
@@ -112,29 +112,23 @@ const StyledStep = styled.div`
 `;
 
 const StyledStepNumber = styled.div<{ isCurrentStep: boolean }>`
-  ${(props) => props.theme.typo.T7};
+  ${({ theme }) => theme.typo.T7};
   display: flex;
   justify-content: center;
   align-items: center;
   width: 2.2rem;
   height: 2.2rem;
-  background-color: ${(props) =>
-    props.isCurrentStep
-      ? props.theme.palette.main_blue
-      : props.theme.palette.light_gray2};
-  color: ${(props) =>
-    props.isCurrentStep
-      ? props.theme.palette.white
-      : props.theme.palette.light_gray4};
+  background-color: ${({ isCurrentStep, theme }) =>
+    isCurrentStep ? theme.palette.main_blue : theme.palette.light_gray2};
+  color: ${({ isCurrentStep, theme }) =>
+    isCurrentStep ? theme.palette.white : theme.palette.light_gray4};
   border-radius: 100%;
 `;
 
 const StyledStepName = styled.div<{ isCurrentStep: boolean }>`
-  ${(props) => props.theme.typo.B2};
-  color: ${(props) =>
-    props.isCurrentStep
-      ? props.theme.palette.main_blue
-      : props.theme.palette.light_gray4};
+  ${({ theme }) => theme.typo.B2};
+  color: ${({ isCurrentStep, theme }) =>
+    isCurrentStep ? theme.palette.main_blue : theme.palette.light_gray4};
 `;
 
 const StyledButton = styled.div`
