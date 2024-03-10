@@ -9,6 +9,7 @@ export const GlobalStyle = css`
   }
 
   body {
+    position: relative;
     height: 100%;
     min-height: 100vh;
     @supports (-webkit-appearance: none) and (stroke-color: transparent) {
