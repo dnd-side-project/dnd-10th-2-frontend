@@ -107,12 +107,12 @@ const CreateMeetingRoom = () => {
           onClick={handleButton}>
           다음으로
         </Button>
-
-        <Toast isToastOpened={isToastOpened} bottom={6.6}>
-          <SvgIcon id="warning" />
-          <span>필수 항목을 모두 완료해주세요</span>
-        </Toast>
       </StyledButton>
+
+      <Toast isToastOpened={isToastOpened} bottom={11}>
+        <SvgIcon id="warning" />
+        <span>필수 항목을 모두 완료해주세요</span>
+      </Toast>
     </Flex>
   );
 };
@@ -149,7 +149,6 @@ const StyledStepName = styled.div<{ isCurrentStep: boolean }>`
 `;
 
 const StyledButton = styled.div`
-  position: relative;
   width: 100%;
   transform: translateY(-4.4rem);
 `;

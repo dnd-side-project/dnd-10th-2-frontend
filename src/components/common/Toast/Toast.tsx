@@ -1,3 +1,4 @@
+import { createPortal } from 'react-dom';
 import { media } from '@/styles';
 import styled from '@emotion/styled';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -5,17 +6,17 @@ import { AnimatePresence, motion } from 'framer-motion';
 interface ToastProps {
   children: React.ReactNode;
   isToastOpened: boolean;
-  bottom: number;
+  bottom?: number;
 }
 
 /**
  * Toast 컴포넌트 props 리스트
  * @default {HTMLDivElement}
  *
- * @param {boolean} [isToastOpened]  Toast 컴포넌트의 open 여부
- * @param {number} [bottom] 부모 컴포넌트로부터의 bottom 값(단위: rem)
+ * @param {boolean} isToastOpened  Toast 컴포넌트의 open 여부
+ * @param {number} bottom? 부모 컴포넌트로부터의 bottom 값(단위: rem)
  */
-export const Toast = ({ children, isToastOpened, bottom }: ToastProps) => {
+export const Toast = ({ children, isToastOpened, bottom = 4 }: ToastProps) => {
   const toastVariants = {
     invisible: {
       opacity: 0,
@@ -30,7 +31,8 @@ export const Toast = ({ children, isToastOpened, bottom }: ToastProps) => {
       bottom: (bottom - 1) * 10
     }
   };
-  return (
+
+  const content = (
     <AnimatePresence>
       {isToastOpened && (
         <StyledToast
@@ -44,6 +46,10 @@ export const Toast = ({ children, isToastOpened, bottom }: ToastProps) => {
       )}
     </AnimatePresence>
   );
+
+  const el = document.getElementById('toast');
+  if (!el) return null;
+  return createPortal(content, el);
 };
 
 const StyledToast = styled(motion.div)<{ bottom: number }>`
