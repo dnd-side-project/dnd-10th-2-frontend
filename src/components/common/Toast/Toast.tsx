@@ -2,46 +2,35 @@ import { createPortal } from 'react-dom';
 import { media } from '@/styles';
 import styled from '@emotion/styled';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useToast } from '@/store/toast';
 
-interface ToastProps {
-  children: React.ReactNode;
-  isToastOpened: boolean;
-  bottom?: number;
-}
+export const Toast = () => {
+  const { toast } = useToast();
 
-/**
- * Toast 컴포넌트 props 리스트
- * @default {HTMLDivElement}
- *
- * @param {boolean} isToastOpened  Toast 컴포넌트의 open 여부
- * @param {number} bottom? 부모 컴포넌트로부터의 bottom 값(단위: rem)
- */
-export const Toast = ({ children, isToastOpened, bottom = 4 }: ToastProps) => {
   const toastVariants = {
     invisible: {
       opacity: 0,
-      bottom: (bottom - 1) * 10
+      bottom: (toast.bottom - 1) * 10
     },
     visible: {
       opacity: 1,
-      bottom: bottom * 10
+      bottom: toast.bottom * 10
     },
     exit: {
       opacity: 0,
-      bottom: (bottom - 1) * 10
+      bottom: (toast.bottom - 1) * 10
     }
   };
 
   const content = (
     <AnimatePresence>
-      {isToastOpened && (
+      {toast.isOpened && (
         <StyledToast
-          bottom={bottom}
           variants={toastVariants}
           initial="invisible"
           animate="visible"
           exit="exit">
-          {children}
+          {toast.content}
         </StyledToast>
       )}
     </AnimatePresence>
@@ -52,7 +41,7 @@ export const Toast = ({ children, isToastOpened, bottom = 4 }: ToastProps) => {
   return createPortal(content, el);
 };
 
-const StyledToast = styled(motion.div)<{ bottom: number }>`
+const StyledToast = styled(motion.div)`
   ${({ theme }) => theme.typo.T7}
   color: ${({ theme }) => theme.palette.white};
   position: absolute;
