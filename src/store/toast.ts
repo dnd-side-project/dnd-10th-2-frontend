@@ -13,8 +13,8 @@ type ToastStoreType = {
     content,
     bottom
   }: {
-    content: ReactNode;
-    bottom?: number;
+    content: ToastType['content'];
+    bottom?: ToastType['bottom'];
   }) => void;
 };
 
