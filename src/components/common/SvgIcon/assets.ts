@@ -31,6 +31,8 @@ export { default as meeting_room_thumbnail_5 } from '@public/icons/meeting_room_
 export { default as meeting_room_thumbnail_6 } from '@public/icons/meeting_room_thumbnail_6.svg';
 export { default as meeting_room_thumbnail_7 } from '@public/icons/meeting_room_thumbnail_7.svg';
 export { default as meeting_room_thumbnail_8 } from '@public/icons/meeting_room_thumbnail_8.svg';
+export { default as date_picker_arrow_left } from '@public/icons/date_picker_arrow_left.svg';
+export { default as date_picker_arrow_right } from '@public/icons/date_picker_arrow_right.svg';
 // grahpics
 export { default as onboarding_background } from '@public/graphics/onboarding_background.svg';
 export { default as join_complete } from '@public/graphics/join_complete.svg';
