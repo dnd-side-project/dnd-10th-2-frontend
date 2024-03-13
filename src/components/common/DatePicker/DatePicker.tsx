@@ -38,6 +38,18 @@ const DatePicker = () => {
    */
   const createArray1ToN = (n: number) =>
     [...Array(n)].map((_, index) => index + 1);
+
+  /**
+   * 달력의 날짜 클릭 시 해당 날짜로 포커스 시키는 함수
+   * @param {number} updatedDate 클릭한 날짜
+   */
+  const selectDate = (updatedDate: number) => {
+    setSelectedDate((prev) => ({
+      ...prev,
+      date: updatedDate
+    }));
+  };
+
   return (
     <StyledDatePicker>
       {/* 달력 헤더 영역(달, 년도, 화살표 아이콘) Start */}
@@ -67,7 +79,7 @@ const DatePicker = () => {
         {createArray1ToN(totalDateOfMonth).map((date) => (
           <StyledDateNum
             key={date}
-            onClick={() => setSelectedDate({ year: 0, month: 0, date: 0 })}
+            onClick={() => selectDate(date)}
             isSelected={date === selectedDate.date}
             isToday={
               today.year === selectedDate.year &&
