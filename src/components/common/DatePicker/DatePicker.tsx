@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import styled from '@emotion/styled';
+import { SvgIcon } from '@/components/common';
 
 const DatePicker = () => {
   const today = {
@@ -50,6 +51,28 @@ const DatePicker = () => {
     }));
   };
 
+  /**
+   * 이전 달 보기 함수
+   */
+  const prevMonth = useCallback(() => {
+    setSelectedDate((prev) => ({
+      year: prev.month === 1 ? prev.year - 1 : prev.year,
+      month: prev.month === 1 ? 12 : prev.month - 1,
+      date: 1
+    }));
+  }, [setSelectedDate]);
+
+  /**
+   * 다음 달 보기 함수
+   */
+  const nextMonth = useCallback(() => {
+    setSelectedDate((prev) => ({
+      year: prev.month === 12 ? prev.year + 1 : prev.year,
+      month: prev.month === 12 ? 1 : prev.month + 1,
+      date: 1
+    }));
+  }, [setSelectedDate]);
+
   return (
     <StyledDatePicker>
       {/* 달력 헤더 영역(달, 년도, 화살표 아이콘) Start */}
@@ -57,6 +80,11 @@ const DatePicker = () => {
         <StyledMonthYear>
           {selectedDate.month}월 {selectedDate.year}
         </StyledMonthYear>
+
+        <StyledArrow>
+          <SvgIcon id="date_picker_arrow_left" onClick={() => prevMonth()} />
+          <SvgIcon id="date_picker_arrow_right" onClick={() => nextMonth()} />
+        </StyledArrow>
       </StyledHeader>
       {/* 달력 헤더 영역(달, 년도, 화살표 아이콘) End */}
 
@@ -109,11 +137,17 @@ const StyledDatePicker = styled.div`
 const StyledHeader = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 2rem;
 `;
 
 const StyledMonthYear = styled.div`
   ${({ theme }) => theme.typo.B1}
+`;
+
+const StyledArrow = styled.div`
+  display: flex;
+  gap: 1.5rem;
 `;
 
 const StyledDayList = styled.div`
