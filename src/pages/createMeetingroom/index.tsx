@@ -1,11 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { Flex, Space } from '@/components/Wrapper';
-import { Button, Header } from '@/components/common';
+import { Button, Header, SvgIcon } from '@/components/common';
 import styled from '@emotion/styled';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { css } from '@emotion/react';
 import Step1 from '@/components/createMeetingRoom/step1';
+import { useToast } from '@/store/toast';
 
 const CreateMeetingRoom = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
@@ -39,14 +40,28 @@ const CreateMeetingRoom = () => {
 
   const [thumbnailNumber, setThumbnailNumber] = useState<number | null>(null);
 
+  const { showToast } = useToast();
+
   const handleButton = () => {
-    setCurrentStep((prev) => prev + 1);
-    console.log(
-      getValues('meetingRoomName'),
-      getValues('meetingRoomNotice'),
+    if (
+      getValues('meetingRoomName') &&
+      getValues('meetingRoomNotice') &&
       thumbnailNumber
-    );
+    ) {
+      setCurrentStep((prev) => prev + 1);
+    } else {
+      showToast({
+        content: (
+          <>
+            <SvgIcon id="warning" />
+            <span>필수 항목을 모두 완료해주세요</span>
+          </>
+        ),
+        bottom: 11
+      });
+    }
   };
+
   return (
     <Flex
       direction="column"

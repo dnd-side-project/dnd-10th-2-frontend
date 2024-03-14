@@ -7,7 +7,7 @@ import { Global, ThemeProvider } from '@emotion/react';
 import { theme } from './styles/theme';
 import { Routers } from '@/routes/index.tsx';
 import { Layout } from '@/components/layout';
-import { GlobalBottomSheet } from '@/components/common/BottomSheet/GlobalBottomSheet';
+import { GlobalBottomSheet, Toast } from '@/components/common';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,6 +26,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Layout>
           <Routers />
           <GlobalBottomSheet />
+          <Toast />
         </Layout>
       </ThemeProvider>
     </RecoilRoot>
