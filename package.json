@@ -36,6 +36,7 @@
     "react-scroll": "^1.9.0",
     "react-spring-bottom-sheet": "^3.4.1",
     "svg-sprite": "^2.0.2",
+    "swiper": "^11.0.7",
     "vite-tsconfig-paths": "^4.3.1"
   },
   "devDependencies": {
