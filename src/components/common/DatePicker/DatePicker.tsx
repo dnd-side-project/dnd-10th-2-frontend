@@ -22,7 +22,6 @@ const DatePicker = () => {
     month: today.month,
     date: today.date
   });
-
   const dayList = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
   /**
@@ -43,6 +42,28 @@ const DatePicker = () => {
       date: updatedDate
     }));
   };
+
+  /**
+   * 이전 달로 이동 시 선택된 날짜 변경 함수
+   */
+  const prevMonth = useCallback(() => {
+    setSelectedDate((prev) => ({
+      year: prev.month === 1 ? prev.year - 1 : prev.year,
+      month: prev.month === 1 ? 12 : prev.month - 1,
+      date: 1
+    }));
+  }, [setSelectedDate]);
+
+  /**
+   * 다음 달로 이동 시 선택된 날짜 변경 함수
+   */
+  const nextMonth = useCallback(() => {
+    setSelectedDate((prev) => ({
+      year: prev.month === 12 ? prev.year + 1 : prev.year,
+      month: prev.month === 12 ? 1 : prev.month + 1,
+      date: 1
+    }));
+  }, [setSelectedDate]);
 
   const [swiperRef, setSwiperRef] = useState<SwiperRef | null>(null);
   const [slideList, setSlideList] = useState([
@@ -77,31 +98,15 @@ const DatePicker = () => {
   ]);
 
   /**
-   * 이전 달 보기 함수
+   * Left Arrow 아이콘 클릭 시 이전 Slide로의 이동 함수
    */
-  const prevMonth = useCallback(() => {
-    setSelectedDate((prev) => ({
-      year: prev.month === 1 ? prev.year - 1 : prev.year,
-      month: prev.month === 1 ? 12 : prev.month - 1,
-      date: 1
-    }));
-  }, [setSelectedDate]);
-
-  /**
-   * 다음 달 보기 함수
-   */
-  const nextMonth = useCallback(() => {
-    setSelectedDate((prev) => ({
-      year: prev.month === 12 ? prev.year + 1 : prev.year,
-      month: prev.month === 12 ? 1 : prev.month + 1,
-      date: 1
-    }));
-  }, [setSelectedDate]);
-
   const onPrevSlide = () => {
     swiperRef?.slidePrev();
   };
 
+  /**
+   * Right Arrow 아이콘 클릭 시 다음 Slide로의 이동 함수
+   */
   const onNextSlide = () => {
     swiperRef?.slideNext();
   };
