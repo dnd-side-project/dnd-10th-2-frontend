@@ -1,6 +1,11 @@
 import { useCallback, useState } from 'react';
 import styled from '@emotion/styled';
 import { SvgIcon } from '@/components/common';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { type Swiper as SwiperRef } from 'swiper';
+
+// Import Swiper styles
+import 'swiper/css';
 
 const DatePicker = () => {
   const today = {
@@ -17,18 +22,6 @@ const DatePicker = () => {
     month: today.month,
     date: today.date
   });
-  // 선택된 달의 전체 날짜 갯수
-  const totalDateOfMonth: number = new Date(
-    selectedDate.year,
-    selectedDate.month,
-    0
-  ).getDate();
-  // 선택된 달의 시작 요일 (0: 일요일, 1: 월요일, ..., 6: 토요일)
-  const firstDayOfMonth: number = new Date(
-    selectedDate.year,
-    selectedDate.month - 1,
-    1
-  ).getDay();
 
   const dayList = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
@@ -50,6 +43,38 @@ const DatePicker = () => {
       date: updatedDate
     }));
   };
+
+  const [swiperRef, setSwiperRef] = useState<SwiperRef | null>(null);
+  const [slideList, setSlideList] = useState([
+    {
+      id: 0,
+      // 선택된 달의 시작 요일 (0: 일요일, 1: 월요일, ..., 6: 토요일)
+      firstDayOfMonth: new Date(
+        selectedDate.year,
+        selectedDate.month - 1,
+        1
+      ).getDay(),
+      // 선택된 달의 전체 날짜 갯수
+      totalDateOfMonth: new Date(
+        selectedDate.year,
+        selectedDate.month,
+        0
+      ).getDate()
+    },
+    {
+      id: 1,
+      firstDayOfMonth: new Date(
+        selectedDate.year,
+        selectedDate.month,
+        1
+      ).getDay(),
+      totalDateOfMonth: new Date(
+        selectedDate.year,
+        selectedDate.month + 1,
+        0
+      ).getDate()
+    }
+  ]);
 
   /**
    * 이전 달 보기 함수
@@ -73,6 +98,39 @@ const DatePicker = () => {
     }));
   }, [setSelectedDate]);
 
+  const onPrevSlide = () => {
+    swiperRef?.slidePrev();
+  };
+
+  const onNextSlide = () => {
+    swiperRef?.slideNext();
+  };
+
+  /**
+   * 마지막 Slide 도착 시 다음 Slide 추가 함수
+   */
+  const appendSlide = () => {
+    setSlideList((prev) => {
+      const lastSlide = prev[prev.length - 1];
+      return [
+        ...prev,
+        {
+          id: lastSlide.id + 1,
+          firstDayOfMonth: new Date(
+            selectedDate.year,
+            selectedDate.month + 1,
+            1
+          ).getDay(),
+          totalDateOfMonth: new Date(
+            selectedDate.year,
+            selectedDate.month + 2,
+            0
+          ).getDate()
+        }
+      ];
+    });
+  };
+
   return (
     <StyledDatePicker>
       {/* 달력 헤더 영역(달, 년도, 화살표 아이콘) Start */}
@@ -82,8 +140,8 @@ const DatePicker = () => {
         </StyledMonthYear>
 
         <StyledArrow>
-          <SvgIcon id="date_picker_arrow_left" onClick={() => prevMonth()} />
-          <SvgIcon id="date_picker_arrow_right" onClick={() => nextMonth()} />
+          <SvgIcon id="date_picker_arrow_left" onClick={onPrevSlide} />
+          <SvgIcon id="date_picker_arrow_right" onClick={onNextSlide} />
         </StyledArrow>
       </StyledHeader>
       {/* 달력 헤더 영역(달, 년도, 화살표 아이콘) End */}
@@ -96,28 +154,38 @@ const DatePicker = () => {
       </StyledDayList>
       {/* 요일 영역(SUN, MON, ... , SAT) End */}
 
-      {/* 날짜 영역 Start */}
-      <StyledDateNumList>
-        {/* 빈 칸 */}
-        {createArray1ToN(firstDayOfMonth).map((index) => (
-          <StyledDateNum key={index} isSelected={false} isToday={false} />
-        ))}
+      <Swiper
+        onSwiper={setSwiperRef}
+        onSlidePrevTransitionEnd={prevMonth}
+        onSlideNextTransitionEnd={nextMonth}
+        onReachEnd={appendSlide}>
+        {slideList.map((slide) => (
+          <SwiperSlide key={slide.id}>
+            {/* 날짜 영역 Start */}
+            <StyledDateNumList>
+              {/* 빈 칸 */}
+              {createArray1ToN(slide.firstDayOfMonth).map((index) => (
+                <StyledDateNum key={index} isSelected={false} isToday={false} />
+              ))}
 
-        {/* 1 ~ 31 */}
-        {createArray1ToN(totalDateOfMonth).map((date) => (
-          <StyledDateNum
-            key={date}
-            onClick={() => selectDate(date)}
-            isSelected={date === selectedDate.date}
-            isToday={
-              today.year === selectedDate.year &&
-              today.month === selectedDate.month &&
-              today.date === date
-            }>
-            {date}
-          </StyledDateNum>
+              {/* 1 ~ 31 */}
+              {createArray1ToN(slide.totalDateOfMonth).map((date) => (
+                <StyledDateNum
+                  key={date}
+                  onClick={() => selectDate(date)}
+                  isSelected={date === selectedDate.date}
+                  isToday={
+                    today.year === selectedDate.year &&
+                    today.month === selectedDate.month &&
+                    today.date === date
+                  }>
+                  {date}
+                </StyledDateNum>
+              ))}
+            </StyledDateNumList>
+          </SwiperSlide>
         ))}
-      </StyledDateNumList>
+      </Swiper>
       {/* 날짜 영역 End */}
     </StyledDatePicker>
   );
