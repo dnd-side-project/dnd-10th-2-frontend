@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import styled from '@emotion/styled';
+import { today } from '@/utils';
 import { SvgIcon } from '@/components/common';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { type Swiper as SwiperRef } from 'swiper';
@@ -7,21 +8,21 @@ import { type Swiper as SwiperRef } from 'swiper';
 // Import Swiper styles
 import 'swiper/css';
 
-const DatePicker = () => {
-  const today = {
-    year: new Date().getFullYear(),
-    month: new Date().getMonth() + 1,
-    date: new Date().getDate()
-  };
-  const [selectedDate, setSelectedDate] = useState<{
-    year: number;
-    month: number;
-    date: number;
-  }>({
-    year: today.year,
-    month: today.month,
-    date: today.date
-  });
+interface DateProps {
+  year: number;
+  month: number;
+  date: number;
+}
+
+interface DatePickerProps {
+  selectedDate: DateProps;
+  setSelectedDate: React.Dispatch<React.SetStateAction<DateProps>>;
+}
+
+export const DatePicker = ({
+  selectedDate,
+  setSelectedDate
+}: DatePickerProps) => {
   const dayList = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
   /**
@@ -254,5 +255,3 @@ const StyledDateNum = styled.div<{ isSelected: boolean; isToday: boolean }>`
     isSelected ? theme.palette.white : isToday && theme.palette.main_blue};
   cursor: pointer;
 `;
-
-export default DatePicker;
