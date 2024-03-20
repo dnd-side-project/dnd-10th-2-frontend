@@ -2,18 +2,11 @@
 import { thumbnailList } from '@/assets/MeetingRoom/thumbnailList';
 import { Flex, Space } from '@/components/Wrapper';
 import { Input, SvgIcon } from '@/components/common';
+import { FormType } from '@/pages/createMeetingroom';
 import { theme } from '@/styles';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { FieldErrors, UseFormRegister, UseFormWatch } from 'react-hook-form';
-
-interface FormType {
-  meetingRoomName: string;
-  meetingRoomNotice: string;
-  meetingRoomDate: string;
-  meetingRoomTime: string;
-  meetingRoomDuration: string;
-}
 
 interface Step1Props {
   register: UseFormRegister<FormType>;

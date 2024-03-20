@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { Flex, Space } from '@/components/Wrapper';
 import { Input, SvgIcon } from '@/components/common';
+import { FormType } from '@/pages/createMeetingroom';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import {
@@ -9,14 +10,6 @@ import {
   UseFormSetValue,
   UseFormWatch
 } from 'react-hook-form';
-
-interface FormType {
-  meetingRoomName: string;
-  meetingRoomNotice: string;
-  meetingRoomDate: string;
-  meetingRoomTime: string;
-  meetingRoomDuration: string;
-}
 
 interface Step1Props {
   register: UseFormRegister<FormType>;
