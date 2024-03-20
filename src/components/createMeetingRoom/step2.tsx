@@ -1,9 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { Flex, Space } from '@/components/Wrapper';
-import { Input, SvgIcon } from '@/components/common';
+import { DatePicker, Input, SvgIcon } from '@/components/common';
 import { FormType } from '@/pages/createMeetingroom';
+import { today } from '@/utils';
+import { getDayOfWeek } from '@/utils/getDayOfWeek';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import { useEffect, useState } from 'react';
 import {
   FieldErrors,
   UseFormRegister,
@@ -18,7 +21,23 @@ interface Step1Props {
   setValue: UseFormSetValue<FormType>;
 }
 
-export const Step2 = ({ register, watch, errors }: Step1Props) => {
+export const Step2 = ({ register, watch, errors, setValue }: Step1Props) => {
+  const [selectedDate, setSelectedDate] = useState({
+    year: today.year,
+    month: today.month,
+    date: today.date
+  });
+
+  useEffect(() => {
+    const { year, month, date } = selectedDate;
+    setValue(
+      'meetingRoomDate',
+      `${month}월 ${date}일 ${getDayOfWeek(`${year}-${month}-${date}`)}요일`
+    );
+
+    setSelectedDate;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedDate]);
   return (
     <Flex direction="column" align="flex-start">
       <div
@@ -44,6 +63,7 @@ export const Step2 = ({ register, watch, errors }: Step1Props) => {
             isError={errors?.meetingRoomDate ? true : false}
             errorText={errors?.meetingRoomDate?.message as string}
             readOnly
+            // onClick={onOpen}
           />
           <Input
             {...register('meetingRoomTime', {
@@ -57,6 +77,12 @@ export const Step2 = ({ register, watch, errors }: Step1Props) => {
             readOnly
           />
         </div>
+
+        <DatePicker
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
+        />
+        <Space height={30} />
 
         <StyledLabel>
           회의 예상 소요시간을 알려주세요
