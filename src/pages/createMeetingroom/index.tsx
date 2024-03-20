@@ -8,6 +8,14 @@ import { css } from '@emotion/react';
 import { Step1, Step2 } from '@/components/createMeetingRoom';
 import { useToast } from '@/store/toast';
 
+export interface FormType {
+  meetingRoomName: string;
+  meetingRoomNotice: string;
+  meetingRoomDate: string;
+  meetingRoomTime: string;
+  meetingRoomDuration: string;
+}
+
 const CreateMeetingRoom = () => {
   const [currentStep, setCurrentStep] = useState<number>(1);
   const stepList = [
