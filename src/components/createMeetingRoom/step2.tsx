@@ -1,11 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import { Flex, Space } from '@/components/Wrapper';
 import { DatePicker, Input, SvgIcon } from '@/components/common';
+import { useOpen } from '@/hooks/useOpen';
 import { FormType } from '@/pages/createMeetingroom';
 import { today } from '@/utils';
 import { getDayOfWeek } from '@/utils/getDayOfWeek';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import {
   FieldErrors,
@@ -21,6 +23,15 @@ interface Step1Props {
   setValue: UseFormSetValue<FormType>;
 }
 
+const datePickerVariants = {
+  invisible: {
+    opacity: 0
+  },
+  visible: {
+    opacity: 1
+  }
+};
+
 export const Step2 = ({ register, watch, errors, setValue }: Step1Props) => {
   const [selectedDate, setSelectedDate] = useState({
     year: today.year,
@@ -28,14 +39,14 @@ export const Step2 = ({ register, watch, errors, setValue }: Step1Props) => {
     date: today.date
   });
 
+  const { open, onOpen, onClose } = useOpen();
+
   useEffect(() => {
     const { year, month, date } = selectedDate;
     setValue(
       'meetingRoomDate',
       `${month}월 ${date}일 ${getDayOfWeek(`${year}-${month}-${date}`)}요일`
     );
-
-    setSelectedDate;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDate]);
   return (
@@ -63,7 +74,7 @@ export const Step2 = ({ register, watch, errors, setValue }: Step1Props) => {
             isError={errors?.meetingRoomDate ? true : false}
             errorText={errors?.meetingRoomDate?.message as string}
             readOnly
-            // onClick={onOpen}
+            onClick={onOpen}
           />
           <Input
             {...register('meetingRoomTime', {
@@ -78,11 +89,21 @@ export const Step2 = ({ register, watch, errors, setValue }: Step1Props) => {
           />
         </div>
 
-        <DatePicker
-          selectedDate={selectedDate}
-          setSelectedDate={setSelectedDate}
-        />
-        <Space height={30} />
+        <AnimatePresence>
+          {open && (
+            <motion.div
+              variants={datePickerVariants}
+              initial="invisible"
+              animate="visible">
+              <DatePicker
+                selectedDate={selectedDate}
+                setSelectedDate={setSelectedDate}
+                onClose={onClose}
+              />
+              <Space height={30} />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <StyledLabel>
           회의 예상 소요시간을 알려주세요
