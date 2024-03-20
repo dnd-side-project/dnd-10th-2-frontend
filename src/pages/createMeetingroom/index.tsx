@@ -5,11 +5,11 @@ import styled from '@emotion/styled';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { css } from '@emotion/react';
-import Step1 from '@/components/createMeetingRoom/step1';
+import { Step1, Step2 } from '@/components/createMeetingRoom';
 import { useToast } from '@/store/toast';
 
 const CreateMeetingRoom = () => {
-  const [currentStep, setCurrentStep] = useState<number>(0);
+  const [currentStep, setCurrentStep] = useState<number>(1);
   const stepList = [
     {
       id: 0,
@@ -29,11 +29,15 @@ const CreateMeetingRoom = () => {
     register,
     watch,
     getValues,
+    setValue,
     formState: { errors }
   } = useForm({
     defaultValues: {
       meetingRoomName: '',
-      meetingRoomNotice: ''
+      meetingRoomNotice: '',
+      meetingRoomDate: '',
+      meetingRoomTime: '',
+      meetingRoomDuration: ''
     },
     mode: 'onChange'
   });
@@ -43,11 +47,7 @@ const CreateMeetingRoom = () => {
   const { showToast } = useToast();
 
   const handleButton = () => {
-    if (
-      getValues('meetingRoomName') &&
-      getValues('meetingRoomNotice') &&
-      thumbnailNumber
-    ) {
+    if (getValues('meetingRoomName') && thumbnailNumber) {
       setCurrentStep((prev) => prev + 1);
     } else {
       showToast({
@@ -93,21 +93,26 @@ const CreateMeetingRoom = () => {
 
         <Space height={30} />
 
-        <Step1
-          register={register}
-          watch={watch}
-          errors={errors}
-          thumbnailNumber={thumbnailNumber}
-          setThumbnailNumber={setThumbnailNumber}
-        />
+        {currentStep === 0 ? (
+          <Step1
+            register={register}
+            watch={watch}
+            errors={errors}
+            thumbnailNumber={thumbnailNumber}
+            setThumbnailNumber={setThumbnailNumber}
+          />
+        ) : (
+          <Step2
+            register={register}
+            watch={watch}
+            errors={errors}
+            setValue={setValue}
+          />
+        )}
       </div>
 
       <StyledButton>
-        <Button
-          size="lg"
-          backgroundColor="main"
-          disabled={false}
-          onClick={handleButton}>
+        <Button size="lg" backgroundColor="main" onClick={handleButton}>
           다음으로
         </Button>
       </StyledButton>
