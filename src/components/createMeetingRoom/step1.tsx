@@ -7,18 +7,23 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { FieldErrors, UseFormRegister, UseFormWatch } from 'react-hook-form';
 
+interface FormType {
+  meetingRoomName: string;
+  meetingRoomNotice: string;
+  meetingRoomDate: string;
+  meetingRoomTime: string;
+  meetingRoomDuration: string;
+}
+
 interface Step1Props {
-  register: UseFormRegister<{
-    meetingRoomName: string;
-    meetingRoomNotice: string;
-  }>;
-  watch: UseFormWatch<{ meetingRoomName: string; meetingRoomNotice: string }>;
+  register: UseFormRegister<FormType>;
+  watch: UseFormWatch<FormType>;
   errors?: FieldErrors;
   thumbnailNumber: number | null;
   setThumbnailNumber: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
-const Step1 = ({
+export const Step1 = ({
   register,
   watch,
   errors,
@@ -32,7 +37,8 @@ const Step1 = ({
           width: 100%;
         `}>
         <StyledLabel>
-          회의 이름을 알려주세요 <SvgIcon id="star_orange" size={18} />
+          회의 이름을 알려주세요
+          <SvgIcon id="star_orange" size={18} />
         </StyledLabel>
         <Input
           {...register('meetingRoomName', {
@@ -73,7 +79,8 @@ const Step1 = ({
         <Space height={4} />
 
         <StyledLabel>
-          썸네일을 골라주세요 <SvgIcon id="star_orange" size={18} />
+          썸네일을 골라주세요
+          <SvgIcon id="star_orange" size={18} />
         </StyledLabel>
 
         <StyledThumbnailList>
@@ -110,5 +117,3 @@ const StyledThumbnailList = styled.div`
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1rem;
 `;
-
-export default Step1;
