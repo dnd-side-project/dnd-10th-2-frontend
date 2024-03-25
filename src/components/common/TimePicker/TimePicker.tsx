@@ -139,8 +139,6 @@ const StyledTimePicker = styled.div`
     width: 100%;
     height: 100%;
   }
-
-  margin-top: 4rem;
 `;
 
 const StyledButton = styled.button`
