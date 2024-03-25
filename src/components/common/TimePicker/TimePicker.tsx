@@ -19,14 +19,15 @@ export const TimePicker = ({
   setSelectedTime,
   onClose
 }: TimePickerProps) => {
-  const hourList =
-    type === 'duration'
-      ? [...Array(24)].map((_, index) => index)
-      : [...Array(12)].map((_, index) => index + 1);
-  const minuteList = [...Array(60)].map(
-    (_, index) => (index < 10 ? '0' : '') + index
-  );
-
+  const [swiperRef, setSwiperRef] = useState<{
+    swiper1: SwiperRef | null;
+    swiper2: SwiperRef | null;
+    swiper3: SwiperRef | null;
+  }>({
+    swiper1: null,
+    swiper2: null,
+    swiper3: null
+  });
   const swiperSettings: SwiperOptions = {
     modules: [EffectCoverflow],
     direction: 'vertical',
@@ -42,38 +43,31 @@ export const TimePicker = ({
     loopAdditionalSlides: 5
   };
 
-  const [swiperRef, setSwiperRef] = useState<{
-    swiper1: SwiperRef | null;
-    swiper2: SwiperRef | null;
-    swiper3: SwiperRef | null;
-  }>({
-    swiper1: null,
-    swiper2: null,
-    swiper3: null
-  });
+  const hourList =
+    type === 'duration'
+      ? [...Array(24)].map((_, index) => index)
+      : [...Array(12)].map((_, index) => index + 1);
+  const minuteList = [...Array(60)].map(
+    (_, index) => (index < 10 ? '0' : '') + index
+  );
 
   const getTime = () => {
     const { swiper1, swiper2, swiper3 } = swiperRef;
-    const minute = swiper3?.realIndex;
+    const hour = swiper2?.slides[swiper2?.activeIndex].innerText;
+    const minute = swiper3?.slides[swiper3?.activeIndex].innerText;
 
-    if (type === 'duration') {
-      const hour = swiper2?.realIndex;
-      return `${hour}:${minute}:00`;
-    }
-
-    if (type === 'time') {
-      const hour =
-        swiper1?.realIndex === 0
-          ? (swiper2?.realIndex as number) + 1
-          : (swiper2?.realIndex as number) + 13;
-      return `${hour}:${minute}:00`;
+    switch (type) {
+      case 'duration': {
+        return `${hour}시간 ${minute}분`;
+      }
+      case 'time': {
+        const periodOfDay = swiper1?.slides[swiper1?.activeIndex].innerText;
+        return `${periodOfDay} ${hour}시 ${minute}분`;
+      }
     }
   };
 
-  const time = getTime() as string;
-
   const handleComplete = () => {
-    setSelectedTime(time);
     onClose?.();
   };
   return (
@@ -86,7 +80,7 @@ export const TimePicker = ({
             onSwiper={(swiper) =>
               setSwiperRef((prev) => ({ ...prev, swiper1: swiper }))
             }
-            onRealIndexChange={() => setSelectedTime(time)}
+            onRealIndexChange={() => setSelectedTime(getTime())}
             {...swiperSettings}>
             {['오전', '오후'].map((value) => (
               <SwiperSlide key={value}>{value}</SwiperSlide>
@@ -101,7 +95,7 @@ export const TimePicker = ({
             setSwiperRef((prev) => ({ ...prev, swiper2: swiper }))
           }
           loop={true}
-          onRealIndexChange={() => setSelectedTime(time)}
+          onRealIndexChange={() => setSelectedTime(getTime())}
           {...swiperSettings}>
           {hourList.map((hour) => (
             <SwiperSlide key={hour}>{hour}</SwiperSlide>
@@ -119,7 +113,7 @@ export const TimePicker = ({
             setSwiperRef((prev) => ({ ...prev, swiper3: swiper }))
           }
           loop={true}
-          onRealIndexChange={() => setSelectedTime(time)}
+          onRealIndexChange={() => setSelectedTime(getTime())}
           {...swiperSettings}>
           {minuteList.map((minute) => (
             <SwiperSlide key={minute}>{minute}</SwiperSlide>
