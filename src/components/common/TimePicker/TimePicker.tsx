@@ -2,20 +2,25 @@ import { useState } from 'react';
 import styled from '@emotion/styled';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow } from 'swiper/modules';
-import { type Swiper as SwiperRef } from 'swiper';
-import { SwiperOptions } from 'swiper/types';
+import { Swiper as SwiperRef, SwiperOptions } from 'swiper/types';
 
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
-import './styles.css';
 
-const hourList = [...Array(24)].map((_, index) => index);
-const minuteList = [...Array(60)].map(
-  (_, index) => (index < 10 ? '0' : '') + index
-);
+interface TimePickerProps {
+  type: 'duration' | 'time';
+}
 
-export const TimePicker = () => {
+export const TimePicker = ({ type = 'duration' }: TimePickerProps) => {
+  const hourList =
+    type === 'duration'
+      ? [...Array(24)].map((_, index) => index)
+      : [...Array(12)].map((_, index) => index + 1);
+  const minuteList = [...Array(60)].map(
+    (_, index) => (index < 10 ? '0' : '') + index
+  );
+
   const swiperSettings: SwiperOptions = {
     modules: [EffectCoverflow],
     direction: 'vertical',
@@ -30,28 +35,62 @@ export const TimePicker = () => {
     }
   };
 
-  const [swiper1Ref, setSwiper1Ref] = useState<SwiperRef | null>(null);
-  const [swiper2Ref, setSwiper2Ref] = useState<SwiperRef | null>(null);
+  const [swiperRef, setSwiperRef] = useState<{
+    swiper1: SwiperRef | null;
+    swiper2: SwiperRef | null;
+    swiper3: SwiperRef | null;
+  }>({
+    swiper1: null,
+    swiper2: null,
+    swiper3: null
+  });
 
   const handleComplete = () => {
-    console.log(swiper1Ref?.realIndex, swiper2Ref?.realIndex);
+    const { swiper1, swiper2, swiper3 } = swiperRef;
+    console.log(swiper1?.realIndex, swiper2?.realIndex, swiper3?.realIndex);
   };
   return (
     <StyledTimePicker>
       <StyledButton onClick={handleComplete}>완료</StyledButton>
 
+      {type === 'time' && (
+        <StyledTimeList type={type}>
+          <Swiper
+            onSwiper={(swiper) =>
+              setSwiperRef((prev) => ({ ...prev, swiper1: swiper }))
+            }
+            {...swiperSettings}>
+            {['오전', '오후'].map((value) => (
+              <SwiperSlide key={value}>{value}</SwiperSlide>
+            ))}
+          </Swiper>
+        </StyledTimeList>
+      )}
+
       <StyledTimeList>
-        <Swiper onSwiper={setSwiper1Ref} loop={true} {...swiperSettings}>
+        <Swiper
+          onSwiper={(swiper) =>
+            setSwiperRef((prev) => ({ ...prev, swiper2: swiper }))
+          }
+          loop={true}
+          {...swiperSettings}>
           {hourList.map((hour) => (
             <SwiperSlide key={hour}>{hour}</SwiperSlide>
           ))}
         </Swiper>
 
-        <StyledText>시간</StyledText>
+        <StyledText>
+          {type === 'duration' ? '시간' : '시 \u00A0 \u00A0'}
+        </StyledText>
       </StyledTimeList>
 
       <StyledTimeList>
-        <Swiper onSwiper={setSwiper2Ref} loop={true} {...swiperSettings}>
+        <Swiper
+          onSwiper={(swiper) =>
+            setSwiperRef((prev) => ({ ...prev, swiper3: swiper }))
+          }
+          loop={true}
+          {...swiperSettings}>
           {minuteList.map((minute) => (
             <SwiperSlide key={minute}>{minute}</SwiperSlide>
           ))}
@@ -72,6 +111,11 @@ const StyledTimePicker = styled.div`
   padding: 1rem 0 1rem 0;
   border-radius: 0.8rem;
 
+  .swiper {
+    width: 100%;
+    height: 100%;
+  }
+
   margin-top: 4rem;
 `;
 
@@ -83,11 +127,22 @@ const StyledButton = styled.button`
   right: 1.5rem;
 `;
 
-const StyledTimeList = styled.div`
+const StyledTimeList = styled.div<{ type?: 'duration' | 'time' }>`
   ${({ theme }) => theme.typo.T7}
   position: relative;
-  width: 8rem;
+  width: ${({ type }) => (type === 'time' ? 'auto' : '8rem')};
   height: 18rem;
+
+  .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #c7ccd6;
+  }
+
+  .swiper-slide-active {
+    color: #646e81;
+  }
 `;
 
 const StyledText = styled.div`
