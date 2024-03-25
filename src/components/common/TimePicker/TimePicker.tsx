@@ -38,7 +38,8 @@ export const TimePicker = ({
       rotate: 25,
       depth: 50,
       slideShadows: false
-    }
+    },
+    loopAdditionalSlides: 5
   };
 
   const [swiperRef, setSwiperRef] = useState<{
