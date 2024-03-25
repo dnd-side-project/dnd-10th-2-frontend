@@ -160,10 +160,12 @@ const StyledTimeList = styled.div<{ type?: 'duration' | 'time' }>`
     justify-content: center;
     align-items: center;
     color: #c7ccd6;
+    font-weight: 400;
   }
 
   .swiper-slide-active {
     color: #646e81;
+    font-weight: 600;
   }
 `;
 
