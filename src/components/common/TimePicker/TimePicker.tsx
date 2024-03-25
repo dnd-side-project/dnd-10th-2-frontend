@@ -10,9 +10,15 @@ import 'swiper/css/effect-coverflow';
 
 interface TimePickerProps {
   type: 'duration' | 'time';
+  setSelectedTime: React.Dispatch<React.SetStateAction<string>>;
+  onClose?: () => void;
 }
 
-export const TimePicker = ({ type = 'duration' }: TimePickerProps) => {
+export const TimePicker = ({
+  type = 'duration',
+  setSelectedTime,
+  onClose
+}: TimePickerProps) => {
   const hourList =
     type === 'duration'
       ? [...Array(24)].map((_, index) => index)
@@ -45,13 +51,33 @@ export const TimePicker = ({ type = 'duration' }: TimePickerProps) => {
     swiper3: null
   });
 
-  const handleComplete = () => {
+  const getTime = () => {
     const { swiper1, swiper2, swiper3 } = swiperRef;
-    console.log(swiper1?.realIndex, swiper2?.realIndex, swiper3?.realIndex);
+    const minute = swiper3?.realIndex;
+
+    if (type === 'duration') {
+      const hour = swiper2?.realIndex;
+      return `${hour}:${minute}:00`;
+    }
+
+    if (type === 'time') {
+      const hour =
+        swiper1?.realIndex === 0
+          ? (swiper2?.realIndex as number) + 1
+          : (swiper2?.realIndex as number) + 13;
+      return `${hour}:${minute}:00`;
+    }
+  };
+
+  const time = getTime() as string;
+
+  const handleComplete = () => {
+    setSelectedTime(time);
+    onClose?.();
   };
   return (
     <StyledTimePicker>
-      <StyledButton onClick={handleComplete}>완료</StyledButton>
+      {onClose && <StyledButton onClick={handleComplete}>완료</StyledButton>}
 
       {type === 'time' && (
         <StyledTimeList type={type}>
@@ -59,6 +85,7 @@ export const TimePicker = ({ type = 'duration' }: TimePickerProps) => {
             onSwiper={(swiper) =>
               setSwiperRef((prev) => ({ ...prev, swiper1: swiper }))
             }
+            onRealIndexChange={() => setSelectedTime(time)}
             {...swiperSettings}>
             {['오전', '오후'].map((value) => (
               <SwiperSlide key={value}>{value}</SwiperSlide>
@@ -73,6 +100,7 @@ export const TimePicker = ({ type = 'duration' }: TimePickerProps) => {
             setSwiperRef((prev) => ({ ...prev, swiper2: swiper }))
           }
           loop={true}
+          onRealIndexChange={() => setSelectedTime(time)}
           {...swiperSettings}>
           {hourList.map((hour) => (
             <SwiperSlide key={hour}>{hour}</SwiperSlide>
@@ -90,6 +118,7 @@ export const TimePicker = ({ type = 'duration' }: TimePickerProps) => {
             setSwiperRef((prev) => ({ ...prev, swiper3: swiper }))
           }
           loop={true}
+          onRealIndexChange={() => setSelectedTime(time)}
           {...swiperSettings}>
           {minuteList.map((minute) => (
             <SwiperSlide key={minute}>{minute}</SwiperSlide>
