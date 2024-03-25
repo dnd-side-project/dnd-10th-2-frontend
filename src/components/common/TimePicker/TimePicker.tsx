@@ -145,8 +145,8 @@ const StyledButton = styled.button`
   ${({ theme }) => theme.typo.B2}
   color: ${({ theme }) => theme.palette.main_blue};
   position: absolute;
-  top: 1rem;
-  right: 1.5rem;
+  top: 1.2rem;
+  right: 1.6rem;
 `;
 
 const StyledTimeList = styled.div<{ type?: 'duration' | 'time' }>`
