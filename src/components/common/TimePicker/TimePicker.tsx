@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styled from '@emotion/styled';
+import { TimeType } from '@/hooks/useTimePicker';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow } from 'swiper/modules';
 import { Swiper as SwiperRef, SwiperOptions } from 'swiper/types';
@@ -10,13 +11,13 @@ import 'swiper/css/effect-coverflow';
 
 interface TimePickerProps {
   type: 'duration' | 'time';
-  setSelectedTime: React.Dispatch<React.SetStateAction<string>>;
+  setTime: ({ periodOfDay, hour, minute }: TimeType) => void;
   onClose?: () => void;
 }
 
 export const TimePicker = ({
   type = 'duration',
-  setSelectedTime,
+  setTime,
   onClose
 }: TimePickerProps) => {
   const [swiperRef, setSwiperRef] = useState<{
@@ -53,21 +54,23 @@ export const TimePicker = ({
 
   const getTime = () => {
     const { swiper1, swiper2, swiper3 } = swiperRef;
-    const hour = swiper2?.slides[swiper2?.activeIndex].innerText;
-    const minute = swiper3?.slides[swiper3?.activeIndex].innerText;
+    const hour = swiper2?.slides[swiper2?.activeIndex].innerText as string;
+    const minute = swiper3?.slides[swiper3?.activeIndex].innerText as string;
 
     switch (type) {
       case 'duration': {
-        return `${hour}시간 ${minute}분`;
+        return { periodOfDay: undefined, hour, minute };
       }
       case 'time': {
         const periodOfDay = swiper1?.slides[swiper1?.activeIndex].innerText;
-        return `${periodOfDay} ${hour}시 ${minute}분`;
+        return { periodOfDay, hour, minute };
+        // return `${periodOfDay} ${hour}시 ${minute}분`;
       }
     }
   };
 
   const handleComplete = () => {
+    setTime(getTime());
     onClose?.();
   };
   return (
@@ -80,7 +83,7 @@ export const TimePicker = ({
             onSwiper={(swiper) =>
               setSwiperRef((prev) => ({ ...prev, swiper1: swiper }))
             }
-            onRealIndexChange={() => setSelectedTime(getTime())}
+            onRealIndexChange={() => setTime(getTime())}
             {...swiperSettings}>
             {['오전', '오후'].map((value) => (
               <SwiperSlide key={value}>{value}</SwiperSlide>
@@ -95,7 +98,7 @@ export const TimePicker = ({
             setSwiperRef((prev) => ({ ...prev, swiper2: swiper }))
           }
           loop={true}
-          onRealIndexChange={() => setSelectedTime(getTime())}
+          onRealIndexChange={() => setTime(getTime())}
           {...swiperSettings}>
           {hourList.map((hour) => (
             <SwiperSlide key={hour}>{hour}</SwiperSlide>
@@ -113,7 +116,7 @@ export const TimePicker = ({
             setSwiperRef((prev) => ({ ...prev, swiper3: swiper }))
           }
           loop={true}
-          onRealIndexChange={() => setSelectedTime(getTime())}
+          onRealIndexChange={() => setTime(getTime())}
           {...swiperSettings}>
           {minuteList.map((minute) => (
             <SwiperSlide key={minute}>{minute}</SwiperSlide>
