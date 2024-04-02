@@ -1,135 +1,181 @@
 import { useState } from 'react';
 import styled from '@emotion/styled';
-import { theme } from '@/styles';
-import { Flex } from '@/components/Wrapper';
-import Picker from 'react-mobile-picker-scroll';
+import { TimeType } from '@/hooks/useTimePicker';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { EffectCoverflow } from 'swiper/modules';
+import { Swiper as SwiperRef, SwiperOptions } from 'swiper/types';
 
-export interface TimePickerValueGroups {
-  hour: number;
-  minute: number;
-}
-
-interface TimePickerOptionGroups {
-  hour: number[];
-  minute: number[];
-}
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
 
 interface TimePickerProps {
-  value: TimePickerValueGroups;
-  setValue: (value: TimePickerValueGroups) => void;
+  type: 'duration' | 'time';
+  setTime: ({ periodOfDay, hour, minute }: TimeType) => void;
+  onClose?: () => void;
 }
 
-export const TimePicker = ({ value, setValue }: TimePickerProps) => {
-  const [valueGroups, setValueGroups] = useState<TimePickerValueGroups>(value);
-
-  const [optionGroups] = useState<TimePickerOptionGroups>({
-    hour: Array.from(new Array(24), (_, index) => index),
-    minute: Array.from(new Array(60), (_, index) => index)
+export const TimePicker = ({
+  type = 'duration',
+  setTime,
+  onClose
+}: TimePickerProps) => {
+  const [swiperRef, setSwiperRef] = useState<{
+    swiper1: SwiperRef | null;
+    swiper2: SwiperRef | null;
+    swiper3: SwiperRef | null;
+  }>({
+    swiper1: null,
+    swiper2: null,
+    swiper3: null
   });
-
-  const handleChange = (name: keyof TimePickerValueGroups, value: number) => {
-    setValueGroups({
-      ...valueGroups,
-      [name]: value
-    });
-    setValue({
-      ...valueGroups,
-      [name]: value
-    });
+  const swiperSettings: SwiperOptions = {
+    modules: [EffectCoverflow],
+    direction: 'vertical',
+    slidesPerView: 5,
+    centeredSlides: true,
+    effect: 'coverflow',
+    grabCursor: true,
+    coverflowEffect: {
+      rotate: 25,
+      depth: 50,
+      slideShadows: false
+    },
+    loopAdditionalSlides: 5
   };
 
+  const hourList =
+    type === 'duration'
+      ? [...Array(24)].map((_, index) => index)
+      : [...Array(12)].map((_, index) => index + 1);
+  const minuteList = [...Array(60)].map(
+    (_, index) => (index < 10 ? '0' : '') + index
+  );
+
+  const getTime = () => {
+    const { swiper1, swiper2, swiper3 } = swiperRef;
+    const hour = swiper2?.slides[swiper2?.activeIndex].innerText as string;
+    const minute = swiper3?.slides[swiper3?.activeIndex].innerText as string;
+
+    switch (type) {
+      case 'duration': {
+        return { periodOfDay: undefined, hour, minute };
+      }
+      case 'time': {
+        const periodOfDay = swiper1?.slides[swiper1?.activeIndex].innerText;
+        return { periodOfDay, hour, minute };
+        // return `${periodOfDay} ${hour}시 ${minute}분`;
+      }
+    }
+  };
+
+  const handleComplete = () => {
+    setTime(getTime());
+    onClose?.();
+  };
   return (
-    <Wrapper>
-      <Picker
-        optionGroups={optionGroups}
-        valueGroups={valueGroups}
-        onChange={handleChange}
-      />
-      <HighlightBox>
-        <Flex gap={38}>
-          <span>시간</span>
-          <span>분</span>
-        </Flex>
-      </HighlightBox>
-    </Wrapper>
+    <StyledTimePicker>
+      {onClose && <StyledButton onClick={handleComplete}>완료</StyledButton>}
+
+      {type === 'time' && (
+        <StyledTimeList type={type}>
+          <Swiper
+            onSwiper={(swiper) =>
+              setSwiperRef((prev) => ({ ...prev, swiper1: swiper }))
+            }
+            onRealIndexChange={() => setTime(getTime())}
+            {...swiperSettings}>
+            {['오전', '오후'].map((value) => (
+              <SwiperSlide key={value}>{value}</SwiperSlide>
+            ))}
+          </Swiper>
+        </StyledTimeList>
+      )}
+
+      <StyledTimeList>
+        <Swiper
+          onSwiper={(swiper) =>
+            setSwiperRef((prev) => ({ ...prev, swiper2: swiper }))
+          }
+          loop={true}
+          onRealIndexChange={() => setTime(getTime())}
+          {...swiperSettings}>
+          {hourList.map((hour) => (
+            <SwiperSlide key={hour}>{hour}</SwiperSlide>
+          ))}
+        </Swiper>
+
+        <StyledText>
+          {type === 'duration' ? '시간' : '시 \u00A0 \u00A0'}
+        </StyledText>
+      </StyledTimeList>
+
+      <StyledTimeList>
+        <Swiper
+          onSwiper={(swiper) =>
+            setSwiperRef((prev) => ({ ...prev, swiper3: swiper }))
+          }
+          loop={true}
+          onRealIndexChange={() => setTime(getTime())}
+          {...swiperSettings}>
+          {minuteList.map((minute) => (
+            <SwiperSlide key={minute}>{minute}</SwiperSlide>
+          ))}
+        </Swiper>
+
+        <StyledText>분 &nbsp;&nbsp;</StyledText>
+      </StyledTimeList>
+    </StyledTimePicker>
   );
 };
 
-const Wrapper = styled.div`
+const StyledTimePicker = styled.div`
   position: relative;
-
+  display: flex;
+  justify-content: center;
   width: 100%;
+  background: linear-gradient(#f6f7f9 40%, #fff 40%, #fff 60%, #f6f7f9 60%);
+  padding: 1rem 0 1rem 0;
+  border-radius: 0.8rem;
 
-  ${theme.typo.T7};
-  color: ${theme.palette.middle_gray3};
-
-  .picker-container {
+  .swiper {
     width: 100%;
-    background-color: ${theme.palette.light_white};
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
-  }
-
-  .picker-inner {
-    position: relative;
-    z-index: 5;
-
-    width: auto;
-    padding: 0;
-    margin-right: 15px;
-
-    gap: 46px;
-  }
-
-  .picker-column,
-  .picker-item {
-    width: 20px;
-
-    display: flex;
-    justify-content: center;
-  }
-
-  .picker-highlight {
-    width: 375px;
-    height: 40px;
-    background-color: ${theme.palette.white};
-    left: -50px;
-
-    display: none;
-  }
-
-  .picker-item {
-    padding: 0px !important;
-    width: 22px;
-    color: ${theme.palette.light_gray3} !important;
-    ${theme.typo.T7};
-    font-weight: 400;
-  }
-
-  .picker-item-selected {
-    color: ${theme.palette.middle_gray3} !important;
-    ${theme.typo.T7};
+    height: 100%;
   }
 `;
 
-const HighlightBox = styled.div`
-  width: 100%;
+const StyledButton = styled.button`
+  ${({ theme }) => theme.typo.B2}
+  color: ${({ theme }) => theme.palette.main_blue};
   position: absolute;
+  top: 1.2rem;
+  right: 1.6rem;
+`;
 
-  border-radius: 8px;
-  height: 40px;
-  background-color: ${theme.palette.white};
+const StyledTimeList = styled.div<{ type?: 'duration' | 'time' }>`
+  ${({ theme }) => theme.typo.T7}
+  position: relative;
+  width: ${({ type }) => (type === 'time' ? 'auto' : '8rem')};
+  height: 18rem;
 
-  top: 50%;
-  transform: translate(0, -50%) !important;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  div {
-    width: 80px;
-    margin-left: 35px;
+  .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #c7ccd6;
+    font-weight: 400;
   }
+
+  .swiper-slide-active {
+    color: #646e81;
+    font-weight: 600;
+  }
+`;
+
+const StyledText = styled.div`
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  color: ${({ theme }) => theme.palette.middle_gray3};
 `;
