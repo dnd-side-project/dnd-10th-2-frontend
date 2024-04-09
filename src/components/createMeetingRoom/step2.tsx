@@ -1,14 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { Flex, Space } from '@/components/Wrapper';
-import { DatePicker, Input, SvgIcon } from '@/components/common';
-import { useOpen } from '@/hooks/useOpen';
+import { DatePicker, Input, SvgIcon, TimePicker } from '@/components/common';
+import { useDatePicker } from '@/hooks/useDatePicker';
+import { useTimePicker } from '@/hooks/useTimePicker';
 import { FormType } from '@/pages/createMeetingroom';
-import { today } from '@/utils';
 import { getDayOfWeek } from '@/utils/getDayOfWeek';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import {
   FieldErrors,
   UseFormRegister,
@@ -16,14 +16,14 @@ import {
   UseFormWatch
 } from 'react-hook-form';
 
-interface Step1Props {
+interface Step2Props {
   register: UseFormRegister<FormType>;
   watch: UseFormWatch<FormType>;
   errors?: FieldErrors;
   setValue: UseFormSetValue<FormType>;
 }
 
-const datePickerVariants = {
+const pickerVariants = {
   invisible: {
     opacity: 0
   },
@@ -32,23 +32,54 @@ const datePickerVariants = {
   }
 };
 
-export const Step2 = ({ register, watch, errors, setValue }: Step1Props) => {
-  const [selectedDate, setSelectedDate] = useState({
-    year: today.year,
-    month: today.month,
-    date: today.date
-  });
-
-  const { open, onOpen, onClose } = useOpen();
+export const Step2 = ({ register, watch, errors, setValue }: Step2Props) => {
+  const { datePicker, setDate, openDatePicker, closeDatePicker } =
+    useDatePicker();
+  const {
+    timePicker: timePicker1,
+    setTime: setTime1,
+    openTimePicker: openTimePicker1,
+    closeTimePicker: closeTimePicker1
+  } = useTimePicker();
+  const {
+    timePicker: timePicker2,
+    setTime: setTime2,
+    openTimePicker: openTimePicker2,
+    closeTimePicker: closeTimePicker2
+  } = useTimePicker();
 
   useEffect(() => {
-    const { year, month, date } = selectedDate;
+    const {
+      date: { year, month, date }
+    } = datePicker;
     setValue(
       'meetingRoomDate',
       `${month}월 ${date}일 ${getDayOfWeek(`${year}-${month}-${date}`)}요일`
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedDate]);
+  }, [datePicker]);
+
+  useEffect(() => {
+    const {
+      time: { periodOfDay, hour, minute }
+    } = timePicker1;
+
+    if (periodOfDay && hour && minute) {
+      setValue('meetingRoomTime', `${periodOfDay} ${hour}시 ${minute}분`);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timePicker1]);
+
+  useEffect(() => {
+    const {
+      time: { hour, minute }
+    } = timePicker2;
+
+    if (hour && minute) {
+      setValue('meetingRoomDuration', `${hour}시간 ${minute}분`);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timePicker2]);
   return (
     <Flex direction="column" align="flex-start">
       <div
@@ -74,7 +105,15 @@ export const Step2 = ({ register, watch, errors, setValue }: Step1Props) => {
             isError={errors?.meetingRoomDate ? true : false}
             errorText={errors?.meetingRoomDate?.message as string}
             readOnly
-            onClick={onOpen}
+            onClick={() => {
+              if (timePicker1.isOpen) {
+                closeTimePicker1();
+              }
+              if (timePicker2.isOpen) {
+                closeTimePicker2();
+              }
+              openDatePicker();
+            }}
           />
           <Input
             {...register('meetingRoomTime', {
@@ -86,19 +125,44 @@ export const Step2 = ({ register, watch, errors, setValue }: Step1Props) => {
             isError={errors?.meetingRoomTime ? true : false}
             errorText={errors?.meetingRoomTime?.message as string}
             readOnly
+            onClick={() => {
+              if (datePicker.isOpen) {
+                closeDatePicker();
+              }
+              if (timePicker2.isOpen) {
+                closeTimePicker2();
+              }
+              openTimePicker1();
+            }}
           />
         </div>
 
         <AnimatePresence>
-          {open && (
+          {datePicker.isOpen && (
             <motion.div
-              variants={datePickerVariants}
+              variants={pickerVariants}
               initial="invisible"
               animate="visible">
               <DatePicker
-                selectedDate={selectedDate}
-                setSelectedDate={setSelectedDate}
-                onClose={onClose}
+                date={datePicker.date}
+                setDate={setDate}
+                onClose={closeDatePicker}
+              />
+              <Space height={30} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {timePicker1.isOpen && (
+            <motion.div
+              variants={pickerVariants}
+              initial="invisible"
+              animate="visible">
+              <TimePicker
+                type="time"
+                setTime={setTime1}
+                onClose={closeTimePicker1}
               />
               <Space height={30} />
             </motion.div>
@@ -124,6 +188,15 @@ export const Step2 = ({ register, watch, errors, setValue }: Step1Props) => {
             isError={errors?.meetingRoomDuration ? true : false}
             errorText={errors?.meetingRoomDuration?.message as string}
             readOnly
+            onClick={() => {
+              if (datePicker.isOpen) {
+                closeDatePicker();
+              }
+              if (timePicker1.isOpen) {
+                closeTimePicker1();
+              }
+              openTimePicker2();
+            }}
           />
           <div
             css={css`
@@ -132,7 +205,20 @@ export const Step2 = ({ register, watch, errors, setValue }: Step1Props) => {
           />
         </div>
 
-        <Space height={4} />
+        <AnimatePresence>
+          {timePicker2.isOpen && (
+            <motion.div
+              variants={pickerVariants}
+              initial="invisible"
+              animate="visible">
+              <TimePicker
+                type="duration"
+                setTime={setTime2}
+                onClose={closeTimePicker2}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </Flex>
   );
