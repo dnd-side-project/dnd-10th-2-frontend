@@ -64,7 +64,6 @@ const CreateMeetingRoom = () => {
     ),
     bottom: 11
   };
-  console.log(getValues('meetingThumbnail'));
 
   const handleButton = () => {
     // 회의실 만들기 Step1
