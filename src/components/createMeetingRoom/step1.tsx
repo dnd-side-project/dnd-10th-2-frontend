@@ -6,23 +6,21 @@ import { FormType } from '@/pages/createMeetingroom';
 import { theme } from '@/styles';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { FieldErrors, UseFormRegister, UseFormWatch } from 'react-hook-form';
+import {
+  FieldErrors,
+  UseFormRegister,
+  UseFormSetValue,
+  UseFormWatch
+} from 'react-hook-form';
 
 interface Step1Props {
   register: UseFormRegister<FormType>;
   watch: UseFormWatch<FormType>;
   errors?: FieldErrors;
-  thumbnailNumber: number | null;
-  setThumbnailNumber: React.Dispatch<React.SetStateAction<number | null>>;
+  setValue: UseFormSetValue<FormType>;
 }
 
-export const Step1 = ({
-  register,
-  watch,
-  errors,
-  thumbnailNumber,
-  setThumbnailNumber
-}: Step1Props) => {
+export const Step1 = ({ register, watch, errors, setValue }: Step1Props) => {
   return (
     <Flex direction="column" align="flex-start">
       <div
@@ -80,9 +78,12 @@ export const Step1 = ({
           {thumbnailList.map((thumbnail) => (
             <button
               key={thumbnail.id}
-              onClick={() => setThumbnailNumber(thumbnail.id + 1)}
+              onClick={() =>
+                setValue('meetingThumbnail', String(thumbnail.id + 1))
+              }
               css={css`
-                border: ${thumbnail.id + 1 === thumbnailNumber &&
+                border: ${thumbnail.id + 1 ===
+                  Number(watch('meetingThumbnail')) &&
                 `2px solid ${theme.palette.main_blue}`};
                 border-radius: 14px;
               `}>
