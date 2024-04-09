@@ -17,11 +17,13 @@ interface DateProps {
 interface DatePickerProps {
   selectedDate: DateProps;
   setSelectedDate: React.Dispatch<React.SetStateAction<DateProps>>;
+  onClose: () => void;
 }
 
 export const DatePicker = ({
   selectedDate,
-  setSelectedDate
+  setSelectedDate,
+  onClose
 }: DatePickerProps) => {
   const dayList = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
@@ -42,6 +44,7 @@ export const DatePicker = ({
       ...prev,
       date: updatedDate
     }));
+    onClose();
   };
 
   /**
@@ -204,8 +207,6 @@ const StyledDatePicker = styled.div`
   border-radius: 0.8rem;
   padding: 2rem;
   box-sizing: border-box;
-
-  margin-top: 4rem;
 `;
 
 const StyledHeader = styled.div`
