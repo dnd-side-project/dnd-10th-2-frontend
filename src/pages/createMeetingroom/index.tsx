@@ -10,10 +10,12 @@ import { useToast } from '@/store/toast';
 
 export interface FormType {
   meetingRoomName: string;
+  meetingThumbnail: string;
   meetingRoomNotice: string;
   meetingRoomDate: string;
   meetingRoomTime: string;
   meetingRoomDuration: string;
+  meetingRoomPlace: string;
 }
 
 const CreateMeetingRoom = () => {
@@ -42,31 +44,48 @@ const CreateMeetingRoom = () => {
   } = useForm({
     defaultValues: {
       meetingRoomName: '',
+      meetingThumbnail: '',
       meetingRoomNotice: '',
       meetingRoomDate: '',
       meetingRoomTime: '',
-      meetingRoomDuration: ''
+      meetingRoomDuration: '',
+      meetingRoomPlace: ''
     },
     mode: 'onChange'
   });
 
-  const [thumbnailNumber, setThumbnailNumber] = useState<number | null>(null);
-
   const { showToast } = useToast();
+  const toastProps = {
+    content: (
+      <>
+        <SvgIcon id="warning" />
+        <span>필수 항목을 모두 완료해주세요</span>
+      </>
+    ),
+    bottom: 11
+  };
+  console.log(getValues('meetingThumbnail'));
 
   const handleButton = () => {
-    if (getValues('meetingRoomName') && thumbnailNumber) {
-      setCurrentStep((prev) => prev + 1);
-    } else {
-      showToast({
-        content: (
-          <>
-            <SvgIcon id="warning" />
-            <span>필수 항목을 모두 완료해주세요</span>
-          </>
-        ),
-        bottom: 11
-      });
+    // 회의실 만들기 Step1
+    if (currentStep === 1) {
+      if (getValues('meetingRoomName') && getValues('meetingThumbnail')) {
+        setCurrentStep((prev) => prev + 1);
+      } else {
+        showToast(toastProps);
+      }
+    }
+    // 회의실 만들기 Step2
+    else if (currentStep === 2) {
+      if (
+        getValues('meetingRoomDate') &&
+        getValues('meetingRoomTime') &&
+        getValues('meetingRoomDuration')
+      ) {
+        setCurrentStep((prev) => prev + 1);
+      } else {
+        showToast(toastProps);
+      }
     }
   };
 
@@ -83,33 +102,29 @@ const CreateMeetingRoom = () => {
           margin-bottom: 11.4rem;
         `}>
         <Header title="회의 만들기" iconLeftId="arrow_left" />
-
         <Space height={15.5} />
-
         <StyledStepList>
           {stepList.map((step) => (
             <StyledStep key={step.id}>
-              <StyledStepNumber isCurrentStep={currentStep === step.id}>
+              <StyledStepNumber isCurrentStep={currentStep === step.id + 1}>
                 {step.id + 1}
               </StyledStepNumber>
-              <StyledStepName isCurrentStep={currentStep === step.id}>
+              <StyledStepName isCurrentStep={currentStep === step.id + 1}>
                 {step.name}
               </StyledStepName>
             </StyledStep>
           ))}
         </StyledStepList>
-
         <Space height={30} />
-
-        {currentStep === 0 ? (
+        {currentStep === 1 && (
           <Step1
             register={register}
             watch={watch}
             errors={errors}
-            thumbnailNumber={thumbnailNumber}
-            setThumbnailNumber={setThumbnailNumber}
+            setValue={setValue}
           />
-        ) : (
+        )}
+        {currentStep === 2 && (
           <Step2
             register={register}
             watch={watch}
@@ -121,7 +136,7 @@ const CreateMeetingRoom = () => {
 
       <StyledButton>
         <Button size="lg" backgroundColor="main" onClick={handleButton}>
-          다음으로
+          {currentStep === 3 ? '완료하기' : '다음으로'}
         </Button>
       </StyledButton>
     </Flex>
