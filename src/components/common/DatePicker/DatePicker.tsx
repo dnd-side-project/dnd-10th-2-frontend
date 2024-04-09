@@ -1,6 +1,7 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import styled from '@emotion/styled';
 import { today } from '@/utils';
+import { DateType } from '@/hooks/useDatePicker';
 import { SvgIcon } from '@/components/common';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { type Swiper as SwiperRef } from 'swiper';
@@ -8,21 +9,13 @@ import { type Swiper as SwiperRef } from 'swiper';
 // Import Swiper styles
 import 'swiper/css';
 
-interface DateProps {
-  year: number;
-  month: number;
-  date: number;
-}
-
 interface DatePickerProps {
-  selectedDate: DateProps;
-  setSelectedDate: React.Dispatch<React.SetStateAction<DateProps>>;
+  date: DateType;
+  setDate: ({ year, month, date }: DateType) => void;
+  onClose: () => void;
 }
 
-export const DatePicker = ({
-  selectedDate,
-  setSelectedDate
-}: DatePickerProps) => {
+export const DatePicker = ({ date, setDate, onClose }: DatePickerProps) => {
   const dayList = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
   /**
@@ -33,68 +26,19 @@ export const DatePicker = ({
   const createArray1ToN = (n: number) =>
     [...Array(n)].map((_, index) => index + 1);
 
-  /**
-   * 달력의 날짜 클릭 시 해당 날짜로 포커스 시키는 함수
-   * @param {number} updatedDate 클릭한 날짜
-   */
-  const selectDate = (updatedDate: number) => {
-    setSelectedDate((prev) => ({
-      ...prev,
-      date: updatedDate
-    }));
-  };
-
-  /**
-   * 이전 달로 이동 시 선택된 날짜 변경 함수
-   */
-  const prevMonth = useCallback(() => {
-    setSelectedDate((prev) => ({
-      year: prev.month === 1 ? prev.year - 1 : prev.year,
-      month: prev.month === 1 ? 12 : prev.month - 1,
-      date: 1
-    }));
-  }, [setSelectedDate]);
-
-  /**
-   * 다음 달로 이동 시 선택된 날짜 변경 함수
-   */
-  const nextMonth = useCallback(() => {
-    setSelectedDate((prev) => ({
-      year: prev.month === 12 ? prev.year + 1 : prev.year,
-      month: prev.month === 12 ? 1 : prev.month + 1,
-      date: 1
-    }));
-  }, [setSelectedDate]);
-
   const [swiperRef, setSwiperRef] = useState<SwiperRef | null>(null);
   const [slideList, setSlideList] = useState([
     {
       id: 0,
       // 선택된 달의 시작 요일 (0: 일요일, 1: 월요일, ..., 6: 토요일)
-      firstDayOfMonth: new Date(
-        selectedDate.year,
-        selectedDate.month - 1,
-        1
-      ).getDay(),
+      firstDayOfMonth: new Date(date.year, date.month - 1, 1).getDay(),
       // 선택된 달의 전체 날짜 갯수
-      totalDateOfMonth: new Date(
-        selectedDate.year,
-        selectedDate.month,
-        0
-      ).getDate()
+      totalDateOfMonth: new Date(date.year, date.month, 0).getDate()
     },
     {
       id: 1,
-      firstDayOfMonth: new Date(
-        selectedDate.year,
-        selectedDate.month,
-        1
-      ).getDay(),
-      totalDateOfMonth: new Date(
-        selectedDate.year,
-        selectedDate.month + 1,
-        0
-      ).getDate()
+      firstDayOfMonth: new Date(date.year, date.month, 1).getDay(),
+      totalDateOfMonth: new Date(date.year, date.month + 1, 0).getDate()
     }
   ]);
 
@@ -122,18 +66,41 @@ export const DatePicker = ({
         ...prev,
         {
           id: lastSlide.id + 1,
-          firstDayOfMonth: new Date(
-            selectedDate.year,
-            selectedDate.month + 1,
-            1
-          ).getDay(),
-          totalDateOfMonth: new Date(
-            selectedDate.year,
-            selectedDate.month + 2,
-            0
-          ).getDate()
+          firstDayOfMonth: new Date(date.year, date.month + 1, 1).getDay(),
+          totalDateOfMonth: new Date(date.year, date.month + 2, 0).getDate()
         }
       ];
+    });
+  };
+
+  /**
+   * 달력의 날짜 클릭 시 해당 날짜로 포커스 시키는 함수
+   * @param {number} updatedDate 클릭한 날짜
+   */
+  const selectDate = (updatedDate: number) => {
+    setDate({ year: date.year, month: date.month, date: updatedDate });
+    onClose();
+  };
+
+  /**
+   * 이전 달로 이동 시 선택된 날짜 변경 함수
+   */
+  const prevMonth = () => {
+    setDate({
+      year: date.month === 1 ? date.year - 1 : date.year,
+      month: date.month === 1 ? 12 : date.month - 1,
+      date: 1
+    });
+  };
+
+  /**
+   * 다음 달로 이동 시 선택된 날짜 변경 함수
+   */
+  const nextMonth = () => {
+    setDate({
+      year: date.month === 12 ? date.year + 1 : date.year,
+      month: date.month === 12 ? 1 : date.month + 1,
+      date: 1
     });
   };
 
@@ -142,7 +109,7 @@ export const DatePicker = ({
       {/* 달력 헤더 영역(달, 년도, 화살표 아이콘) Start */}
       <StyledHeader>
         <StyledMonthYear>
-          {selectedDate.month}월 {selectedDate.year}
+          {date.month}월 {date.year}
         </StyledMonthYear>
 
         <StyledArrow>
@@ -175,17 +142,17 @@ export const DatePicker = ({
               ))}
 
               {/* 1 ~ 31 */}
-              {createArray1ToN(slide.totalDateOfMonth).map((date) => (
+              {createArray1ToN(slide.totalDateOfMonth).map((dateOfMonth) => (
                 <StyledDateNum
-                  key={date}
-                  onClick={() => selectDate(date)}
-                  isSelected={date === selectedDate.date}
+                  key={dateOfMonth}
+                  onClick={() => selectDate(dateOfMonth)}
+                  isSelected={dateOfMonth === date.date}
                   isToday={
-                    today.year === selectedDate.year &&
-                    today.month === selectedDate.month &&
-                    today.date === date
+                    today.year === date.year &&
+                    today.month === date.month &&
+                    today.date === dateOfMonth
                   }>
-                  {date}
+                  {dateOfMonth}
                 </StyledDateNum>
               ))}
             </StyledDateNumList>
@@ -204,8 +171,6 @@ const StyledDatePicker = styled.div`
   border-radius: 0.8rem;
   padding: 2rem;
   box-sizing: border-box;
-
-  margin-top: 4rem;
 `;
 
 const StyledHeader = styled.div`
