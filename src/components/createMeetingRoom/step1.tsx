@@ -2,29 +2,25 @@
 import { thumbnailList } from '@/assets/MeetingRoom/thumbnailList';
 import { Flex, Space } from '@/components/Wrapper';
 import { Input, SvgIcon } from '@/components/common';
+import { FormType } from '@/pages/createMeetingroom';
 import { theme } from '@/styles';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { FieldErrors, UseFormRegister, UseFormWatch } from 'react-hook-form';
+import {
+  FieldErrors,
+  UseFormRegister,
+  UseFormSetValue,
+  UseFormWatch
+} from 'react-hook-form';
 
 interface Step1Props {
-  register: UseFormRegister<{
-    meetingRoomName: string;
-    meetingRoomNotice: string;
-  }>;
-  watch: UseFormWatch<{ meetingRoomName: string; meetingRoomNotice: string }>;
+  register: UseFormRegister<FormType>;
+  watch: UseFormWatch<FormType>;
   errors?: FieldErrors;
-  thumbnailNumber: number | null;
-  setThumbnailNumber: React.Dispatch<React.SetStateAction<number | null>>;
+  setValue: UseFormSetValue<FormType>;
 }
 
-const Step1 = ({
-  register,
-  watch,
-  errors,
-  thumbnailNumber,
-  setThumbnailNumber
-}: Step1Props) => {
+export const Step1 = ({ register, watch, errors, setValue }: Step1Props) => {
   return (
     <Flex direction="column" align="flex-start">
       <div
@@ -32,7 +28,8 @@ const Step1 = ({
           width: 100%;
         `}>
         <StyledLabel>
-          회의 이름을 알려주세요 <SvgIcon id="star_orange" size={18} />
+          회의 이름을 알려주세요
+          <SvgIcon id="star_orange" size={18} />
         </StyledLabel>
         <Input
           {...register('meetingRoomName', {
@@ -73,16 +70,20 @@ const Step1 = ({
         <Space height={4} />
 
         <StyledLabel>
-          썸네일을 골라주세요 <SvgIcon id="star_orange" size={18} />
+          썸네일을 골라주세요
+          <SvgIcon id="star_orange" size={18} />
         </StyledLabel>
 
         <StyledThumbnailList>
           {thumbnailList.map((thumbnail) => (
             <button
               key={thumbnail.id}
-              onClick={() => setThumbnailNumber(thumbnail.id + 1)}
+              onClick={() =>
+                setValue('meetingThumbnail', String(thumbnail.id + 1))
+              }
               css={css`
-                border: ${thumbnail.id + 1 === thumbnailNumber &&
+                border: ${thumbnail.id + 1 ===
+                  Number(watch('meetingThumbnail')) &&
                 `2px solid ${theme.palette.main_blue}`};
                 border-radius: 14px;
               `}>
@@ -110,5 +111,3 @@ const StyledThumbnailList = styled.div`
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1rem;
 `;
-
-export default Step1;

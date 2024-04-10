@@ -5,11 +5,21 @@ import styled from '@emotion/styled';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { css } from '@emotion/react';
-import Step1 from '@/components/createMeetingRoom/step1';
+import { Step1, Step2 } from '@/components/createMeetingRoom';
 import { useToast } from '@/store/toast';
 
+export interface FormType {
+  meetingRoomName: string;
+  meetingThumbnail: string;
+  meetingRoomNotice: string;
+  meetingRoomDate: string;
+  meetingRoomTime: string;
+  meetingRoomDuration: string;
+  meetingRoomPlace: string;
+}
+
 const CreateMeetingRoom = () => {
-  const [currentStep, setCurrentStep] = useState<number>(0);
+  const [currentStep, setCurrentStep] = useState<number>(1);
   const stepList = [
     {
       id: 0,
@@ -29,36 +39,52 @@ const CreateMeetingRoom = () => {
     register,
     watch,
     getValues,
+    setValue,
     formState: { errors }
   } = useForm({
     defaultValues: {
       meetingRoomName: '',
-      meetingRoomNotice: ''
+      meetingThumbnail: '',
+      meetingRoomNotice: '',
+      meetingRoomDate: '',
+      meetingRoomTime: '',
+      meetingRoomDuration: '',
+      meetingRoomPlace: ''
     },
     mode: 'onChange'
   });
 
-  const [thumbnailNumber, setThumbnailNumber] = useState<number | null>(null);
-
   const { showToast } = useToast();
+  const toastProps = {
+    content: (
+      <>
+        <SvgIcon id="warning" />
+        <span>필수 항목을 모두 완료해주세요</span>
+      </>
+    ),
+    bottom: 11
+  };
 
   const handleButton = () => {
-    if (
-      getValues('meetingRoomName') &&
-      getValues('meetingRoomNotice') &&
-      thumbnailNumber
-    ) {
-      setCurrentStep((prev) => prev + 1);
-    } else {
-      showToast({
-        content: (
-          <>
-            <SvgIcon id="warning" />
-            <span>필수 항목을 모두 완료해주세요</span>
-          </>
-        ),
-        bottom: 11
-      });
+    // 회의실 만들기 Step1
+    if (currentStep === 1) {
+      if (getValues('meetingRoomName') && getValues('meetingThumbnail')) {
+        setCurrentStep((prev) => prev + 1);
+      } else {
+        showToast(toastProps);
+      }
+    }
+    // 회의실 만들기 Step2
+    else if (currentStep === 2) {
+      if (
+        getValues('meetingRoomDate') &&
+        getValues('meetingRoomTime') &&
+        getValues('meetingRoomDuration')
+      ) {
+        setCurrentStep((prev) => prev + 1);
+      } else {
+        showToast(toastProps);
+      }
     }
   };
 
@@ -75,40 +101,41 @@ const CreateMeetingRoom = () => {
           margin-bottom: 11.4rem;
         `}>
         <Header title="회의 만들기" iconLeftId="arrow_left" />
-
         <Space height={15.5} />
-
         <StyledStepList>
           {stepList.map((step) => (
             <StyledStep key={step.id}>
-              <StyledStepNumber isCurrentStep={currentStep === step.id}>
+              <StyledStepNumber isCurrentStep={currentStep === step.id + 1}>
                 {step.id + 1}
               </StyledStepNumber>
-              <StyledStepName isCurrentStep={currentStep === step.id}>
+              <StyledStepName isCurrentStep={currentStep === step.id + 1}>
                 {step.name}
               </StyledStepName>
             </StyledStep>
           ))}
         </StyledStepList>
-
         <Space height={30} />
-
-        <Step1
-          register={register}
-          watch={watch}
-          errors={errors}
-          thumbnailNumber={thumbnailNumber}
-          setThumbnailNumber={setThumbnailNumber}
-        />
+        {currentStep === 1 && (
+          <Step1
+            register={register}
+            watch={watch}
+            errors={errors}
+            setValue={setValue}
+          />
+        )}
+        {currentStep === 2 && (
+          <Step2
+            register={register}
+            watch={watch}
+            errors={errors}
+            setValue={setValue}
+          />
+        )}
       </div>
 
       <StyledButton>
-        <Button
-          size="lg"
-          backgroundColor="main"
-          disabled={false}
-          onClick={handleButton}>
-          다음으로
+        <Button size="lg" backgroundColor="main" onClick={handleButton}>
+          {currentStep === 3 ? '완료하기' : '다음으로'}
         </Button>
       </StyledButton>
     </Flex>

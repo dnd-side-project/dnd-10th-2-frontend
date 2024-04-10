@@ -64,7 +64,6 @@ export const TimePicker = ({
       case 'time': {
         const periodOfDay = swiper1?.slides[swiper1?.activeIndex].innerText;
         return { periodOfDay, hour, minute };
-        // return `${periodOfDay} ${hour}시 ${minute}분`;
       }
     }
   };
