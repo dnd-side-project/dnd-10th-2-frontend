@@ -5,7 +5,7 @@ import styled from '@emotion/styled';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { css } from '@emotion/react';
-import { Step1, Step2 } from '@/components/createMeetingRoom';
+import { Step1, Step2, Step3 } from '@/components/createMeetingRoom';
 import { useToast } from '@/store/toast';
 
 export interface FormType {
@@ -75,7 +75,7 @@ const CreateMeetingRoom = () => {
       }
     }
     // 회의실 만들기 Step2
-    else if (currentStep === 2) {
+    if (currentStep === 2) {
       if (
         getValues('meetingRoomDate') &&
         getValues('meetingRoomTime') &&
@@ -85,6 +85,10 @@ const CreateMeetingRoom = () => {
       } else {
         showToast(toastProps);
       }
+    }
+    // 회의실 만들기 Step3
+    if (currentStep === 3) {
+      // api 호출
     }
   };
 
@@ -130,6 +134,9 @@ const CreateMeetingRoom = () => {
             errors={errors}
             setValue={setValue}
           />
+        )}
+        {currentStep === 3 && (
+          <Step3 register={register} watch={watch} errors={errors} />
         )}
       </div>
 
