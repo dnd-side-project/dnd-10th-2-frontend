@@ -49,37 +49,26 @@ export const Step2 = ({ register, watch, errors, setValue }: Step2Props) => {
   } = useTimePicker();
 
   useEffect(() => {
-    const {
-      date: { year, month, date }
-    } = datePicker;
+    const { year, month, date } = datePicker.date;
     setValue(
       'meetingRoomDate',
       `${month}월 ${date}일 ${getDayOfWeek(`${year}-${month}-${date}`)}요일`
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [datePicker]);
+  }, [datePicker.date, setValue]);
 
   useEffect(() => {
-    const {
-      time: { periodOfDay, hour, minute }
-    } = timePicker1;
-
+    const { periodOfDay, hour, minute } = timePicker1.time;
     if (periodOfDay && hour && minute) {
       setValue('meetingRoomTime', `${periodOfDay} ${hour}시 ${minute}분`);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timePicker1]);
+  }, [timePicker1.time, setValue]);
 
   useEffect(() => {
-    const {
-      time: { hour, minute }
-    } = timePicker2;
-
+    const { hour, minute } = timePicker2.time;
     if (hour && minute) {
       setValue('meetingRoomDuration', `${hour}시간 ${minute}분`);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timePicker2]);
+  }, [timePicker2.time, setValue]);
   return (
     <Flex direction="column" align="flex-start">
       <div
