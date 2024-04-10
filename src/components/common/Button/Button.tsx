@@ -60,8 +60,8 @@ const StyledButton = styled.button<{
       : props.theme.palette[props.backgroundColor]};
   color: ${(props) => props.theme.palette[props.textColor]};
   transition: opacity 0.1s ease-in-out;
-  &:hover,
+  /* &:hover,
   &:focus {
     opacity: 0.8;
-  }
+  } */
 `;
