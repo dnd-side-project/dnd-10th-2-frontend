@@ -21,11 +21,11 @@ export const Modal = () => {
   } = useModal();
 
   useEffect(() => {
-    if (isOpened) {
+    if (isOpened && time) {
       const timer = setInterval(updateTime, 1000);
       return () => clearInterval(timer);
     }
-  }, [isOpened, updateTime]);
+  }, [isOpened, time, updateTime]);
 
   useEffect(() => {
     if (time === 0) {
