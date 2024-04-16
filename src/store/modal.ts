@@ -3,8 +3,8 @@ import type { ReactNode } from 'react';
 
 type ModalType = {
   isOpened: boolean;
-  title: ReactNode;
-  description?: ReactNode;
+  title: string;
+  description?: string;
   textAlign?: 'start' | 'center' | string;
   button?: { text: string; onClick: () => void };
   time?: number;
