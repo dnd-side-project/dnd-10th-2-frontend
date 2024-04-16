@@ -2,6 +2,7 @@ import { Button } from '@/components/common';
 import { useModal } from '@/store/modal';
 import styled from '@emotion/styled';
 import { createPortal } from 'react-dom';
+import { useEffect } from 'react';
 
 export const Modal = () => {
   const {
@@ -15,8 +16,22 @@ export const Modal = () => {
       topContent,
       bottomContent
     },
-    closeModal
+    closeModal,
+    updateTime
   } = useModal();
+
+  useEffect(() => {
+    if (isOpened) {
+      const timer = setInterval(updateTime, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [isOpened, updateTime]);
+
+  useEffect(() => {
+    if (time === 0) {
+      closeModal();
+    }
+  }, [time, closeModal]);
 
   const content = isOpened && (
     <StyledOverlay>

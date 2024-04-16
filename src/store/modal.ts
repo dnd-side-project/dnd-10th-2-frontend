@@ -32,6 +32,7 @@ interface ModalStoreType {
     bottomContent?: ModalType['bottomContent'];
   }) => void;
   closeModal: () => void;
+  updateTime: () => void;
 }
 
 export const useModal = create<ModalStoreType>((set) => ({
@@ -62,5 +63,12 @@ export const useModal = create<ModalStoreType>((set) => ({
     set(() => ({
       modal: { isOpened: false, title: '' }
     }));
-  }
+  },
+  updateTime: () =>
+    set(({ modal }) => ({
+      modal: {
+        ...modal,
+        ...(modal.time && modal.time > 0 && { time: modal.time - 1 })
+      }
+    }))
 }));
