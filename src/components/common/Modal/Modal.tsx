@@ -82,9 +82,10 @@ export const Modal = () => {
 };
 
 const StyledOverlay = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -94,6 +95,10 @@ const StyledOverlay = styled.div`
   padding: 0 2rem;
   z-index: 99;
   box-sizing: border-box;
+
+  @media (min-width: 768px) {
+    width: 375px;
+  }
 `;
 
 const StyledModal = styled.div<{ isTimerExist: boolean }>`
