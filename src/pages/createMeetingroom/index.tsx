@@ -2,11 +2,11 @@
 import { Flex, Space } from '@/components/Wrapper';
 import { Button, Header, SvgIcon } from '@/components/common';
 import styled from '@emotion/styled';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { css } from '@emotion/react';
 import { Step1, Step2, Step3 } from '@/components/createMeetingRoom';
 import { useToast } from '@/store/toast';
+import { useStep } from '@/hooks/useStep';
 
 export interface FormType {
   step1: {
@@ -34,21 +34,7 @@ export interface FormType {
 }
 
 const CreateMeetingRoom = () => {
-  const [currentStep, setCurrentStep] = useState<number>(1);
-  const stepList = [
-    {
-      id: 0,
-      name: '회의 이름'
-    },
-    {
-      id: 1,
-      name: '회의 날짜 및 시간'
-    },
-    {
-      id: 2,
-      name: '회의 장소'
-    }
-  ];
+  const { stepList, currentStep, nextStep } = useStep();
 
   const {
     register,
@@ -101,7 +87,7 @@ const CreateMeetingRoom = () => {
           getValues('step1.meetingRoomName') &&
           getValues('step1.meetingThumbnail')
         ) {
-          setCurrentStep((prev) => prev + 1);
+          nextStep();
         } else {
           showToast(toastProps);
         }
@@ -113,7 +99,7 @@ const CreateMeetingRoom = () => {
           getValues('step2.meetingRoomTime') &&
           getValues('step2.meetingRoomDuration')
         ) {
-          setCurrentStep((prev) => prev + 1);
+          nextStep();
         } else {
           showToast(toastProps);
         }
