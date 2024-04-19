@@ -32,14 +32,14 @@ export const Step1 = ({ register, watch, errors, setValue }: Step1Props) => {
           <SvgIcon id="star_orange" size={18} />
         </StyledLabel>
         <Input
-          {...register('meetingRoomName', {
+          {...register('step1.meetingRoomName', {
             required: '회의 이름을 입력해주세요',
             maxLength: {
               message: '최대 15자까지 입력가능해요',
               value: 15
             }
           })}
-          value={watch('meetingRoomName')}
+          value={watch('step1.meetingRoomName')}
           type="default"
           placeholder="회의 이름"
           maxLength={15}
@@ -51,14 +51,14 @@ export const Step1 = ({ register, watch, errors, setValue }: Step1Props) => {
 
         <StyledLabel>회의 공지가 있다면 적어주세요</StyledLabel>
         <Input
-          {...register('meetingRoomNotice', {
+          {...register('step1.meetingRoomNotice', {
             maxLength: {
               message: '최대 15자까지 입력가능해요',
               value: 30
             }
           })}
           multiline={true}
-          value={watch('meetingRoomNotice')}
+          value={watch('step1.meetingRoomNotice')}
           type="default"
           placeholder="회의 이름"
           maxLength={30}
@@ -79,11 +79,11 @@ export const Step1 = ({ register, watch, errors, setValue }: Step1Props) => {
             <button
               key={thumbnail.id}
               onClick={() =>
-                setValue('meetingThumbnail', String(thumbnail.id + 1))
+                setValue('step1.meetingThumbnail', String(thumbnail.id + 1))
               }
               css={css`
                 border: ${thumbnail.id + 1 ===
-                  Number(watch('meetingThumbnail')) &&
+                  Number(watch('step1.meetingThumbnail')) &&
                 `2px solid ${theme.palette.main_blue}`};
                 border-radius: 14px;
               `}>

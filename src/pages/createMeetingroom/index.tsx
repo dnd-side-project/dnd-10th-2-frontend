@@ -9,13 +9,28 @@ import { Step1, Step2, Step3 } from '@/components/createMeetingRoom';
 import { useToast } from '@/store/toast';
 
 export interface FormType {
-  meetingRoomName: string;
-  meetingThumbnail: string;
-  meetingRoomNotice: string;
-  meetingRoomDate: string;
-  meetingRoomTime: string;
-  meetingRoomDuration: string;
-  meetingRoomPlace: string;
+  step1: {
+    meetingRoomName: string;
+    meetingRoomNotice: string;
+    meetingThumbnail: string;
+  };
+  step2: {
+    meetingRoomDate: {
+      date: { year: number; month: number; date: number };
+      dateString: string;
+    };
+    meetingRoomTime: {
+      time: { periodOfDay: string; hour: string; minute: string };
+      timeString: string;
+    };
+    meetingRoomDuration: {
+      duration: { hour: string; minute: string };
+      durationString: string;
+    };
+  };
+  step3: {
+    meetingRoomPlace: string;
+  };
 }
 
 const CreateMeetingRoom = () => {
@@ -43,13 +58,26 @@ const CreateMeetingRoom = () => {
     formState: { errors }
   } = useForm({
     defaultValues: {
-      meetingRoomName: '',
-      meetingThumbnail: '',
-      meetingRoomNotice: '',
-      meetingRoomDate: '',
-      meetingRoomTime: '',
-      meetingRoomDuration: '',
-      meetingRoomPlace: ''
+      step1: {
+        meetingRoomName: '',
+        meetingRoomNotice: '',
+        meetingThumbnail: ''
+      },
+      step2: {
+        meetingRoomDate: {
+          date: { year: 0, month: 0, date: 0 },
+          dateString: ''
+        },
+        meetingRoomTime: {
+          time: { periodOfDay: '', hour: '', minute: '' },
+          timeString: ''
+        },
+        meetingRoomDuration: {
+          duration: { hour: '', minute: '' },
+          durationString: ''
+        }
+      },
+      step3: { meetingRoomPlace: '' }
     },
     mode: 'onChange'
   });
@@ -66,29 +94,36 @@ const CreateMeetingRoom = () => {
   };
 
   const handleButton = () => {
-    // 회의실 만들기 Step1
-    if (currentStep === 1) {
-      if (getValues('meetingRoomName') && getValues('meetingThumbnail')) {
-        setCurrentStep((prev) => prev + 1);
-      } else {
-        showToast(toastProps);
-      }
-    }
-    // 회의실 만들기 Step2
-    if (currentStep === 2) {
-      if (
-        getValues('meetingRoomDate') &&
-        getValues('meetingRoomTime') &&
-        getValues('meetingRoomDuration')
-      ) {
-        setCurrentStep((prev) => prev + 1);
-      } else {
-        showToast(toastProps);
-      }
-    }
-    // 회의실 만들기 Step3
-    if (currentStep === 3) {
-      // api 호출
+    switch (currentStep) {
+      // 회의실 만들기 Step1
+      case 1:
+        if (
+          getValues('step1.meetingRoomName') &&
+          getValues('step1.meetingThumbnail')
+        ) {
+          setCurrentStep((prev) => prev + 1);
+        } else {
+          showToast(toastProps);
+        }
+        break;
+      // 회의실 만들기 Step2
+      case 2:
+        if (
+          getValues('step2.meetingRoomDate') &&
+          getValues('step2.meetingRoomTime') &&
+          getValues('step2.meetingRoomDuration')
+        ) {
+          setCurrentStep((prev) => prev + 1);
+        } else {
+          showToast(toastProps);
+        }
+        break;
+      // 회의실 만들기 Step3
+      case 3:
+        // api 호출
+        break;
+      default:
+        break;
     }
   };
 

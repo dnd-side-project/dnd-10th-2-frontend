@@ -21,8 +21,8 @@ export const Step3 = ({ register, watch, errors }: Step3Props) => {
         `}>
         <StyledLabel>회의 장소를 알려주세요</StyledLabel>
         <Input
-          {...register('meetingRoomPlace')}
-          value={watch('meetingRoomPlace')}
+          {...register('step3.meetingRoomPlace')}
+          value={watch('step3.meetingRoomPlace')}
           type="default"
           placeholder="선택사항입니다"
           isError={errors?.meetingRoomPlace ? true : false}

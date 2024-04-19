@@ -50,25 +50,34 @@ export const Step2 = ({ register, watch, errors, setValue }: Step2Props) => {
 
   useEffect(() => {
     const { year, month, date } = datePicker.date;
-    setValue(
-      'meetingRoomDate',
-      `${month}월 ${date}일 ${getDayOfWeek(`${year}-${month}-${date}`)}요일`
-    );
+    setValue('step2.meetingRoomDate', {
+      date: { year, month, date },
+      dateString: `${month}월 ${date}일 ${getDayOfWeek(`${year}-${month}-${date}`)}요일`
+    });
   }, [datePicker.date, setValue]);
 
   useEffect(() => {
     const { periodOfDay, hour, minute } = timePicker1.time;
     if (periodOfDay && hour && minute) {
-      setValue('meetingRoomTime', `${periodOfDay} ${hour}시 ${minute}분`);
+      console.log(`${periodOfDay} ${hour}시 ${minute}분`);
+      setValue('step2.meetingRoomTime', {
+        time: { periodOfDay, hour, minute },
+        timeString: `${periodOfDay} ${hour}시 ${minute}분`
+      });
     }
   }, [timePicker1.time, setValue]);
 
   useEffect(() => {
     const { hour, minute } = timePicker2.time;
     if (hour && minute) {
-      setValue('meetingRoomDuration', `${hour}시간 ${minute}분`);
+      console.log(`${hour}시 ${minute}분`);
+      setValue('step2.meetingRoomDuration', {
+        duration: { hour, minute },
+        durationString: `${hour}시간 ${minute}분`
+      });
     }
   }, [timePicker2.time, setValue]);
+
   return (
     <Flex direction="column" align="flex-start">
       <div
@@ -85,10 +94,10 @@ export const Step2 = ({ register, watch, errors, setValue }: Step2Props) => {
             gap: 1rem;
           `}>
           <Input
-            {...register('meetingRoomDate', {
+            {...register('step2.meetingRoomDate.dateString', {
               required: '회의 날짜를 입력해주세요'
             })}
-            value={watch('meetingRoomDate')}
+            value={watch('step2.meetingRoomDate.dateString')}
             type="default"
             placeholder="0월 0일 00일"
             isError={errors?.meetingRoomDate ? true : false}
@@ -105,10 +114,10 @@ export const Step2 = ({ register, watch, errors, setValue }: Step2Props) => {
             }}
           />
           <Input
-            {...register('meetingRoomTime', {
+            {...register('step2.meetingRoomTime.timeString', {
               required: '회의 시간을 입력해주세요'
             })}
-            value={watch('meetingRoomTime')}
+            value={watch('step2.meetingRoomTime.timeString')}
             type="default"
             placeholder="오후 00시 00분"
             isError={errors?.meetingRoomTime ? true : false}
@@ -168,10 +177,10 @@ export const Step2 = ({ register, watch, errors, setValue }: Step2Props) => {
             gap: 1rem;
           `}>
           <Input
-            {...register('meetingRoomDuration', {
+            {...register('step2.meetingRoomDuration.durationString', {
               required: '회의 예상 소요시간을 입력해주세요'
             })}
-            value={watch('meetingRoomDuration')}
+            value={watch('step2.meetingRoomDuration.durationString')}
             type="default"
             placeholder="00시간 00분"
             isError={errors?.meetingRoomDuration ? true : false}
