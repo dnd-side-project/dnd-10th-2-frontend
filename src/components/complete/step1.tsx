@@ -1,5 +1,7 @@
+/** @jsxImportSource @emotion/react */
 import { Space } from '@/components/Wrapper';
-import { Button } from '@/components/common';
+import { Button, SvgIcon } from '@/components/common';
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { Dispatch, SetStateAction } from 'react';
 
@@ -28,22 +30,44 @@ export const Step1 = ({ setCurrentStep }: Props) => {
 
   return (
     <>
-      <StyledTitle>
-        25분 더 이야기 나누셨네요.
-        <br />
-        제시간에 끝내도록 분발해봅시다!
-      </StyledTitle>
+      {true && (
+        <>
+          <StyledTitle>
+            회의가 종료되었어요!
+            <br />
+            오늘도 수고 많으셨습니다.
+          </StyledTitle>
 
-      <Space height={16} />
+          <div
+            css={css`
+              display: flex;
+              justify-content: center;
+            `}>
+            <SvgIcon id="meeting_complete" size={260} />
+          </div>
+        </>
+      )}
 
-      {agendaList.map((agenda) => (
-        <StyledAgenda key={agenda.id}>
-          <span>{agenda.name}</span>
-          <span>+{agenda.time}분</span>
-        </StyledAgenda>
-      ))}
+      {false && (
+        <>
+          <StyledTitle>
+            25분 더 이야기 나누셨네요.
+            <br />
+            제시간에 끝내도록 분발해봅시다!
+          </StyledTitle>
 
-      <Space height={60} />
+          <Space height={16} />
+
+          {agendaList.map((agenda) => (
+            <StyledAgenda key={agenda.id}>
+              <span>{agenda.name}</span>
+              <span>+{agenda.time}분</span>
+            </StyledAgenda>
+          ))}
+
+          <Space height={60} />
+        </>
+      )}
 
       <StyledButtonContainer>
         <StyledButton>

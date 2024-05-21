@@ -1,5 +1,5 @@
 import { Space } from '@/components/Wrapper';
-import { Header } from '@/components/common';
+import { Header, SvgIcon } from '@/components/common';
 import { Step1 } from '@/components/complete';
 import { Step2 } from '@/components/complete/step2';
 import styled from '@emotion/styled';
@@ -21,6 +21,10 @@ const Complete = () => {
       <Space height={38} />
 
       <StyledContent>
+        <StyledClipIcon>
+          <SvgIcon id="clip" size={50} />
+        </StyledClipIcon>
+
         <StyledStepList>
           {[1, 2].map((step) => (
             <StyledStep key={step} isCurrentStep={currentStep === step}>
@@ -49,9 +53,16 @@ const StyledContainer = styled.div`
 `;
 
 const StyledContent = styled.div`
+  position: relative;
   background-color: ${({ theme }) => theme.palette.white};
   padding: 4rem 2.2rem 3rem 2.2rem;
   border-radius: 2rem;
+`;
+
+const StyledClipIcon = styled.div`
+  position: absolute;
+  top: -2.5rem;
+  left: 0.5rem;
 `;
 
 const StyledStepList = styled.div`
