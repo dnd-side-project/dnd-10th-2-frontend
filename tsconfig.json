@@ -22,6 +22,9 @@
 
     "esModuleInterop": true,
 
+    "jsxImportSource": "@emotion/react",
+    "types": ["@emotion/react/types/css-prop", "vite/client"],
+
     /* Alias */
     "baseUrl": "./src",
     "paths": {
