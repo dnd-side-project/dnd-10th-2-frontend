@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { thumbnailList } from '@/assets/MeetingRoom/thumbnailList';
 import { Flex, Space } from '@/components/Wrapper';
 import { Input, SvgIcon } from '@/components/common';

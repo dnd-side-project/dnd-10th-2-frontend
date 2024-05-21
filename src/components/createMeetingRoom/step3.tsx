@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { Flex } from '@/components/Wrapper';
 import { Input } from '@/components/common';
 import { FormType } from '@/pages/createMeetingroom';
