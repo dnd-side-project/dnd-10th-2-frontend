@@ -1,12 +1,13 @@
 import { Space } from '@/components/Wrapper';
 import { Header } from '@/components/common';
 import { Step1 } from '@/components/complete';
+import { Step2 } from '@/components/complete/step2';
 import styled from '@emotion/styled';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Complete = () => {
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(2);
   const navigate = useNavigate();
 
   return (
@@ -29,7 +30,9 @@ const Complete = () => {
         </StyledStepList>
 
         <Space height={22} />
+
         {currentStep === 1 && <Step1 setCurrentStep={setCurrentStep} />}
+        {currentStep === 2 && <Step2 setCurrentStep={setCurrentStep} />}
       </StyledContent>
 
       <Space height={30} />

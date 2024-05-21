@@ -50,7 +50,7 @@ export const Step1 = ({ setCurrentStep }: Props) => {
           <Button
             size="sm"
             backgroundColor="main_blue"
-            onClick={() => setCurrentStep((prev) => prev + 1)}>
+            onClick={() => setCurrentStep(2)}>
             다음으로
           </Button>
         </StyledButton>
