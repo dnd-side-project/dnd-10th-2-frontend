@@ -1,5 +1,6 @@
 import { Space } from '@/components/Wrapper';
-import { Button, Header } from '@/components/common';
+import { Header } from '@/components/common';
+import { Step1 } from '@/components/complete';
 import styled from '@emotion/styled';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -16,7 +17,7 @@ const Complete = () => {
         onClickIconLeft={() => navigate(-1)}
       />
 
-      <Space height={22} />
+      <Space height={38} />
 
       <StyledContent>
         <StyledStepList>
@@ -28,23 +29,7 @@ const Complete = () => {
         </StyledStepList>
 
         <Space height={22} />
-
-        <StyledTitle>
-          25분 더 이야기 나누셨네요.
-          <br />
-          제시간에 끝내도록 분발해봅시다!
-        </StyledTitle>
-
-        <StyledButton>
-          <Button
-            size="sm"
-            // fullWidth={false}
-            backgroundColor="main_blue"
-            //   disabled={errors.join || getValues('join').length < 2 ? true : false}
-            onClick={() => setCurrentStep((prev) => prev + 1)}>
-            다음으로
-          </Button>
-        </StyledButton>
+        {currentStep === 1 && <Step1 setCurrentStep={setCurrentStep} />}
       </StyledContent>
 
       <Space height={30} />
@@ -66,11 +51,6 @@ const StyledContent = styled.div`
   border-radius: 2rem;
 `;
 
-const StyledTitle = styled.div`
-  ${({ theme }) => theme.typo.T2}
-  color: ${({ theme }) => theme.palette.dark_gray2};
-`;
-
 const StyledStepList = styled.div`
   display: flex;
   gap: 0.6rem;
@@ -88,10 +68,6 @@ const StyledStep = styled.div<{ isCurrentStep: boolean }>`
   color: ${({ isCurrentStep, theme }) =>
     isCurrentStep ? theme.palette.white : theme.palette.light_gray4};
   border-radius: 100%;
-`;
-
-const StyledButton = styled.div`
-  width: 7.5rem;
 `;
 
 export default Complete;
