@@ -1,3 +1,4 @@
+/** @jsxImportSource @emotion/react */
 import { Flex, Space } from '@/components/Wrapper';
 import { Button, Header, SvgIcon } from '@/components/common';
 import styled from '@emotion/styled';
