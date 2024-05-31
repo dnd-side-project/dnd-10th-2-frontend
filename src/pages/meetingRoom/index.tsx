@@ -4,10 +4,12 @@ import {
   Header,
   Input,
   MeetingRoomModal,
-  ModalPortal,
+  ModalPortal
+} from '@/components/common';
+import {
   TimePicker,
   TimePickerValueGroups
-} from '@/components/common';
+} from '@/components/common/TimePicker/TimePicker(Deprecated)';
 import {
   AgendaCard,
   MeetingCard,

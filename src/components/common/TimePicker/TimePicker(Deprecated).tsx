@@ -9,7 +9,7 @@ export interface TimePickerValueGroups {
   minute: number;
 }
 
-interface TimePickerOptionGroups {
+export interface TimePickerOptionGroups {
   hour: number[];
   minute: number[];
 }
