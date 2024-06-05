@@ -1,5 +1,6 @@
 import App from '@/App';
 import { LoginLayout } from '@/components/layout';
+import Complete from '@/pages/complete';
 import CreateMeetingRoom from '@/pages/createMeetingroom';
 import Join from '@/pages/join';
 import JoinComplete from '@/pages/join/complete';
@@ -45,6 +46,11 @@ const routeChildren: RouteChildren[] = [
   {
     path: '/meeting-room/:meetingId',
     element: <MeetingRoom />,
+    auth: true
+  },
+  {
+    path: '/complete',
+    element: <Complete />,
     auth: true
   }
 ];
