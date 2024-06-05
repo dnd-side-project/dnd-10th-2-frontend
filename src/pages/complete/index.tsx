@@ -1,3 +1,4 @@
+import { FolderIcon } from '@/assets/Complete/FolderIcon';
 import { Space } from '@/components/Wrapper';
 import { Header, SvgIcon } from '@/components/common';
 import { Step1 } from '@/components/complete';
@@ -7,7 +8,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Complete = () => {
-  const [currentStep, setCurrentStep] = useState(2);
+  const [currentStep, setCurrentStep] = useState(1);
   const navigate = useNavigate();
 
   return (
@@ -39,14 +40,19 @@ const Complete = () => {
         {currentStep === 2 && <Step2 setCurrentStep={setCurrentStep} />}
       </StyledContent>
 
-      <Space height={30} />
+      <Space height={25.5} />
+
+      <StyledIcon>
+        <FolderIcon />
+      </StyledIcon>
     </StyledContainer>
   );
 };
 
 const StyledContainer = styled.div`
+  position: relative;
   width: 37.5rem;
-  height: 100vh;
+  /* height: 100vh; */
   background-color: ${({ theme }) => theme.palette.light_white};
   margin: 0px -20px;
   padding: 0px 20px;
@@ -82,6 +88,10 @@ const StyledStep = styled.div<{ isCurrentStep: boolean }>`
   color: ${({ isCurrentStep, theme }) =>
     isCurrentStep ? theme.palette.white : theme.palette.light_gray4};
   border-radius: 100%;
+`;
+
+const StyledIcon = styled.div`
+  height: 17.3rem;
 `;
 
 export default Complete;
