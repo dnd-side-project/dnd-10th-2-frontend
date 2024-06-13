@@ -59,7 +59,6 @@ export const Step2 = ({ register, watch, errors, setValue }: Step2Props) => {
   useEffect(() => {
     const { periodOfDay, hour, minute } = timePicker1.time;
     if (periodOfDay && hour && minute) {
-      console.log(`${periodOfDay} ${hour}시 ${minute}분`);
       setValue('step2.meetingRoomTime', {
         time: { periodOfDay, hour, minute },
         timeString: `${periodOfDay} ${hour}시 ${minute}분`
@@ -70,7 +69,6 @@ export const Step2 = ({ register, watch, errors, setValue }: Step2Props) => {
   useEffect(() => {
     const { hour, minute } = timePicker2.time;
     if (hour && minute) {
-      console.log(`${hour}시 ${minute}분`);
       setValue('step2.meetingRoomDuration', {
         duration: { hour, minute },
         durationString: `${hour}시간 ${minute}분`

@@ -11,7 +11,7 @@ export const meetingRoomApi = {
     estimatedTotalDuration,
     imageNum
   }: {
-    token: string;
+    token: string | null;
     title: string;
     location?: string;
     startTime: string;

@@ -60,7 +60,7 @@ export const Step1 = ({ register, watch, errors, setValue }: Step1Props) => {
           multiline={true}
           value={watch('step1.meetingRoomNotice')}
           type="default"
-          placeholder="회의 이름"
+          placeholder="선택 사항입니다"
           maxLength={30}
           isError={errors?.meetingRoomNotice ? true : false}
           errorText={errors?.meetingRoomNotice?.message as string}

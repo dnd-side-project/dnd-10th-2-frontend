@@ -91,6 +91,7 @@ export const Input = forwardRef<
                 {...props}
                 ref={ref as ForwardedRef<HTMLInputElement>}
                 placeholder={placeholder}
+                value={value}
                 spellCheck={false}
                 isError={isError}
                 height={height}

@@ -7,6 +7,11 @@ import { css } from '@emotion/react';
 import { Step1, Step2, Step3 } from '@/components/createMeetingRoom';
 import { useToast } from '@/store/toast';
 import { useStep } from '@/hooks/useStep';
+import { useMutation } from '@tanstack/react-query';
+import { meetingRoomApi } from '@/apis/meetingRoom';
+import { formatMeetingDuration } from '@/utils/formatMeetingDuration';
+import { formatMeetingDateTime } from '@/utils/formatMeetingDateTime';
+import { getCookie } from '@/utils/getCookie';
 
 export interface FormType {
   step1: {
@@ -34,7 +39,7 @@ export interface FormType {
 }
 
 const CreateMeetingRoom = () => {
-  const { stepList, currentStep, nextStep } = useStep();
+  const { stepList, currentStep, prevStep, nextStep } = useStep();
 
   const {
     register,
@@ -79,6 +84,56 @@ const CreateMeetingRoom = () => {
     bottom: 11
   };
 
+  const { mutate, data } = useMutation({
+    mutationFn: async () => {
+      // throw Error();
+
+      const { meetingRoomName, meetingRoomNotice, meetingThumbnail } =
+        getValues('step1');
+      const {
+        meetingRoomDate: { date },
+        meetingRoomTime: { time },
+        meetingRoomDuration: { duration }
+      } = getValues('step2');
+      const { meetingRoomPlace } = getValues('step3');
+
+      return await meetingRoomApi.CREATE_MEETING_ROOM({
+        token: getCookie('token'),
+        title: meetingRoomName,
+        description: meetingRoomNotice,
+        imageNum: Number(meetingThumbnail),
+        startTime: formatMeetingDateTime(date, time),
+        estimatedTotalDuration: formatMeetingDuration(duration),
+        location: meetingRoomPlace
+      });
+    },
+    onError: () => {
+      console.log('error');
+    },
+    onSuccess: () => {
+      console.log('success');
+    }
+  });
+
+  console.log(data);
+
+  const handlePrev = () => {
+    switch (currentStep) {
+      // 회의실 만들기 Step1
+      case 1:
+        console.log('start');
+        break;
+      // 회의실 만들기 Step2
+      case 2:
+        prevStep();
+        break;
+      // 회의실 만들기 Step3
+      case 3:
+        prevStep();
+        break;
+    }
+  };
+
   const handleButton = () => {
     switch (currentStep) {
       // 회의실 만들기 Step1
@@ -95,9 +150,9 @@ const CreateMeetingRoom = () => {
       // 회의실 만들기 Step2
       case 2:
         if (
-          getValues('step2.meetingRoomDate') &&
-          getValues('step2.meetingRoomTime') &&
-          getValues('step2.meetingRoomDuration')
+          getValues('step2.meetingRoomDate.dateString') &&
+          getValues('step2.meetingRoomTime.timeString') &&
+          getValues('step2.meetingRoomDuration.durationString')
         ) {
           nextStep();
         } else {
@@ -106,9 +161,7 @@ const CreateMeetingRoom = () => {
         break;
       // 회의실 만들기 Step3
       case 3:
-        // api 호출
-        break;
-      default:
+        mutate();
         break;
     }
   };
@@ -125,7 +178,11 @@ const CreateMeetingRoom = () => {
           width: 100%;
           margin-bottom: 11.4rem;
         `}>
-        <Header title="회의 만들기" iconLeftId="arrow_left" />
+        <Header
+          title="회의 만들기"
+          iconLeftId="arrow_left"
+          onClickIconLeft={handlePrev}
+        />
         <Space height={15.5} />
         <StyledStepList>
           {stepList.map((step) => (
@@ -140,6 +197,7 @@ const CreateMeetingRoom = () => {
           ))}
         </StyledStepList>
         <Space height={30} />
+
         {currentStep === 1 && (
           <Step1
             register={register}
