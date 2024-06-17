@@ -12,6 +12,7 @@ import { meetingRoomApi } from '@/apis/meetingRoom';
 import { formatMeetingDuration } from '@/utils/formatMeetingDuration';
 import { formatMeetingDateTime } from '@/utils/formatMeetingDateTime';
 import { getCookie } from '@/utils/getCookie';
+import { useNavigate } from 'react-router-dom';
 
 export interface FormType {
   step1: {
@@ -39,6 +40,7 @@ export interface FormType {
 }
 
 const CreateMeetingRoom = () => {
+  const navigate = useNavigate();
   const { stepList, currentStep, prevStep, nextStep } = useStep();
 
   const {
@@ -84,7 +86,7 @@ const CreateMeetingRoom = () => {
     bottom: 11
   };
 
-  const { mutate, data } = useMutation({
+  const { mutate } = useMutation({
     mutationFn: async () => {
       // throw Error();
 
@@ -110,12 +112,14 @@ const CreateMeetingRoom = () => {
     onError: () => {
       console.log('error');
     },
-    onSuccess: () => {
-      console.log('success');
+    onSuccess: ({
+      data: {
+        response: { meetingId }
+      }
+    }) => {
+      navigate(`/meeting-room/${meetingId}`);
     }
   });
-
-  console.log(data);
 
   const handlePrev = () => {
     switch (currentStep) {
