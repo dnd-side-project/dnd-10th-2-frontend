@@ -10,6 +10,7 @@ import { useStep } from '@/hooks/useStep';
 import { formatMeetingDuration } from '@/utils/formatMeetingDuration';
 import { formatMeetingDateTime } from '@/utils/formatMeetingDateTime';
 import { useCreateMeetingRoom } from '@/apis/meetingRoom/useCreateMeetingRoom';
+import { useCallback } from 'react';
 
 export interface FormType {
   step1: {
@@ -96,22 +97,11 @@ const CreateMeetingRoom = () => {
     location: getValues('step3').meetingRoomPlace
   });
 
-  const handlePrev = () => {
-    switch (currentStep) {
-      // 회의실 만들기 Step1
-      case 1:
-        console.log('start');
-        break;
-      // 회의실 만들기 Step2
-      case 2:
-        prevStep();
-        break;
-      // 회의실 만들기 Step3
-      case 3:
-        prevStep();
-        break;
+  const handlePrev = useCallback(() => {
+    if (currentStep > 1) {
+      prevStep();
     }
-  };
+  }, [currentStep, prevStep]);
 
   const handleButton = () => {
     switch (currentStep) {
