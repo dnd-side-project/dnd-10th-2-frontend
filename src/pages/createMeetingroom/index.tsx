@@ -2,38 +2,46 @@
 import { Flex, Space } from '@/components/Wrapper';
 import { Button, Header, SvgIcon } from '@/components/common';
 import styled from '@emotion/styled';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { css } from '@emotion/react';
 import { Step1, Step2, Step3 } from '@/components/createMeetingRoom';
 import { useToast } from '@/store/toast';
+import { useStep } from '@/hooks/useStep';
+import { useMutation } from '@tanstack/react-query';
+import { meetingRoomApi } from '@/apis/meetingRoom';
+import { formatMeetingDuration } from '@/utils/formatMeetingDuration';
+import { formatMeetingDateTime } from '@/utils/formatMeetingDateTime';
+import { getCookie } from '@/utils/getCookie';
+import { useNavigate } from 'react-router-dom';
 
 export interface FormType {
-  meetingRoomName: string;
-  meetingThumbnail: string;
-  meetingRoomNotice: string;
-  meetingRoomDate: string;
-  meetingRoomTime: string;
-  meetingRoomDuration: string;
-  meetingRoomPlace: string;
+  step1: {
+    meetingRoomName: string;
+    meetingRoomNotice: string;
+    meetingThumbnail: string;
+  };
+  step2: {
+    meetingRoomDate: {
+      date: { year: number; month: number; date: number };
+      dateString: string;
+    };
+    meetingRoomTime: {
+      time: { periodOfDay: string; hour: string; minute: string };
+      timeString: string;
+    };
+    meetingRoomDuration: {
+      duration: { hour: string; minute: string };
+      durationString: string;
+    };
+  };
+  step3: {
+    meetingRoomPlace: string;
+  };
 }
 
 const CreateMeetingRoom = () => {
-  const [currentStep, setCurrentStep] = useState<number>(1);
-  const stepList = [
-    {
-      id: 0,
-      name: '회의 이름'
-    },
-    {
-      id: 1,
-      name: '회의 날짜 및 시간'
-    },
-    {
-      id: 2,
-      name: '회의 장소'
-    }
-  ];
+  const navigate = useNavigate();
+  const { stepList, currentStep, prevStep, nextStep } = useStep();
 
   const {
     register,
@@ -43,13 +51,26 @@ const CreateMeetingRoom = () => {
     formState: { errors }
   } = useForm({
     defaultValues: {
-      meetingRoomName: '',
-      meetingThumbnail: '',
-      meetingRoomNotice: '',
-      meetingRoomDate: '',
-      meetingRoomTime: '',
-      meetingRoomDuration: '',
-      meetingRoomPlace: ''
+      step1: {
+        meetingRoomName: '',
+        meetingRoomNotice: '',
+        meetingThumbnail: ''
+      },
+      step2: {
+        meetingRoomDate: {
+          date: { year: 0, month: 0, date: 0 },
+          dateString: ''
+        },
+        meetingRoomTime: {
+          time: { periodOfDay: '', hour: '', minute: '' },
+          timeString: ''
+        },
+        meetingRoomDuration: {
+          duration: { hour: '', minute: '' },
+          durationString: ''
+        }
+      },
+      step3: { meetingRoomPlace: '' }
     },
     mode: 'onChange'
   });
@@ -65,30 +86,87 @@ const CreateMeetingRoom = () => {
     bottom: 11
   };
 
+  const { mutate } = useMutation({
+    mutationFn: async () => {
+      // throw Error();
+
+      const { meetingRoomName, meetingRoomNotice, meetingThumbnail } =
+        getValues('step1');
+      const {
+        meetingRoomDate: { date },
+        meetingRoomTime: { time },
+        meetingRoomDuration: { duration }
+      } = getValues('step2');
+      const { meetingRoomPlace } = getValues('step3');
+
+      return await meetingRoomApi.CREATE_MEETING_ROOM({
+        token: getCookie('token'),
+        title: meetingRoomName,
+        description: meetingRoomNotice,
+        imageNum: Number(meetingThumbnail),
+        startTime: formatMeetingDateTime(date, time),
+        estimatedTotalDuration: formatMeetingDuration(duration),
+        location: meetingRoomPlace
+      });
+    },
+    onError: () => {
+      console.log('error');
+    },
+    onSuccess: ({
+      data: {
+        response: { meetingId }
+      }
+    }) => {
+      navigate(`/meeting-room/${meetingId}`);
+    }
+  });
+
+  const handlePrev = () => {
+    switch (currentStep) {
+      // 회의실 만들기 Step1
+      case 1:
+        console.log('start');
+        break;
+      // 회의실 만들기 Step2
+      case 2:
+        prevStep();
+        break;
+      // 회의실 만들기 Step3
+      case 3:
+        prevStep();
+        break;
+    }
+  };
+
   const handleButton = () => {
-    // 회의실 만들기 Step1
-    if (currentStep === 1) {
-      if (getValues('meetingRoomName') && getValues('meetingThumbnail')) {
-        setCurrentStep((prev) => prev + 1);
-      } else {
-        showToast(toastProps);
-      }
-    }
-    // 회의실 만들기 Step2
-    if (currentStep === 2) {
-      if (
-        getValues('meetingRoomDate') &&
-        getValues('meetingRoomTime') &&
-        getValues('meetingRoomDuration')
-      ) {
-        setCurrentStep((prev) => prev + 1);
-      } else {
-        showToast(toastProps);
-      }
-    }
-    // 회의실 만들기 Step3
-    if (currentStep === 3) {
-      // api 호출
+    switch (currentStep) {
+      // 회의실 만들기 Step1
+      case 1:
+        if (
+          getValues('step1.meetingRoomName') &&
+          getValues('step1.meetingThumbnail')
+        ) {
+          nextStep();
+        } else {
+          showToast(toastProps);
+        }
+        break;
+      // 회의실 만들기 Step2
+      case 2:
+        if (
+          getValues('step2.meetingRoomDate.dateString') &&
+          getValues('step2.meetingRoomTime.timeString') &&
+          getValues('step2.meetingRoomDuration.durationString')
+        ) {
+          nextStep();
+        } else {
+          showToast(toastProps);
+        }
+        break;
+      // 회의실 만들기 Step3
+      case 3:
+        mutate();
+        break;
     }
   };
 
@@ -104,7 +182,11 @@ const CreateMeetingRoom = () => {
           width: 100%;
           margin-bottom: 11.4rem;
         `}>
-        <Header title="회의 만들기" iconLeftId="arrow_left" />
+        <Header
+          title="회의 만들기"
+          iconLeftId="arrow_left"
+          onClickIconLeft={handlePrev}
+        />
         <Space height={15.5} />
         <StyledStepList>
           {stepList.map((step) => (
@@ -119,6 +201,7 @@ const CreateMeetingRoom = () => {
           ))}
         </StyledStepList>
         <Space height={30} />
+
         {currentStep === 1 && (
           <Step1
             register={register}
