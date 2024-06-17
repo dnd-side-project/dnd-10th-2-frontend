@@ -1,8 +1,9 @@
 import { api } from '../axois';
+import { CreateMeetingRoomRequest, CreateMeetingRoomResponse } from './types';
 
 export const meetingRoomApi = {
   // 회의실 만들기
-  CREATE_MEETING_ROOM: ({
+  CREATE_MEETING_ROOM: async ({
     token,
     title,
     location,
@@ -10,16 +11,10 @@ export const meetingRoomApi = {
     description,
     estimatedTotalDuration,
     imageNum
-  }: {
-    token: string | null;
-    title: string;
-    location?: string;
-    startTime: string;
-    description?: string;
-    estimatedTotalDuration: string;
-    imageNum: number;
-  }) =>
-    api.post(
+  }: CreateMeetingRoomRequest) => {
+    const {
+      data: { response }
+    } = await api.post<CreateMeetingRoomResponse>(
       '/api/meetings',
       {
         title,
@@ -34,5 +29,8 @@ export const meetingRoomApi = {
           Authorization: token
         }
       }
-    )
+    );
+
+    return response;
+  }
 };

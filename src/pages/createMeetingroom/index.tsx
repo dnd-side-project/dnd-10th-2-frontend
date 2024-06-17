@@ -7,12 +7,10 @@ import { css } from '@emotion/react';
 import { Step1, Step2, Step3 } from '@/components/createMeetingRoom';
 import { useToast } from '@/store/toast';
 import { useStep } from '@/hooks/useStep';
-import { useMutation } from '@tanstack/react-query';
-import { meetingRoomApi } from '@/apis/meetingRoom';
 import { formatMeetingDuration } from '@/utils/formatMeetingDuration';
 import { formatMeetingDateTime } from '@/utils/formatMeetingDateTime';
-import { getCookie } from '@/utils/getCookie';
-import { useNavigate } from 'react-router-dom';
+import { useCreateMeetingRoom } from '@/apis/meetingRoom/useCreateMeetingRoom';
+import { useCallback } from 'react';
 
 export interface FormType {
   step1: {
@@ -40,7 +38,6 @@ export interface FormType {
 }
 
 const CreateMeetingRoom = () => {
-  const navigate = useNavigate();
   const { stepList, currentStep, prevStep, nextStep } = useStep();
 
   const {
@@ -86,57 +83,25 @@ const CreateMeetingRoom = () => {
     bottom: 11
   };
 
-  const { mutate } = useMutation({
-    mutationFn: async () => {
-      // throw Error();
-
-      const { meetingRoomName, meetingRoomNotice, meetingThumbnail } =
-        getValues('step1');
-      const {
-        meetingRoomDate: { date },
-        meetingRoomTime: { time },
-        meetingRoomDuration: { duration }
-      } = getValues('step2');
-      const { meetingRoomPlace } = getValues('step3');
-
-      return await meetingRoomApi.CREATE_MEETING_ROOM({
-        token: getCookie('token'),
-        title: meetingRoomName,
-        description: meetingRoomNotice,
-        imageNum: Number(meetingThumbnail),
-        startTime: formatMeetingDateTime(date, time),
-        estimatedTotalDuration: formatMeetingDuration(duration),
-        location: meetingRoomPlace
-      });
-    },
-    onError: () => {
-      console.log('error');
-    },
-    onSuccess: ({
-      data: {
-        response: { meetingId }
-      }
-    }) => {
-      navigate(`/meeting-room/${meetingId}`);
-    }
+  const { mutate } = useCreateMeetingRoom({
+    title: getValues('step1').meetingRoomName,
+    description: getValues('step1').meetingRoomNotice,
+    imageNum: Number(getValues('step1').meetingThumbnail),
+    startTime: formatMeetingDateTime(
+      getValues('step2').meetingRoomDate.date,
+      getValues('step2').meetingRoomTime.time
+    ),
+    estimatedTotalDuration: formatMeetingDuration(
+      getValues('step2').meetingRoomDuration.duration
+    ),
+    location: getValues('step3').meetingRoomPlace
   });
 
-  const handlePrev = () => {
-    switch (currentStep) {
-      // 회의실 만들기 Step1
-      case 1:
-        console.log('start');
-        break;
-      // 회의실 만들기 Step2
-      case 2:
-        prevStep();
-        break;
-      // 회의실 만들기 Step3
-      case 3:
-        prevStep();
-        break;
+  const handlePrev = useCallback(() => {
+    if (currentStep > 1) {
+      prevStep();
     }
-  };
+  }, [currentStep, prevStep]);
 
   const handleButton = () => {
     switch (currentStep) {

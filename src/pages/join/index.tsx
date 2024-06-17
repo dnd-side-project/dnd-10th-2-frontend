@@ -3,7 +3,7 @@ import { Space } from '@/components/Wrapper';
 import { Button, Header, Input } from '@/components/common';
 import { media } from '@/styles';
 import styled from '@emotion/styled';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -24,39 +24,41 @@ const Join = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get('code');
 
-  const handleJoin = async () => {
+  const handleJoin = useCallback(async () => {
     const nickname = getValues('join');
+    if (!token) {
+      navigate('/onboarding');
+      return;
+    }
 
-    if (token) {
-      try {
-        await userApi.PATCH_NICKNAME(nickname, token);
-        document.cookie = `token=${token}`;
-        navigate('/join/complete');
-      } catch {
-        navigate('/onboarding');
-      }
-    } else {
+    try {
+      await userApi.PATCH_NICKNAME(nickname, token);
+      document.cookie = `token=${token}`;
+      navigate('/join/complete');
+    } catch {
       navigate('/onboarding');
     }
-  };
+  }, [token, getValues, navigate]);
 
-  const getUserData = async () => {
-    if (token) {
-      try {
-        const { data } = await userApi.GET_MEMBERS(token);
-        const nickname = data?.response?.nickname;
-        setValue('join', nickname);
-      } catch {
-        navigate('/onboarding');
-      }
-    } else {
+  const getUserData = useCallback(async () => {
+    if (!token) {
+      navigate('/onboarding');
+      return;
+    }
+
+    try {
+      const { nickname } = await userApi.GET_MEMBERS(token);
+      setValue('join', nickname);
+    } catch {
       navigate('/onboarding');
     }
-  };
+  }, [token, setValue, navigate]);
 
   useEffect(() => {
+    console.log('mount');
     getUserData();
-  }, []);
+  }, [getUserData]);
+
   return (
     <StyledContainer>
       <Header
