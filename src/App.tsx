@@ -1,4 +1,4 @@
-import { Flex } from '@/components/Wrapper';
+import { Flex } from '@shared/common/ui';
 
 function App() {
   return <Flex direction="column">...</Flex>;
