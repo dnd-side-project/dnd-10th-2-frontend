@@ -29,15 +29,10 @@
     "baseUrl": "./src",
     "paths": {
       "@/*": ["./*"],
-      "@apis/*": ["apis/*"],
-      "@assets/*": ["assets/*"],
-      "@components/*": ["components/*"],
-      "@constants/*": ["constants/*"],
-      "@hooks/*": ["hooks/*"],
       "@pages/*": ["pages/*"],
-      "@styles/*": ["styles/*"],
-      "@utils/*": ["utils/*"],
-      "@types/*": ["types/*"]
+      "@features/*": ["features/*"],
+      "@shared/*": ["shared/*"],
+      "@routes/*": ["routes/*"]
     }
   },
   "include": ["src"],
