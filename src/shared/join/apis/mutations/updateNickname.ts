@@ -1,6 +1,6 @@
 import { api } from '@shared/common/api';
 
-export const useUpdateNickname = (nickname: string, token: string) =>
+export const updateNickname = (nickname: string, token: string) =>
   api.patch(
     '/api/members/nickname',
     { nickname },
