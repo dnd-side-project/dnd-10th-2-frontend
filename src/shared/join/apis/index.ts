@@ -1,2 +1,2 @@
-export * from './queries/useGetUserInfo';
-export * from './mutations/useUpdateNickname';
+export * from './queries/getUserInfo';
+export * from './mutations/updateNickname';
