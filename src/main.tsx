@@ -1,13 +1,12 @@
 import ReactDOM from 'react-dom/client';
+import { Global, ThemeProvider } from '@emotion/react';
 import { RecoilRoot } from 'recoil';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { GlobalStyle } from './styles/GlobalStyles';
-import { Global, ThemeProvider } from '@emotion/react';
-import { theme } from './styles/theme';
-import { Routers } from '@/routes/index.tsx';
-import { Layout } from '@/components/layout';
-import { GlobalBottomSheet, Modal, Toast } from '@/components/common';
+
+import { Routers } from '@routes/index.tsx';
+import { Layout, GlobalBottomSheet, Modal, Toast } from '@shared/common/ui';
+import { theme, GlobalStyle } from '@shared/common/styles';
 
 const queryClient = new QueryClient({
   defaultOptions: {

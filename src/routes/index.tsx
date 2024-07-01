@@ -1,11 +1,14 @@
 import App from '@/App';
-import { LoginLayout } from '@/components/layout';
-import Complete from '@/pages/complete';
-import CreateMeetingRoom from '@/pages/createMeetingroom';
-import Join from '@/pages/join';
-import JoinComplete from '@/pages/join/complete';
-import { MeetingRoom } from '@/pages/meetingRoom';
-import Onboarding from '@/pages/onboarding';
+import { LoginLayout } from '@shared/common/ui';
+
+import Onboarding from '@pages/onboarding/OnboardingPage';
+
+import Join from '@pages/join/JoinPage';
+import JoinComplete from '@pages/join/JoinCompletePage';
+
+import MeetingCreatePage from '@pages/meeting/MeetingCreatePage';
+import MeetingPage from '@pages/meeting/MeetingPage';
+import MeetingCompletePage from '@pages/meeting/MeetingCompletePage';
 
 import {
   createBrowserRouter,
@@ -39,18 +42,18 @@ const routeChildren: RouteChildren[] = [
     auth: false
   },
   {
-    path: '/create-meeting-room',
-    element: <CreateMeetingRoom />,
+    path: '/meeting/create',
+    element: <MeetingCreatePage />,
     auth: true
   },
   {
-    path: '/meeting-room/:meetingId',
-    element: <MeetingRoom />,
+    path: '/meeting/:meetingId',
+    element: <MeetingPage />,
     auth: true
   },
   {
-    path: '/complete',
-    element: <Complete />,
+    path: '/meeting/:meetingId/complete',
+    element: <MeetingCompletePage />,
     auth: true
   }
 ];
