@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import { Routers } from '@routes/index.tsx';
-import { Layout, GlobalBottomSheet, Modal, Toast } from '@shared/common/ui';
+import { Layout, Modal, Toast, BottomSheet } from '@shared/common/ui';
 import { theme, GlobalStyle } from '@shared/common/styles';
 
 const queryClient = new QueryClient({
@@ -24,7 +24,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <ThemeProvider theme={theme}>
         <Layout>
           <Routers />
-          <GlobalBottomSheet />
+          <BottomSheet />
           <Modal />
           <Toast />
         </Layout>

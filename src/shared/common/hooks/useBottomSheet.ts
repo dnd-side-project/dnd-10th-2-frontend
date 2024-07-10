@@ -1,30 +1,33 @@
+import { create } from 'zustand';
 import { ReactNode } from 'react';
-import { atom, useRecoilState } from 'recoil';
 
-interface BottomSheetStateType {
+type BottomSheetType = {
+  isOpened: boolean;
   content: ReactNode;
-  isOpen: boolean;
+};
+
+interface BotttomSheetStoreType {
+  bottomSheet: BottomSheetType;
+  openBottomSheet: ({
+    content
+  }: {
+    content: BottomSheetType['content'];
+  }) => void;
+  closeBottomSheet: () => void;
 }
 
-const bottomSheetState = atom<BottomSheetStateType | null>({
-  key: 'bottomSheetState',
-  default: null
-});
-
-export const useBottomSheet = () => {
-  const [bottomSheet, setBottomSheet] = useRecoilState(bottomSheetState);
-  const openGlobalSheet = ({
-    content,
-    isOpen = true
-  }: BottomSheetStateType) => {
-    setBottomSheet({ content, isOpen });
-  };
-  const closeGlobalSheet = () => {
-    setBottomSheet({ ...bottomSheet!, isOpen: false });
+export const useBottomSheet = create<BotttomSheetStoreType>((set) => ({
+  bottomSheet: {
+    isOpened: false,
+    content: null
+  },
+  openBottomSheet: ({ content }) => {
+    set(() => ({ bottomSheet: { isOpened: true, content } }));
+  },
+  closeBottomSheet: () => {
+    set((prev) => ({ bottomSheet: { ...prev.bottomSheet, isOpened: false } }));
     setTimeout(() => {
-      setBottomSheet(null);
-    }, 400);
-  };
-  const isOpen = bottomSheet?.isOpen || false;
-  return { bottomSheet, isOpen, openGlobalSheet, closeGlobalSheet };
-};
+      set((prev) => ({ bottomSheet: { ...prev.bottomSheet, content: null } }));
+    }, 100);
+  }
+}));
