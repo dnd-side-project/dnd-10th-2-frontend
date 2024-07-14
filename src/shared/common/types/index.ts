@@ -6,3 +6,5 @@ export * from './Time';
 export * from './TimePickerState';
 export * from './Date';
 export * from './DatePickerState';
+export * from './Dialog';
+export * from './DialogStore';
