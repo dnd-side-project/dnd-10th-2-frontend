@@ -1,196 +1,145 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
-import { useForm } from 'react-hook-form';
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult
+} from 'react-beautiful-dnd';
 
 import {
   ButtonWrapper,
   Flex,
   Space,
-  Text,
   Button,
   Header,
-  Input,
   ModalPortal
-  //   TimePicker
 } from '@shared/common/ui';
 import { media, theme } from '@shared/common/styles';
-import { useBottomSheet } from '@shared/common/hooks';
+import { useOpen, useBottomSheet } from '@shared/common/hooks';
+import { getCookie } from '@shared/common/utils';
+import { AgendaResponse } from '@shared/meeting/apis/types';
+
+import { useGetAgendaList } from '@shared/meeting/apis';
 
 import {
-  AgendaCard,
   MeetingCard,
   TimeLineButton,
-  Modal
+  Modal,
+  Agenda,
+  AgendaSheet,
+  BreakTimeSheet
 } from '@features/meeting/ui';
+// import { api } from '@/shared/common/api';
 
 const MeetingPage = () => {
-  const { openGlobalSheet } = useBottomSheet();
-  const [modalOn, setModalOn] = useState(false);
-  const {
-    register,
-    watch,
-    // setValue,
-    formState: { errors }
-  } = useForm({
-    defaultValues: {
-      agenda: '',
-      agendaTime: {
-        hour: 0,
-        minute: 0
-      },
-      breakTimeTime: {
-        hour: 0,
-        minute: 0
-      }
-    },
-    mode: 'onChange'
+  const { open, onOpen, onClose } = useOpen();
+  const { openBottomSheet } = useBottomSheet();
+
+  const { data, refetch } = useGetAgendaList({
+    meetingId: '65',
+    token: getCookie('token')
   });
 
-  const handleModal = () => {
-    setModalOn(!modalOn);
+  // console.log(data);
+
+  const [agendaList, setAgendaList] = useState<AgendaResponse[]>([]);
+
+  useEffect(() => {
+    // console.log(data);
+    setAgendaList(data?.agendaResponse || []);
+  }, [data, refetch]);
+
+  const onDragEnd = (result: DropResult) => {
+    if (!result.destination) {
+      return;
+    }
+
+    const reorderedItems = Array.from(agendaList);
+    const [removed] = reorderedItems.splice(result.source.index, 1);
+    reorderedItems.splice(result.destination.index, 0, removed);
+
+    setAgendaList(reorderedItems);
   };
 
-  const agendaSheet = {
-    isOpen: true,
-    content: (
-      <Flex direction="column" align="flex-start">
-        <Text typo="T5" color="dark_gray2">
-          첫 번째 안건을 알려주세요
-        </Text>
-
-        <Space height={16} />
-
-        <Input
-          {...register('agenda', { required: true })}
-          placeholder="안건 입력"
-          value={watch('agenda')}
-          type="default"
-          height={60}
-          isError={errors.agenda ? true : false}
-          errorText={errors.agenda?.message as string}
-        />
-
-        <Text typo="T5" color="dark_gray2">
-          타이머를 맞춰주세요
-        </Text>
-
-        <Space height={16} />
-        {/* <TimePicker
-          value={watch('agendaTime')}
-          setValue={(value: TimePickerValueGroups) =>
-            setValue('agendaTime', value)
-          }
-        /> */}
-
-        <Space height={16} />
-
-        <Button
-          size={'lg'}
-          backgroundColor={'main'}
-          onClick={() => console.log(watch('agenda'), watch('agendaTime'))}>
-          완료하기
-        </Button>
-      </Flex>
-    )
-  };
-
-  const breakTimeSheet = {
-    isOpen: true,
-    content: (
-      <Flex direction="column" align="flex-start">
-        <Text typo="T5" color="dark_gray2">
-          타이머를 맞춰주세요
-        </Text>
-
-        <Space height={16} />
-
-        {/* <TimePicker
-          value={watch('breakTimeTime')}
-          setValue={(value: TimePickerValueGroups) =>
-            setValue('breakTimeTime', value)
-          }
-        /> */}
-
-        <Space height={16} />
-
-        <Button
-          size={'lg'}
-          backgroundColor={'main'}
-          onClick={() => console.log(watch('breakTimeTime'))}>
-          완료하기
-        </Button>
-      </Flex>
-    )
-  };
-
-  const userListSheet = {
-    isOpen: true,
-    content: (
-      <Flex justify="flex-start">
-        <Text typo="T5" color="dark_gray2">
-          참여자 목록
-        </Text>
-
-        <Space height={16} />
-
-        {/* <List ={} /> */}
-      </Flex>
-    )
-  };
-
-  // TODO page 전체 background-color
+  // const handleDelete = async () => {
+  //   try {
+  //     const response = await api.delete(`/api/meetings/65/agendas/29`, {
+  //       headers: {
+  //         Authorization: `Bearer ${getCookie('token')}`
+  //       }
+  //     });
+  //     await refetch();
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error('Error deleting agenda:', error);
+  //     throw error;
+  //   }
+  // };
   return (
     <Wrapper direction="column" justify="flex-start">
+      {/* <button onClick={handleDelete}>삭제</button> */}
       {/* TODO Header onClick 핸들러 연결, background-color */}
       <Header iconLeftId="hamburger_menu" title="회의실" iconRightId2="share" />
 
       <Space height={10} />
 
-      {/* TODO props data */}
-      <MeetingCard
-        date={'2024년 2월 11일'}
-        isHost={true}
-        title={'DND 2조 3차 회의'}
-        onClickUserList={() => openGlobalSheet(userListSheet)}
-        actualTotalDuration={'01:01:02'}
-      />
+      <MeetingCard />
+
       <Space height={20} />
-      <AgendaCard
-        type="agenda"
-        time="00:10:00"
-        title="아이스브레이킹"
-        currentOrder={2}
-        agendaOrder={1}
-        isDone
-      />
+
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="droppable">
+          {(provided) => (
+            <StyledAgendaList
+              {...provided.droppableProps}
+              ref={provided.innerRef}>
+              {agendaList.map((agenda, index) =>
+                agenda.status === 'COMPLETED' ? (
+                  <Agenda
+                    key={agenda.agendaId}
+                    agendaId={agenda.agendaId}
+                    title={agenda.title}
+                    type={agenda.type}
+                    currentDuration={agenda.currentDuration}
+                    remainingDuration={agenda.remainingDuration}
+                    status={agenda.status}
+                  />
+                ) : (
+                  <Draggable
+                    key={agenda.agendaId}
+                    draggableId={agenda.agendaId.toString()}
+                    index={index}>
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}>
+                        <Agenda
+                          agendaId={agenda.agendaId}
+                          title={agenda.title}
+                          type={agenda.type}
+                          currentDuration={agenda.currentDuration}
+                          remainingDuration={agenda.remainingDuration}
+                          status={agenda.status}
+                        />
+                      </div>
+                    )}
+                  </Draggable>
+                )
+              )}
+              {provided.placeholder}
+            </StyledAgendaList>
+          )}
+        </Droppable>
+      </DragDropContext>
+
       <Space height={10} />
-      <AgendaCard
-        type="breakTime"
-        time="00:10:00"
-        title="아이스브레이킹"
-        currentOrder={2}
-        agendaOrder={2}
-        isDone
-      />
-      <Space height={10} />
-      <AgendaCard
-        type="agenda"
-        time="00:10:00"
-        title="아이스브레이킹"
-        currentOrder={2}
-        agendaOrder={2}
-      />
-      <Space height={10} />
-      <AgendaCard
-        type="breakTime"
-        time="00:10:00"
-        title="아이스브레이킹"
-        currentOrder={2}
-        agendaOrder={3}
-      />
-      <Space height={10} />
-      <TimeLineButton onClick={handleModal} />
+
+      <TimeLineButton onClick={onOpen} />
+
       <Space height={14} />
+
       <Flex justify="space-between" align="flex-start">
         <Flex direction="column" align="flex-start" gap={6}>
           <ButtonWrapper width={78}>
@@ -206,16 +155,22 @@ const MeetingPage = () => {
             회의 종료는 방장만 할 수 있어요!
           </ExitButtonChip>
         </Flex>
+
         <ExitButton>회의실 나가기</ExitButton>
+
         <Space height={220} />
       </Flex>
 
       <ModalPortal>
-        {modalOn && (
+        {open && (
           <Modal
-            onAgendaClick={() => openGlobalSheet(agendaSheet)}
-            onBreakTimeClick={() => openGlobalSheet(breakTimeSheet)}
-            closeModal={handleModal}
+            onAgendaClick={() =>
+              openBottomSheet({ content: <AgendaSheet refetch={refetch} /> })
+            }
+            onBreakTimeClick={() =>
+              openBottomSheet({ content: <BreakTimeSheet refetch={refetch} /> })
+            }
+            closeModal={onClose}
           />
         )}
       </ModalPortal>
@@ -226,16 +181,20 @@ const MeetingPage = () => {
 const Wrapper = styled(Flex)`
   background-color: #f2f4f6;
   min-height: 100vh;
-
   width: 375px;
   box-sizing: border-box;
-
   margin: 0px -20px;
   padding: 0px 20px;
 
   ${media.mobile} {
     width: 100vw;
   }
+`;
+
+const StyledAgendaList = styled.div`
+  display: grid;
+  row-gap: 1rem;
+  width: 100%;
 `;
 
 const ExitButton = styled.button`

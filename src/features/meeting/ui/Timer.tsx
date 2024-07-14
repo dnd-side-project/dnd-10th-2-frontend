@@ -51,11 +51,12 @@ export const Timer = ({
 };
 
 const TimerWrapper = styled(Flex)`
-  width: 260px;
-  height: 260px;
+  position: relative;
+  width: 26rem;
+  height: 26rem;
 
-  ${theme.typo.T1}
-  color: ${theme.palette.timer_typo};
+  ${({ theme }) => theme.typo.T1}
+  color: ${({ theme }) => theme.palette.timer_typo};
 
   > div > div {
     top: 7px !important;
@@ -63,15 +64,14 @@ const TimerWrapper = styled(Flex)`
 `;
 
 const Chip = styled(Flex)`
-  ${theme.typo.B5}
-  color: ${theme.palette.orange};
-  background-color: ${theme.palette.light_orange};
-
-  padding: 10px;
-  border-radius: 8px;
-
+  ${({ theme }) => theme.typo.B5}
   position: absolute;
-  top: 79px;
+  color: ${({ theme }) => theme.palette.orange};
+  background-color: ${({ theme }) => theme.palette.light_orange};
+  width: 12rem;
+  height: 3rem;
+  border-radius: 0.8rem;
+  top: 7.9rem;
 `;
 
 const Gradient = () => {

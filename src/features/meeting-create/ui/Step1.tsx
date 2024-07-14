@@ -54,7 +54,7 @@ export const Step1 = ({ register, watch, errors, setValue }: Step1Props) => {
           {...register('step1.meetingRoomNotice', {
             maxLength: {
               message: '최대 15자까지 입력가능해요',
-              value: 30
+              value: 15
             }
           })}
           multiline={true}
