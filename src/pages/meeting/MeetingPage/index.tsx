@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import {
   DragDropContext,
@@ -32,6 +32,10 @@ import {
 } from '@features/meeting/ui';
 // import { api } from '@/shared/common/api';
 
+export interface AgendaResponseWithOrder extends AgendaResponse {
+  order: number;
+}
+
 const MeetingPage = () => {
   const { open, onOpen, onClose } = useOpen();
   const { openBottomSheet } = useBottomSheet();
@@ -43,28 +47,38 @@ const MeetingPage = () => {
 
   // console.log(data);
 
-  const [agendaList, setAgendaList] = useState<AgendaResponse[]>([]);
+  const [agendaList, setAgendaList] = useState<AgendaResponseWithOrder[]>([]);
 
   useEffect(() => {
     // console.log(data);
-    setAgendaList(data?.agendaResponse || []);
+    let agendaOrder = 1;
+    // console.log(agendaOrder);
+
+    setAgendaList(
+      data?.agendaResponse.map((agenda) => {
+        const order = agenda.type === 'AGENDA' ? agendaOrder++ : -1;
+        return { ...agenda, order };
+      }) || []
+    );
   }, [data, refetch]);
 
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) {
-      return;
+      return null;
     }
 
-    const reorderedItems = Array.from(agendaList);
-    const [removed] = reorderedItems.splice(result.source.index, 1);
-    reorderedItems.splice(result.destination.index, 0, removed);
+    const reorderedAgendaList = Array.from(agendaList);
+    const [removed] = reorderedAgendaList.splice(result.source.index, 1);
+    reorderedAgendaList.splice(result.destination.index, 0, removed);
 
-    setAgendaList(reorderedItems);
+    console.log(reorderedAgendaList.map((agenda) => agenda.agendaId));
+
+    setAgendaList(reorderedAgendaList);
   };
 
   // const handleDelete = async () => {
   //   try {
-  //     const response = await api.delete(`/api/meetings/65/agendas/29`, {
+  //     const response = await api.delete(`/api/meetings/65/agendas/43`, {
   //       headers: {
   //         Authorization: `Bearer ${getCookie('token')}`
   //       }
@@ -79,6 +93,7 @@ const MeetingPage = () => {
   return (
     <Wrapper direction="column" justify="flex-start">
       {/* <button onClick={handleDelete}>삭제</button> */}
+
       {/* TODO Header onClick 핸들러 연결, background-color */}
       <Header iconLeftId="hamburger_menu" title="회의실" iconRightId2="share" />
 
@@ -94,47 +109,57 @@ const MeetingPage = () => {
             <StyledAgendaList
               {...provided.droppableProps}
               ref={provided.innerRef}>
-              {agendaList.map((agenda, index) =>
-                agenda.status === 'COMPLETED' ? (
-                  <Agenda
-                    key={agenda.agendaId}
-                    agendaId={agenda.agendaId}
-                    title={agenda.title}
-                    type={agenda.type}
-                    currentDuration={agenda.currentDuration}
-                    remainingDuration={agenda.remainingDuration}
-                    status={agenda.status}
-                  />
-                ) : (
-                  <Draggable
-                    key={agenda.agendaId}
-                    draggableId={agenda.agendaId.toString()}
-                    index={index}>
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}>
+              {agendaList.map((agenda, index) => {
+                // const order = agenda.type === 'AGENDA' ? agendaOrder++ : -1;
+
+                return (
+                  <Fragment key={agenda.agendaId}>
+                    {agenda.status === 'COMPLETED' && (
+                      <>
                         <Agenda
                           agendaId={agenda.agendaId}
+                          order={agenda.order}
                           title={agenda.title}
                           type={agenda.type}
                           currentDuration={agenda.currentDuration}
                           remainingDuration={agenda.remainingDuration}
                           status={agenda.status}
                         />
-                      </div>
+                        <Space height={10} />
+                      </>
                     )}
-                  </Draggable>
-                )
-              )}
+
+                    {agenda.status !== 'COMPLETED' && (
+                      <Draggable
+                        draggableId={agenda.agendaId.toString()}
+                        index={index}>
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}>
+                            <Agenda
+                              agendaId={agenda.agendaId}
+                              order={agenda.order}
+                              title={agenda.title}
+                              type={agenda.type}
+                              currentDuration={agenda.currentDuration}
+                              remainingDuration={agenda.remainingDuration}
+                              status={agenda.status}
+                            />
+                            <Space height={10} />
+                          </div>
+                        )}
+                      </Draggable>
+                    )}
+                  </Fragment>
+                );
+              })}
               {provided.placeholder}
             </StyledAgendaList>
           )}
         </Droppable>
       </DragDropContext>
-
-      <Space height={10} />
 
       <TimeLineButton onClick={onOpen} />
 
@@ -192,8 +217,8 @@ const Wrapper = styled(Flex)`
 `;
 
 const StyledAgendaList = styled.div`
-  display: grid;
-  row-gap: 1rem;
+  /* display: grid; */
+  /* row-gap: 1rem; */
   width: 100%;
 `;
 

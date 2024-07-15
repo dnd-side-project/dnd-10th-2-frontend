@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 
 import { Space, Text, SvgIcon } from '@shared/common/ui';
-import { AgendaResponse } from '@shared/meeting/apis/types';
 
 import {
   AgendaAbleIcon,
@@ -12,15 +11,17 @@ import {
 import { Timer } from './Timer';
 import { useOpen } from '@shared/common/hooks';
 import { formatTimeToSecond } from '../utils';
+import { AgendaResponseWithOrder } from '@pages/meeting/MeetingPage';
 
 export const Agenda = ({
-  agendaId,
+  // agendaId,
+  order,
   title,
   type,
   // currentDuration,
   remainingDuration,
   status
-}: AgendaResponse) => {
+}: AgendaResponseWithOrder) => {
   const { open, onOpen } = useOpen();
   return (
     <StyledAgenda isDone={status === 'COMPLETED'}>
@@ -42,7 +43,7 @@ export const Agenda = ({
 
         <AgendaWrapper>
           {type === 'AGENDA' && status !== 'COMPLETED' && (
-            <AgendaChip isDone={false}>{agendaId}번째 안건</AgendaChip>
+            <AgendaChip isDone={false}>안건 {order}</AgendaChip>
           )}
           {type === 'AGENDA' && status === 'COMPLETED' && (
             <AgendaChip isDone={true}>논의완료</AgendaChip>

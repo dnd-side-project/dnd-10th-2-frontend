@@ -68,7 +68,7 @@ export const AgendaSheet = ({ refetch }: { refetch: () => void }) => {
   return (
     <Flex direction="column" align="flex-start">
       <Text typo="T5" color="dark_gray2">
-        첫 번째 안건을 알려주세요
+        안건을 알려주세요
       </Text>
 
       <Space height={16} />
