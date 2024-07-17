@@ -94,3 +94,17 @@ export interface AddAgendaResponse {
     agendaId: number;
   };
 }
+
+export interface ReorderAgendaListRequest {
+  token: string | null;
+  meetingId: string;
+  // agendaIds: number[];
+}
+
+export interface ReorderAgendaListResponse {
+  response: {
+    meetingId: number;
+    remainingTime: string; // 현재까지 회의 소요시간
+    agendaResponse: AgendaResponse[];
+  };
+}
