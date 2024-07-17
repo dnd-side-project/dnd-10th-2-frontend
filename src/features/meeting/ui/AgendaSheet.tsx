@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import {
@@ -19,37 +18,26 @@ export const AgendaSheet = ({ refetch }: { refetch: () => void }) => {
   const {
     register,
     watch,
-    setValue,
     getValues,
     formState: { errors }
   } = useForm({
     defaultValues: {
-      agenda: {
-        title: '',
-        duration: { hour: '', minute: '' }
-      }
+      agendaTitle: ''
     },
     mode: 'onChange'
   });
   const { closeBottomSheet } = useBottomSheet();
   const { timePicker, setTime, closeTimePicker } = useTimePicker();
 
-  useEffect(() => {
-    const { hour, minute } = timePicker.time;
-    if (hour && minute) {
-      setValue('agenda.duration', {
-        hour,
-        minute
-      });
-    }
-  }, [timePicker.time, setValue]);
-
   const { mutate } = useAddAgenda({
     token: getCookie('token'),
     meetingId: '65',
-    title: getValues('agenda').title,
+    title: getValues('agendaTitle'),
     type: 'AGENDA',
-    duration: formatDuration(getValues('agenda').duration),
+    duration: formatDuration({
+      hour: timePicker.time.hour,
+      minute: timePicker.time.minute
+    }),
     onSuccess: () => {
       refetch();
       closeBottomSheet();
@@ -58,6 +46,7 @@ export const AgendaSheet = ({ refetch }: { refetch: () => void }) => {
 
   const handleButton = async () => {
     try {
+      // console.log(formatDuration(getValues('agenda').duration));
       mutate();
     } catch (error) {
       console.log(`Error: ${error}`);
@@ -74,13 +63,13 @@ export const AgendaSheet = ({ refetch }: { refetch: () => void }) => {
       <Space height={16} />
 
       <Input
-        {...register('agenda.title', { required: '안건을 입력해주세요' })}
+        {...register('agendaTitle', { required: '안건을 입력해주세요' })}
         placeholder="안건 입력"
-        value={watch('agenda.title')}
+        value={watch('agendaTitle')}
         type="default"
         height={60}
-        isError={errors.agenda ? true : false}
-        errorText={errors.agenda?.message as string}
+        isError={errors.agendaTitle ? true : false}
+        errorText={errors.agendaTitle?.message as string}
       />
 
       <Text typo="T5" color="dark_gray2">
