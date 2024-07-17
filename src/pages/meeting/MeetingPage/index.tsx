@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 import {
   DragDropContext,
@@ -20,7 +21,7 @@ import { useOpen, useBottomSheet } from '@shared/common/hooks';
 import { getCookie } from '@shared/common/utils';
 import { AgendaResponse } from '@shared/meeting/apis/types';
 
-import { useGetAgendaList } from '@shared/meeting/apis';
+import { useGetAgendaList, useReorderAgendaList } from '@shared/meeting/apis';
 
 import {
   MeetingCard,
@@ -30,6 +31,7 @@ import {
   AgendaSheet,
   BreakTimeSheet
 } from '@features/meeting/ui';
+
 // import { api } from '@/shared/common/api';
 
 export interface AgendaResponseWithOrder extends AgendaResponse {
@@ -37,30 +39,36 @@ export interface AgendaResponseWithOrder extends AgendaResponse {
 }
 
 const MeetingPage = () => {
+  const meetingId = useParams().meetingId || '';
+
   const { open, onOpen, onClose } = useOpen();
   const { openBottomSheet } = useBottomSheet();
 
   const { data, refetch } = useGetAgendaList({
-    meetingId: '65',
-    token: getCookie('token')
+    token: getCookie('token'),
+    meetingId
   });
-
-  // console.log(data);
 
   const [agendaList, setAgendaList] = useState<AgendaResponseWithOrder[]>([]);
 
-  useEffect(() => {
-    // console.log(data);
+  const updateAgendaOrder = (agendaList: AgendaResponse[]) => {
     let agendaOrder = 1;
-    // console.log(agendaOrder);
-
     setAgendaList(
-      data?.agendaResponse.map((agenda) => {
+      agendaList.map((agenda) => {
         const order = agenda.type === 'AGENDA' ? agendaOrder++ : -1;
         return { ...agenda, order };
-      }) || []
+      })
     );
+  };
+
+  useEffect(() => {
+    updateAgendaOrder(data?.agendaResponse || []);
   }, [data, refetch]);
+
+  const { mutate } = useReorderAgendaList({
+    token: getCookie('token'),
+    meetingId
+  });
 
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) {
@@ -71,18 +79,21 @@ const MeetingPage = () => {
     const [removed] = reorderedAgendaList.splice(result.source.index, 1);
     reorderedAgendaList.splice(result.destination.index, 0, removed);
 
-    console.log(reorderedAgendaList.map((agenda) => agenda.agendaId));
+    mutate({ agendaIds: reorderedAgendaList.map((agenda) => agenda.agendaId) });
 
-    setAgendaList(reorderedAgendaList);
+    updateAgendaOrder(reorderedAgendaList);
   };
 
-  // const handleDelete = async () => {
+  // const handleDelete = async (i: number) => {
   //   try {
-  //     const response = await api.delete(`/api/meetings/65/agendas/43`, {
-  //       headers: {
-  //         Authorization: `Bearer ${getCookie('token')}`
+  //     const response = await api.delete(
+  //       `/api/meetings/${meetingId}/agendas/${i}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${getCookie('token')}`
+  //         }
   //       }
-  //     });
+  //     );
   //     await refetch();
   //     return response.data;
   //   } catch (error) {
@@ -90,10 +101,12 @@ const MeetingPage = () => {
   //     throw error;
   //   }
   // };
+
+  // for (let i = 44; i <= 52; i++) {
+  //   handleDelete(i);
+  // }
   return (
     <Wrapper direction="column" justify="flex-start">
-      {/* <button onClick={handleDelete}>삭제</button> */}
-
       {/* TODO Header onClick 핸들러 연결, background-color */}
       <Header iconLeftId="hamburger_menu" title="회의실" iconRightId2="share" />
 
