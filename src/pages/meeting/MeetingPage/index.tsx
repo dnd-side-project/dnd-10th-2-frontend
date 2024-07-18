@@ -20,7 +20,6 @@ import { media, theme } from '@shared/common/styles';
 import { useOpen, useBottomSheet } from '@shared/common/hooks';
 import { getCookie } from '@shared/common/utils';
 import { AgendaResponse } from '@shared/meeting/apis/types';
-
 import { useGetAgendaList, useReorderAgendaList } from '@shared/meeting/apis';
 
 import {
