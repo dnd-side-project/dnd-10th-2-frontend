@@ -1,3 +1,4 @@
+import { useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
 import {
@@ -15,23 +16,19 @@ import { getCookie } from '@shared/common/utils';
 import { formatDuration } from '@features/meeting-create/utils';
 
 export const AgendaSheet = ({ refetch }: { refetch: () => void }) => {
+  const meetingId = useParams().meetingId || '';
   const {
     register,
     watch,
     getValues,
     formState: { errors }
-  } = useForm({
-    defaultValues: {
-      agendaTitle: ''
-    },
-    mode: 'onChange'
-  });
+  } = useForm({ defaultValues: { agendaTitle: '' }, mode: 'onChange' });
   const { closeBottomSheet } = useBottomSheet();
   const { timePicker, setTime, closeTimePicker } = useTimePicker();
 
   const { mutate } = useAddAgenda({
     token: getCookie('token'),
-    meetingId: '65',
+    meetingId,
     title: getValues('agendaTitle'),
     type: 'AGENDA',
     duration: formatDuration({
@@ -85,6 +82,8 @@ export const AgendaSheet = ({ refetch }: { refetch: () => void }) => {
       <Button size={'lg'} backgroundColor={'main'} onClick={handleButton}>
         완료하기
       </Button>
+
+      <Space height={44} />
     </Flex>
   );
 };

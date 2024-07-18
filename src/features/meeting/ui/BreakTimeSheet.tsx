@@ -1,3 +1,4 @@
+import { useParams } from 'react-router-dom';
 import { Flex, Space, Text, Button, TimePicker } from '@shared/common/ui';
 import { useBottomSheet, useTimePicker } from '@shared/common/hooks';
 import { useAddAgenda } from '@shared/meeting/apis';
@@ -6,12 +7,13 @@ import { getCookie } from '@shared/common/utils';
 import { formatDuration } from '@features/meeting-create/utils';
 
 export const BreakTimeSheet = ({ refetch }: { refetch: () => void }) => {
+  const meetingId = useParams().meetingId || '';
   const { closeBottomSheet } = useBottomSheet();
   const { timePicker, setTime, closeTimePicker } = useTimePicker();
 
   const { mutate } = useAddAgenda({
     token: getCookie('token'),
-    meetingId: '65',
+    meetingId,
     title: '쉬는 시간',
     type: 'BREAK',
     duration: formatDuration({
@@ -48,6 +50,8 @@ export const BreakTimeSheet = ({ refetch }: { refetch: () => void }) => {
       <Button size={'lg'} backgroundColor={'main'} onClick={handleButton}>
         완료하기
       </Button>
+
+      <Space height={44} />
     </Flex>
   );
 };
