@@ -27,8 +27,7 @@ import {
   TimeLineButton,
   Modal,
   Agenda,
-  AgendaSheet,
-  BreakTimeSheet
+  AgendaSheet
 } from '@features/meeting/ui';
 
 export interface AgendaResponseWithOrder extends AgendaResponse {
@@ -41,7 +40,7 @@ const MeetingPage = () => {
   const { open, onOpen, onClose } = useOpen();
   const { openBottomSheet } = useBottomSheet();
 
-  const { data, refetch } = useGetAgendaList({
+  const { data, refetch: refetchAgendaList } = useGetAgendaList({
     token: getCookie('token'),
     meetingId
   });
@@ -60,7 +59,7 @@ const MeetingPage = () => {
 
   useEffect(() => {
     updateAgendaOrder(data?.agendaResponse || []);
-  }, [data, refetch]);
+  }, [data, refetchAgendaList]);
 
   const { mutate } = useReorderAgendaList({
     token: getCookie('token'),
@@ -110,7 +109,7 @@ const MeetingPage = () => {
                         currentDuration={agenda.currentDuration}
                         remainingDuration={agenda.remainingDuration}
                         status={agenda.status}
-                        refetch={refetch}
+                        refetchAgendaList={refetchAgendaList}
                       />
                       <Space height={10} />
                     </>
@@ -133,7 +132,7 @@ const MeetingPage = () => {
                             currentDuration={agenda.currentDuration}
                             remainingDuration={agenda.remainingDuration}
                             status={agenda.status}
-                            refetch={refetch}
+                            refetchAgendaList={refetchAgendaList}
                           />
                           <Space height={10} />
                         </div>
@@ -178,13 +177,23 @@ const MeetingPage = () => {
           <Modal
             onAgendaClick={() =>
               openBottomSheet({
-                content: <AgendaSheet meetingId={meetingId} refetch={refetch} />
+                content: (
+                  <AgendaSheet
+                    type="AGENDA"
+                    meetingId={meetingId}
+                    refetchAgendaList={refetchAgendaList}
+                  />
+                )
               })
             }
             onBreakTimeClick={() =>
               openBottomSheet({
                 content: (
-                  <BreakTimeSheet meetingId={meetingId} refetch={refetch} />
+                  <AgendaSheet
+                    type="BREAK"
+                    meetingId={meetingId}
+                    refetchAgendaList={refetchAgendaList}
+                  />
                 )
               })
             }

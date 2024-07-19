@@ -4,6 +4,6 @@ export * from './UserListSheet';
 export * from './AgendaCard';
 export * from './Agenda';
 export * from './AgendaSheet';
-export * from './BreakTimeSheet';
+export * from './EditSheet';
 export * from './TimeLineButton';
 export * from './Modal';

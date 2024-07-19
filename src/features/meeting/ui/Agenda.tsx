@@ -1,28 +1,77 @@
+import { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
+import { css } from '@emotion/react';
 
 import { Space, Text, SvgIcon } from '@shared/common/ui';
 
+import { useBottomSheet, useOpen } from '@shared/common/hooks';
+import { useDeleteAgenda } from '@shared/meeting/apis';
+import { getCookie } from '@shared/common/utils';
+
+import { EditSheet, Timer } from '@features/meeting/ui';
+import { formatTimeToSecond } from '@features/meeting/utils';
 import {
   AgendaAbleIcon,
   AgendaDisableIcon,
   BreakTimeAbleIcon,
   BreakTimeDisableIcon
 } from '@features/meeting/assets';
-import { Timer } from './Timer';
-import { useOpen } from '@shared/common/hooks';
-import { formatTimeToSecond } from '../utils';
+
 import { AgendaResponseWithOrder } from '@pages/meeting/MeetingPage';
 
+interface AgendaResponseWithRefetch extends AgendaResponseWithOrder {
+  refetchAgendaList: () => void;
+}
+
 export const Agenda = ({
-  // agendaId,
+  agendaId,
   order,
   title,
   type,
   // currentDuration,
   remainingDuration,
-  status
-}: AgendaResponseWithOrder) => {
+  status,
+  refetchAgendaList
+}: AgendaResponseWithRefetch) => {
+  const meetingId = useParams().meetingId || '';
+
   const { open, onOpen } = useOpen();
+  const { openBottomSheet } = useBottomSheet();
+
+  const { mutate } = useDeleteAgenda({
+    token: getCookie('token'),
+    meetingId,
+    agendaId: String(agendaId),
+    refetchAgendaList
+  });
+
+  // 삭제하기, 수정하기 모달 hook
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const popupRef = useRef<HTMLDivElement>(null);
+
+  const handleButtonClick = () => {
+    setIsPopupOpen(true);
+  };
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+      setIsPopupOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isPopupOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isPopupOpen]);
+  //
   return (
     <StyledAgenda isDone={status === 'COMPLETED'}>
       <StyledAgendaContent>
@@ -77,7 +126,69 @@ export const Agenda = ({
 
         <HorizonSpace width={16} />
 
-        {status !== 'COMPLETED' && <SvgIcon id="dots_mono" width={4} />}
+        {status !== 'COMPLETED' && (
+          <div
+            css={css`
+              position: relative;
+            `}>
+            <SvgIcon id="dots_mono" width={4} onClick={handleButtonClick} />
+
+            {isPopupOpen && (
+              <div
+                ref={popupRef}
+                css={css`
+                  position: absolute;
+                  top: 3rem;
+                  right: -0.5rem;
+                  width: 15.4rem;
+                  background-color: white;
+                  box-shadow: 0px 0px 6px 0px rgba(185, 189, 201, 0.25);
+                  border-radius: 0.8rem;
+                  z-index: 99;
+                `}>
+                <Text
+                  typo="B1"
+                  color="dark_gray2"
+                  css={css`
+                    display: flex;
+                    justify-content: center;
+                    width: 100%;
+                    height: 4rem;
+                    border-bottom: 1px solid #e7ebef;
+                  `}
+                  onClick={() => mutate()}>
+                  삭제하기
+                </Text>
+                <Text
+                  typo="B1"
+                  color="dark_gray2"
+                  css={css`
+                    display: flex;
+                    justify-content: center;
+                    width: 100%;
+                    height: 4rem;
+                    border-top: 1px solid #e7ebef;
+                  `}
+                  onClick={() =>
+                    openBottomSheet({
+                      content: (
+                        <EditSheet
+                          type={type}
+                          meetingId={meetingId}
+                          agendaId={agendaId}
+                          title={title}
+                          allocatedDuration={remainingDuration}
+                          refetchAgendaList={refetchAgendaList}
+                        />
+                      )
+                    })
+                  }>
+                  수정하기
+                </Text>
+              </div>
+            )}
+          </div>
+        )}
       </StyledAgendaContent>
 
       {open && (

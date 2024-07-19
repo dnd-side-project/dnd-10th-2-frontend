@@ -9,18 +9,25 @@ import {
   TimePicker
 } from '@shared/common/ui';
 import { useBottomSheet, useTimePicker } from '@shared/common/hooks';
-import { useAddAgenda } from '@shared/meeting/apis';
+import { useEditAgenda } from '@shared/meeting/apis';
 import { getCookie } from '@shared/common/utils';
 
 import { formatDuration } from '@features/meeting-create/utils';
+import { formatTimeToHourMinute } from '@features/meeting/utils';
 
-export const AgendaSheet = ({
+export const EditSheet = ({
   type,
   meetingId,
+  agendaId,
+  title,
+  allocatedDuration,
   refetchAgendaList
 }: {
   type: 'AGENDA' | 'BREAK';
   meetingId: string;
+  agendaId: number;
+  title: string;
+  allocatedDuration: string;
   refetchAgendaList: () => void;
 }) => {
   const {
@@ -28,15 +35,15 @@ export const AgendaSheet = ({
     watch,
     getValues,
     formState: { errors }
-  } = useForm({ defaultValues: { agendaTitle: '' }, mode: 'onChange' });
+  } = useForm({ defaultValues: { agendaTitle: title }, mode: 'onChange' });
   const { closeBottomSheet } = useBottomSheet();
   const { timePicker, setTime, closeTimePicker } = useTimePicker();
 
-  const { mutate } = useAddAgenda({
+  const { mutate } = useEditAgenda({
     token: getCookie('token'),
     meetingId,
+    agendaId,
     title: getValues('agendaTitle'),
-    type,
     allocatedDuration: formatDuration({
       hour: timePicker.time.hour,
       minute: timePicker.time.minute
@@ -77,12 +84,20 @@ export const AgendaSheet = ({
       )}
 
       <Text typo="T5" color="dark_gray2">
-        타이머를 맞춰주세요
+        시간을 수정해주세요
       </Text>
 
       <Space height={16} />
 
-      <TimePicker type="duration" setTime={setTime} onClose={closeTimePicker} />
+      <TimePicker
+        type="duration"
+        initialTime={{
+          hour: formatTimeToHourMinute(allocatedDuration).hour,
+          minute: formatTimeToHourMinute(allocatedDuration).minute
+        }}
+        setTime={setTime}
+        onClose={closeTimePicker}
+      />
 
       <Space height={24} />
 
