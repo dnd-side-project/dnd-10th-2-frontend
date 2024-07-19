@@ -7,7 +7,7 @@ export const useDeleteAgenda = ({
   token,
   meetingId,
   agendaId,
-  onSuccess
+  refetchAgendaList
 }: DeleteAgendaRequest) => {
   const { mutate } = useMutation({
     mutationFn: async () => {
@@ -24,7 +24,9 @@ export const useDeleteAgenda = ({
     onError: () => {
       console.log('error');
     },
-    onSuccess
+    onSuccess: () => {
+      refetchAgendaList();
+    }
   });
 
   return { mutate };

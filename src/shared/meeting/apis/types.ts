@@ -85,8 +85,8 @@ export interface AddAgendaRequest {
   meetingId: string;
   title: string;
   type: 'AGENDA' | 'BREAK'; // 안건이면 AGENDA, 쉬는시간이면 BREAK
-  duration: string;
-  onSuccess: () => void;
+  allocatedDuration: string;
+  refetchAgendaList: () => void;
 }
 
 export interface AddAgendaResponse {
@@ -99,7 +99,24 @@ export interface DeleteAgendaRequest {
   token: string | null;
   meetingId: string;
   agendaId: string;
-  onSuccess: () => void;
+  refetchAgendaList: () => void;
+}
+
+export interface EditAgendaRequest {
+  token: string | null;
+  meetingId: string;
+  agendaId: number;
+  title: string;
+  allocatedDuration: string;
+  refetchAgendaList: () => void;
+}
+
+export interface EditAgendaResponse {
+  response: {
+    agendaId: number;
+    title: string;
+    allocatedDuration: string;
+  };
 }
 
 export interface ReorderAgendaListRequest {
