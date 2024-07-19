@@ -95,6 +95,13 @@ export interface AddAgendaResponse {
   };
 }
 
+export interface DeleteAgendaRequest {
+  token: string | null;
+  meetingId: string;
+  agendaId: string;
+  onSuccess: () => void;
+}
+
 export interface ReorderAgendaListRequest {
   token: string | null;
   meetingId: string;
