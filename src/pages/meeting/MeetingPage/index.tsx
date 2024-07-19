@@ -31,8 +31,6 @@ import {
   BreakTimeSheet
 } from '@features/meeting/ui';
 
-// import { api } from '@/shared/common/api';
-
 export interface AgendaResponseWithOrder extends AgendaResponse {
   order: number;
 }
@@ -83,27 +81,6 @@ const MeetingPage = () => {
     updateAgendaOrder(reorderedAgendaList);
   };
 
-  // const handleDelete = async (i: number) => {
-  //   try {
-  //     const response = await api.delete(
-  //       `/api/meetings/${meetingId}/agendas/${i}`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${getCookie('token')}`
-  //         }
-  //       }
-  //     );
-  //     await refetch();
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error('Error deleting agenda:', error);
-  //     throw error;
-  //   }
-  // };
-
-  // for (let i = 44; i <= 52; i++) {
-  //   handleDelete(i);
-  // }
   return (
     <Wrapper direction="column" justify="flex-start">
       {/* TODO Header onClick 핸들러 연결, background-color */}
@@ -121,52 +98,50 @@ const MeetingPage = () => {
             <StyledAgendaList
               {...provided.droppableProps}
               ref={provided.innerRef}>
-              {agendaList.map((agenda, index) => {
-                // const order = agenda.type === 'AGENDA' ? agendaOrder++ : -1;
+              {agendaList.map((agenda, index) => (
+                <Fragment key={agenda.agendaId}>
+                  {agenda.status === 'COMPLETED' && (
+                    <>
+                      <Agenda
+                        agendaId={agenda.agendaId}
+                        order={agenda.order}
+                        title={agenda.title}
+                        type={agenda.type}
+                        currentDuration={agenda.currentDuration}
+                        remainingDuration={agenda.remainingDuration}
+                        status={agenda.status}
+                        refetch={refetch}
+                      />
+                      <Space height={10} />
+                    </>
+                  )}
 
-                return (
-                  <Fragment key={agenda.agendaId}>
-                    {agenda.status === 'COMPLETED' && (
-                      <>
-                        <Agenda
-                          agendaId={agenda.agendaId}
-                          order={agenda.order}
-                          title={agenda.title}
-                          type={agenda.type}
-                          currentDuration={agenda.currentDuration}
-                          remainingDuration={agenda.remainingDuration}
-                          status={agenda.status}
-                        />
-                        <Space height={10} />
-                      </>
-                    )}
-
-                    {agenda.status !== 'COMPLETED' && (
-                      <Draggable
-                        draggableId={agenda.agendaId.toString()}
-                        index={index}>
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}>
-                            <Agenda
-                              agendaId={agenda.agendaId}
-                              order={agenda.order}
-                              title={agenda.title}
-                              type={agenda.type}
-                              currentDuration={agenda.currentDuration}
-                              remainingDuration={agenda.remainingDuration}
-                              status={agenda.status}
-                            />
-                            <Space height={10} />
-                          </div>
-                        )}
-                      </Draggable>
-                    )}
-                  </Fragment>
-                );
-              })}
+                  {agenda.status !== 'COMPLETED' && (
+                    <Draggable
+                      draggableId={agenda.agendaId.toString()}
+                      index={index}>
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}>
+                          <Agenda
+                            agendaId={agenda.agendaId}
+                            order={agenda.order}
+                            title={agenda.title}
+                            type={agenda.type}
+                            currentDuration={agenda.currentDuration}
+                            remainingDuration={agenda.remainingDuration}
+                            status={agenda.status}
+                            refetch={refetch}
+                          />
+                          <Space height={10} />
+                        </div>
+                      )}
+                    </Draggable>
+                  )}
+                </Fragment>
+              ))}
               {provided.placeholder}
             </StyledAgendaList>
           )}
@@ -202,10 +177,16 @@ const MeetingPage = () => {
         {open && (
           <Modal
             onAgendaClick={() =>
-              openBottomSheet({ content: <AgendaSheet refetch={refetch} /> })
+              openBottomSheet({
+                content: <AgendaSheet meetingId={meetingId} refetch={refetch} />
+              })
             }
             onBreakTimeClick={() =>
-              openBottomSheet({ content: <BreakTimeSheet refetch={refetch} /> })
+              openBottomSheet({
+                content: (
+                  <BreakTimeSheet meetingId={meetingId} refetch={refetch} />
+                )
+              })
             }
             closeModal={onClose}
           />
