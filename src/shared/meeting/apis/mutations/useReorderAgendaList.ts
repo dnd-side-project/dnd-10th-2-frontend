@@ -2,28 +2,22 @@ import { useMutation } from '@tanstack/react-query';
 
 import { api } from '@shared/common/api';
 import type {
-  AddAgendaRequest,
-  AddAgendaResponse
+  ReorderAgendaListRequest,
+  ReorderAgendaListResponse
 } from '@shared/meeting/apis/types';
 
-export const useAddAgenda = ({
+export const useReorderAgendaList = ({
   token,
-  meetingId,
-  title,
-  type,
-  allocatedDuration,
-  refetchAgendaList
-}: AddAgendaRequest) => {
+  meetingId
+}: ReorderAgendaListRequest) => {
   const { mutate } = useMutation({
-    mutationFn: async () => {
+    mutationFn: async ({ agendaIds }: { agendaIds: number[] }) => {
       const {
         data: { response }
-      } = await api.post<AddAgendaResponse>(
-        `/api/meetings/${meetingId}/agendas`,
+      } = await api.patch<ReorderAgendaListResponse>(
+        `/api/meetings/${meetingId}/agendas/order`,
         {
-          title,
-          type,
-          allocatedDuration
+          agendaIds
         },
         {
           headers: {
@@ -36,10 +30,8 @@ export const useAddAgenda = ({
     },
     onError: () => {
       console.log('error');
-    },
-    onSuccess: () => {
-      refetchAgendaList();
     }
+    // onSuccess: () => {}
   });
 
   return { mutate };

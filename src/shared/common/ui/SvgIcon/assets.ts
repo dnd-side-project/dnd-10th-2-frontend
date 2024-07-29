@@ -7,6 +7,7 @@ export { default as check_circle } from '@public/icons/check_circle.svg';
 export { default as check } from '@public/icons/check.svg';
 export { default as clip } from '@public/icons/clip.svg';
 export { default as crown } from '@public/icons/crown.svg';
+export { default as crown_orange } from '@public/icons/crown_orange.svg';
 export { default as hamburger_menu } from '@public/icons/hamburger_menu.svg';
 export { default as kebab_menu } from '@public/icons/kebab_menu.svg';
 export { default as mega_phone } from '@public/icons/mega_phone.svg';

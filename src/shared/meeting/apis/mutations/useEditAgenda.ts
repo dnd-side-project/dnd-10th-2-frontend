@@ -2,27 +2,26 @@ import { useMutation } from '@tanstack/react-query';
 
 import { api } from '@shared/common/api';
 import type {
-  AddAgendaRequest,
-  AddAgendaResponse
+  EditAgendaRequest,
+  EditAgendaResponse
 } from '@shared/meeting/apis/types';
 
-export const useAddAgenda = ({
+export const useEditAgenda = ({
   token,
   meetingId,
+  agendaId,
   title,
-  type,
   allocatedDuration,
   refetchAgendaList
-}: AddAgendaRequest) => {
+}: EditAgendaRequest) => {
   const { mutate } = useMutation({
     mutationFn: async () => {
       const {
         data: { response }
-      } = await api.post<AddAgendaResponse>(
-        `/api/meetings/${meetingId}/agendas`,
+      } = await api.patch<EditAgendaResponse>(
+        `/api/meetings/${meetingId}/agendas/${agendaId}`,
         {
           title,
-          type,
           allocatedDuration
         },
         {

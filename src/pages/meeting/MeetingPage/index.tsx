@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 import {
   DragDropContext,
@@ -19,66 +20,68 @@ import { media, theme } from '@shared/common/styles';
 import { useOpen, useBottomSheet } from '@shared/common/hooks';
 import { getCookie } from '@shared/common/utils';
 import { AgendaResponse } from '@shared/meeting/apis/types';
-
-import { useGetAgendaList } from '@shared/meeting/apis';
+import { useGetAgendaList, useReorderAgendaList } from '@shared/meeting/apis';
 
 import {
   MeetingCard,
   TimeLineButton,
   Modal,
   Agenda,
-  AgendaSheet,
-  BreakTimeSheet
+  AgendaSheet
 } from '@features/meeting/ui';
-// import { api } from '@/shared/common/api';
+
+export interface AgendaResponseWithOrder extends AgendaResponse {
+  order: number;
+}
 
 const MeetingPage = () => {
+  const meetingId = useParams().meetingId || '';
+
   const { open, onOpen, onClose } = useOpen();
   const { openBottomSheet } = useBottomSheet();
 
-  const { data, refetch } = useGetAgendaList({
-    meetingId: '65',
-    token: getCookie('token')
+  const { data, refetch: refetchAgendaList } = useGetAgendaList({
+    token: getCookie('token'),
+    meetingId
   });
 
-  // console.log(data);
+  const [agendaList, setAgendaList] = useState<AgendaResponseWithOrder[]>([]);
 
-  const [agendaList, setAgendaList] = useState<AgendaResponse[]>([]);
+  const updateAgendaOrder = (agendaList: AgendaResponse[]) => {
+    let agendaOrder = 1;
+    setAgendaList(
+      agendaList.map((agenda) => {
+        const order = agenda.type === 'AGENDA' ? agendaOrder++ : -1;
+        return { ...agenda, order };
+      })
+    );
+  };
 
   useEffect(() => {
-    // console.log(data);
-    setAgendaList(data?.agendaResponse || []);
-  }, [data, refetch]);
+    updateAgendaOrder(data?.agendaResponse || []);
+  }, [data, refetchAgendaList]);
+
+  const { mutate } = useReorderAgendaList({
+    token: getCookie('token'),
+    meetingId
+  });
 
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) {
-      return;
+      return null;
     }
 
-    const reorderedItems = Array.from(agendaList);
-    const [removed] = reorderedItems.splice(result.source.index, 1);
-    reorderedItems.splice(result.destination.index, 0, removed);
+    const reorderedAgendaList = Array.from(agendaList);
+    const [removed] = reorderedAgendaList.splice(result.source.index, 1);
+    reorderedAgendaList.splice(result.destination.index, 0, removed);
 
-    setAgendaList(reorderedItems);
+    mutate({ agendaIds: reorderedAgendaList.map((agenda) => agenda.agendaId) });
+
+    updateAgendaOrder(reorderedAgendaList);
   };
 
-  // const handleDelete = async () => {
-  //   try {
-  //     const response = await api.delete(`/api/meetings/65/agendas/29`, {
-  //       headers: {
-  //         Authorization: `Bearer ${getCookie('token')}`
-  //       }
-  //     });
-  //     await refetch();
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error('Error deleting agenda:', error);
-  //     throw error;
-  //   }
-  // };
   return (
     <Wrapper direction="column" justify="flex-start">
-      {/* <button onClick={handleDelete}>삭제</button> */}
       {/* TODO Header onClick 핸들러 연결, background-color */}
       <Header iconLeftId="hamburger_menu" title="회의실" iconRightId2="share" />
 
@@ -94,47 +97,55 @@ const MeetingPage = () => {
             <StyledAgendaList
               {...provided.droppableProps}
               ref={provided.innerRef}>
-              {agendaList.map((agenda, index) =>
-                agenda.status === 'COMPLETED' ? (
-                  <Agenda
-                    key={agenda.agendaId}
-                    agendaId={agenda.agendaId}
-                    title={agenda.title}
-                    type={agenda.type}
-                    currentDuration={agenda.currentDuration}
-                    remainingDuration={agenda.remainingDuration}
-                    status={agenda.status}
-                  />
-                ) : (
-                  <Draggable
-                    key={agenda.agendaId}
-                    draggableId={agenda.agendaId.toString()}
-                    index={index}>
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}>
-                        <Agenda
-                          agendaId={agenda.agendaId}
-                          title={agenda.title}
-                          type={agenda.type}
-                          currentDuration={agenda.currentDuration}
-                          remainingDuration={agenda.remainingDuration}
-                          status={agenda.status}
-                        />
-                      </div>
-                    )}
-                  </Draggable>
-                )
-              )}
+              {agendaList.map((agenda, index) => (
+                <Fragment key={agenda.agendaId}>
+                  {agenda.status === 'COMPLETED' && (
+                    <>
+                      <Agenda
+                        agendaId={agenda.agendaId}
+                        order={agenda.order}
+                        title={agenda.title}
+                        type={agenda.type}
+                        currentDuration={agenda.currentDuration}
+                        remainingDuration={agenda.remainingDuration}
+                        status={agenda.status}
+                        refetchAgendaList={refetchAgendaList}
+                      />
+                      <Space height={10} />
+                    </>
+                  )}
+
+                  {agenda.status !== 'COMPLETED' && (
+                    <Draggable
+                      draggableId={agenda.agendaId.toString()}
+                      index={index}>
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}>
+                          <Agenda
+                            agendaId={agenda.agendaId}
+                            order={agenda.order}
+                            title={agenda.title}
+                            type={agenda.type}
+                            currentDuration={agenda.currentDuration}
+                            remainingDuration={agenda.remainingDuration}
+                            status={agenda.status}
+                            refetchAgendaList={refetchAgendaList}
+                          />
+                          <Space height={10} />
+                        </div>
+                      )}
+                    </Draggable>
+                  )}
+                </Fragment>
+              ))}
               {provided.placeholder}
             </StyledAgendaList>
           )}
         </Droppable>
       </DragDropContext>
-
-      <Space height={10} />
 
       <TimeLineButton onClick={onOpen} />
 
@@ -165,10 +176,26 @@ const MeetingPage = () => {
         {open && (
           <Modal
             onAgendaClick={() =>
-              openBottomSheet({ content: <AgendaSheet refetch={refetch} /> })
+              openBottomSheet({
+                content: (
+                  <AgendaSheet
+                    type="AGENDA"
+                    meetingId={meetingId}
+                    refetchAgendaList={refetchAgendaList}
+                  />
+                )
+              })
             }
             onBreakTimeClick={() =>
-              openBottomSheet({ content: <BreakTimeSheet refetch={refetch} /> })
+              openBottomSheet({
+                content: (
+                  <AgendaSheet
+                    type="BREAK"
+                    meetingId={meetingId}
+                    refetchAgendaList={refetchAgendaList}
+                  />
+                )
+              })
             }
             closeModal={onClose}
           />
@@ -192,8 +219,8 @@ const Wrapper = styled(Flex)`
 `;
 
 const StyledAgendaList = styled.div`
-  display: grid;
-  row-gap: 1rem;
+  /* display: grid; */
+  /* row-gap: 1rem; */
   width: 100%;
 `;
 

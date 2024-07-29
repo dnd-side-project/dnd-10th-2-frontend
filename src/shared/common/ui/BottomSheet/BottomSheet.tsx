@@ -2,6 +2,7 @@ import { Drawer } from 'vaul';
 import styled from '@emotion/styled';
 
 import { useBottomSheet } from '@shared/common/hooks';
+import { media } from '@shared/common/styles';
 
 export const BottomSheet = () => {
   const {
@@ -31,9 +32,12 @@ const StyledOverlay = styled(Drawer.Overlay)`
   inset: 0;
   margin: 0 auto;
   background-color: rgba(0, 0, 0, 0.6);
-  width: 100%;
-  max-width: calc(34.2rem + 4.8rem);
+  width: 37.5rem;
   z-index: 99;
+
+  ${media.mobile} {
+    width: 100vw;
+  }
 `;
 
 const StyledContent = styled(Drawer.Content)`
@@ -43,14 +47,19 @@ const StyledContent = styled(Drawer.Content)`
   left: 0;
   right: 0;
   margin: 0 auto;
-  padding: 1rem 2rem 4.4rem;
+  padding: 1rem 2rem 0 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: ${({ theme }) => theme.palette.white};
   border-radius: 1rem 1rem 0 0;
-  max-width: calc(34.2rem + 4.8rem);
+  width: 37.5rem;
+  box-sizing: border-box;
   outline: none;
+
+  ${media.mobile} {
+    width: 100vw;
+  }
 `;
 
 const StyledBar = styled.div`

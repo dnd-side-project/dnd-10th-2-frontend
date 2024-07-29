@@ -1,41 +1,27 @@
+import { useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { keyframes } from '@emotion/react';
 
 import { Flex, Space, Text, SvgIcon } from '@shared/common/ui';
-import { useGetMeeting, useGetMeetingMemberList } from '@/shared/meeting/apis';
-import { getCookie } from '@/shared/common/utils';
+import { useGetMeeting, useGetMeetingMemberList } from '@shared/meeting/apis';
+import { getCookie } from '@shared/common/utils';
+import { useBottomSheet } from '@shared/common/hooks';
 
-import { formatDateString } from '@/features/meeting/utils';
+import { formatDateString } from '@features/meeting/utils';
+import { UserListSheet } from './UserListSheet';
 
 export const MeetingCard = () => {
-  // const { openBottomSheet } = useBottomSheet();
+  const meetingId = useParams().meetingId || '';
+  const { openBottomSheet } = useBottomSheet();
   const { data: meetingData } = useGetMeeting({
-    meetingId: '65',
+    meetingId,
     token: getCookie('token')
   });
   const { data: meetingMemberListData } = useGetMeetingMemberList({
-    meetingId: '65',
+    meetingId,
     token: getCookie('token')
   });
 
-  // const userListSheet = {
-  //   isOpen: true,
-  //   content: (
-  //     <Flex direction="column" align="flex-start">
-  //       <Text typo="T5" color="dark_gray2">
-  //         참여자 목록
-  //       </Text>
-
-  //       <Space height={16} />
-
-  //       <Text typo="T6" color="dark_gray2">
-  //         {meetingMemberListData?.hostMember.nickname}
-  //       </Text>
-
-  //       {/* <List ={} /> */}
-  //     </Flex>
-  //   )
-  // };
   return (
     <MeetingCardWrapper
       direction="column"
@@ -45,9 +31,7 @@ export const MeetingCard = () => {
         <Text typo="B3" color="white">
           {formatDateString(meetingData?.startTime)}
         </Text>
-        {meetingMemberListData?.host && (
-          <SvgIcon id="crown" width={18} height={18} />
-        )}
+        {meetingMemberListData?.host && <SvgIcon id="crown" size={18} />}
       </Flex>
 
       <Space height={10} />
@@ -58,8 +42,11 @@ export const MeetingCard = () => {
         </Text>
         {/* <UserListButton onClick={onClickUserList}>참여자 목록</UserListButton> */}
         <UserListButton
-        // onClick={() => openBottomSheet(userListSheet)}
-        >
+          onClick={() =>
+            openBottomSheet({
+              content: <UserListSheet memberList={meetingMemberListData} />
+            })
+          }>
           참여자 목록
         </UserListButton>
       </Flex>

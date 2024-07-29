@@ -10,12 +10,14 @@ import type { Time } from '@shared/common/types';
 
 interface TimePickerProps {
   type: 'duration' | 'time';
+  initialTime?: { hour: number; minute: number };
   setTime: ({ periodOfDay, hour, minute }: Time) => void;
   onClose?: () => void;
 }
 
 export const TimePicker = ({
   type = 'duration',
+  initialTime = { hour: 0, minute: 0 },
   setTime,
   onClose
 }: TimePickerProps) => {
@@ -43,13 +45,31 @@ export const TimePicker = ({
     loopAdditionalSlides: 5
   };
 
-  const hourList =
-    type === 'duration'
-      ? [...Array(24)].map((_, index) => index)
-      : [...Array(12)].map((_, index) => index + 1);
-  const minuteList = [...Array(60)].map(
-    (_, index) => (index < 10 ? '0' : '') + index
-  );
+  const getHourList = () => {
+    if (type === 'duration') {
+      const hourList = [...Array(24)].map((_, index) => index);
+      return [
+        ...hourList.slice(initialTime.hour, hourList.length),
+        ...hourList.slice(0, initialTime.hour)
+      ];
+    }
+
+    if (type === 'time') {
+      return [...Array(12)].map((_, index) => index + 1);
+    }
+
+    return [];
+  };
+
+  const getMinuteList = () => {
+    const minuteList = [...Array(60)].map(
+      (_, index) => (index < 10 ? '0' : '') + index
+    );
+    return [
+      ...minuteList.slice(initialTime.minute, minuteList.length),
+      ...minuteList.slice(0, initialTime.minute)
+    ];
+  };
 
   const getTime = () => {
     const { swiper1, swiper2, swiper3 } = swiperRef;
@@ -98,7 +118,7 @@ export const TimePicker = ({
           loop={true}
           onRealIndexChange={() => setTime(getTime())}
           {...swiperSettings}>
-          {hourList.map((hour) => (
+          {getHourList().map((hour) => (
             <SwiperSlide key={hour}>{hour}</SwiperSlide>
           ))}
         </Swiper>
@@ -116,7 +136,7 @@ export const TimePicker = ({
           loop={true}
           onRealIndexChange={() => setTime(getTime())}
           {...swiperSettings}>
-          {minuteList.map((minute) => (
+          {getMinuteList().map((minute) => (
             <SwiperSlide key={minute}>{minute}</SwiperSlide>
           ))}
         </Swiper>
