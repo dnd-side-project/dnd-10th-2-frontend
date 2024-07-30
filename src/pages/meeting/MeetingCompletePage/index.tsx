@@ -13,11 +13,14 @@ const MeetingCompletePage = () => {
 
   return (
     <StyledContainer>
-      <Header
-        iconLeftId="arrow_left"
-        iconRightId1="x"
-        onClickIconLeft={() => navigate(-1)}
-      />
+      <Header>
+        <Header.Left>
+          <SvgIcon id="arrow_left" onClick={() => navigate(-1)} />
+        </Header.Left>
+        <Header.Right>
+          <SvgIcon id="x" />
+        </Header.Right>
+      </Header>
 
       <Space height={38} />
 

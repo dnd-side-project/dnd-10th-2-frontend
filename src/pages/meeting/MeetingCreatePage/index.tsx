@@ -124,12 +124,15 @@ const MeetingCreatePage = () => {
           width: 100%;
           margin-bottom: 11.4rem;
         `}>
-        <Header
-          title="회의 만들기"
-          iconLeftId="arrow_left"
-          onClickIconLeft={handlePrev}
-        />
+        <Header>
+          <Header.Left>
+            <SvgIcon id="arrow_left" onClick={handlePrev} />
+          </Header.Left>
+          <Header.Center>회의 만들기</Header.Center>
+        </Header>
+
         <Space height={15.5} />
+
         <StyledStepList>
           {stepList.map((step) => (
             <StyledStep key={step.id}>
@@ -142,6 +145,7 @@ const MeetingCreatePage = () => {
             </StyledStep>
           ))}
         </StyledStepList>
+
         <Space height={30} />
 
         {currentStep === 1 && (

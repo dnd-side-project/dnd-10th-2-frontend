@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 
-import { Space, Button, Header } from '@shared/common/ui';
+import { Space, Button, Header, SvgIcon } from '@shared/common/ui';
 import { media } from '@shared/common/styles';
 
 import { JoinCompleteIcon } from '@features/join-complete/assets';
@@ -11,11 +11,12 @@ const JoinComplete = () => {
 
   return (
     <StyledContainer>
-      <Header
-        title="가입 완료"
-        iconRightId1="x"
-        onClickIconRight1={() => navigate('/')}
-      />
+      <Header>
+        <Header.Center>가입 완료</Header.Center>
+        <Header.Right>
+          <SvgIcon id="x" onClick={() => navigate('/')} />
+        </Header.Right>
+      </Header>
 
       <Space height={55} />
 
