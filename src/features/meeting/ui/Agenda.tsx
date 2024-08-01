@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 
 import { Space, Text, SvgIcon } from '@shared/common/ui';
 
-import { useBottomSheet, useOpen } from '@shared/common/hooks';
+import { useBottomSheet, useModal, useOpen } from '@shared/common/hooks';
 import { useDeleteAgenda } from '@shared/meeting/apis';
 import { getCookie } from '@shared/common/utils';
 
@@ -72,6 +72,17 @@ export const Agenda = ({
     };
   }, [isPopupOpen]);
   //
+
+  const { openModal } = useModal();
+
+  const modalContent = {
+    title: '\n\n정말 안건을 삭제하시겠어요?',
+    description: '\n\n',
+    button: {
+      text: '삭제하기',
+      onClick: mutate
+    }
+  };
   return (
     <StyledAgenda isDone={status === 'COMPLETED'}>
       <StyledAgendaContent>
@@ -156,7 +167,8 @@ export const Agenda = ({
                     height: 4rem;
                     border-bottom: 1px solid #e7ebef;
                   `}
-                  onClick={() => mutate()}>
+                  // onClick={() => mutate()}
+                  onClick={() => openModal(modalContent)}>
                   삭제하기
                 </Text>
                 <Text

@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { useForm } from 'react-hook-form';
 
-import { Space, Button, Header, Input } from '@shared/common/ui';
+import { Space, Button, Header, Input, SvgIcon } from '@shared/common/ui';
 import { media } from '@shared/common/styles';
 import { getUserInfo, updateNickname } from 'shared/join/apis';
 
@@ -61,11 +61,12 @@ const Join = () => {
 
   return (
     <StyledContainer>
-      <Header
-        iconLeftId="arrow_left"
-        title="개인정보 입력"
-        onClickIconLeft={() => navigate('/onboarding')}
-      />
+      <Header>
+        <Header.Left>
+          <SvgIcon id="arrow_left" onClick={() => navigate('/onboarding')} />
+        </Header.Left>
+        <Header.Center>개인정보 입력</Header.Center>
+      </Header>
 
       <Space height={22} />
 

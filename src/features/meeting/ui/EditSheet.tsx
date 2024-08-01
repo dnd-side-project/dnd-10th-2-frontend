@@ -37,17 +37,23 @@ export const EditSheet = ({
     formState: { errors }
   } = useForm({ defaultValues: { agendaTitle: title }, mode: 'onChange' });
   const { closeBottomSheet } = useBottomSheet();
-  const { timePicker, setTime, closeTimePicker } = useTimePicker();
+  const {
+    timePicker: {
+      time: { hour, minute }
+    },
+    setTime,
+    closeTimePicker
+  } = useTimePicker();
 
   const { mutate } = useEditAgenda({
     token: getCookie('token'),
     meetingId,
     agendaId,
     title: getValues('agendaTitle'),
-    allocatedDuration: formatDuration({
-      hour: timePicker.time.hour,
-      minute: timePicker.time.minute
-    }),
+    allocatedDuration:
+      hour.length === 0 || minute.length === 0
+        ? allocatedDuration
+        : formatDuration({ hour, minute }),
     refetchAgendaList
   });
 

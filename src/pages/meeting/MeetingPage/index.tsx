@@ -14,7 +14,8 @@ import {
   Space,
   Button,
   Header,
-  ModalPortal
+  ModalPortal,
+  SvgIcon
 } from '@shared/common/ui';
 import { media, theme } from '@shared/common/styles';
 import { useOpen, useBottomSheet } from '@shared/common/hooks';
@@ -83,7 +84,15 @@ const MeetingPage = () => {
   return (
     <Wrapper direction="column" justify="flex-start">
       {/* TODO Header onClick 핸들러 연결, background-color */}
-      <Header iconLeftId="hamburger_menu" title="회의실" iconRightId2="share" />
+      <Header>
+        <Header.Left>
+          <SvgIcon id="hamburger_menu" onClick={() => {}} />
+        </Header.Left>
+        <Header.Center>회의실</Header.Center>
+        <Header.Right>
+          <SvgIcon id="share" onClick={() => {}} />
+        </Header.Right>
+      </Header>
 
       <Space height={10} />
 
