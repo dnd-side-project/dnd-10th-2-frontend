@@ -53,6 +53,7 @@ const StyledButton = styled.button<{
   justify-content: center;
   align-items: center;
   width: ${(props) => (props.fullWidth ? '100%' : 'auto')};
+  height: 100%;
   padding: 1.4rem 0;
   border-radius: 1.2rem;
   background-color: ${(props) =>

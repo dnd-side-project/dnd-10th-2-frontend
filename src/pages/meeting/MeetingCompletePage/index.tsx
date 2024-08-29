@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 
 import { Header, SvgIcon, Space } from '@shared/common/ui';
+import { media } from '@shared/common/styles';
 
 import { Step1, Step2 } from '@features/meeting-complete/ui';
 import { FolderIcon } from '@features/meeting-complete/assets';
@@ -55,10 +56,15 @@ const MeetingCompletePage = () => {
 const StyledContainer = styled.div`
   position: relative;
   width: 37.5rem;
-  /* height: 100vh; */
+  height: 100vh;
   background-color: ${({ theme }) => theme.palette.light_white};
   margin: 0px -20px;
   padding: 0px 20px;
+  box-sizing: border-box;
+
+  ${media.mobile} {
+    width: 100vw;
+  }
 `;
 
 const StyledContent = styled.div`
@@ -94,6 +100,10 @@ const StyledStep = styled.div<{ isCurrentStep: boolean }>`
 `;
 
 const StyledIcon = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%);
   height: 17.3rem;
 `;
 
