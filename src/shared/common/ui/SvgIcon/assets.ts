@@ -22,6 +22,7 @@ export { default as x_circle } from '@public/icons/x_circle.svg';
 export { default as x } from '@public/icons/x.svg';
 export { default as plus } from '@public/icons/plus.svg';
 export { default as agenda } from '@public/icons/agenda.svg';
+export { default as pause } from '@public/icons/pause.svg';
 export { default as play } from '@public/icons/play.svg';
 export { default as play_disabled } from '@public/icons/play_disabled.svg';
 export { default as dots_mono } from '@public/icons/dots_mono.svg';
