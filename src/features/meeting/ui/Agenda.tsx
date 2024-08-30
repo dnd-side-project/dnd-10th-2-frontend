@@ -270,7 +270,7 @@ export const Agenda = ({
                 size="md"
                 backgroundColor="main_blue"
                 onClick={() => {
-                  console.log('end');
+                  sendMessage('end');
                 }}>
                 안건 종료
               </Button>
