@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 import {
   DragDropContext,
@@ -21,7 +21,11 @@ import { media, theme } from '@shared/common/styles';
 import { useOpen, useBottomSheet } from '@shared/common/hooks';
 import { getCookie } from '@shared/common/utils';
 import { AgendaResponse } from '@shared/meeting/apis/types';
-import { useGetAgendaList, useReorderAgendaList } from '@shared/meeting/apis';
+import {
+  // useEndMeeting,
+  useGetAgendaList,
+  useReorderAgendaList
+} from '@shared/meeting/apis';
 
 import {
   MeetingCard,
@@ -38,6 +42,7 @@ export interface AgendaResponseWithOrder extends AgendaResponse {
 const MeetingPage = () => {
   const meetingId = useParams().meetingId || '';
 
+  const navigate = useNavigate();
   const { open, onOpen, onClose } = useOpen();
   const { openBottomSheet } = useBottomSheet();
 
@@ -45,6 +50,16 @@ const MeetingPage = () => {
     token: getCookie('token'),
     meetingId
   });
+
+  const { mutate: reorderAgendaList } = useReorderAgendaList({
+    token: getCookie('token'),
+    meetingId
+  });
+
+  // const { mutate: endMeeting } = useEndMeeting({
+  //   token: getCookie('token'),
+  //   meetingId
+  // });
 
   const [agendaList, setAgendaList] = useState<AgendaResponseWithOrder[]>([]);
 
@@ -62,11 +77,6 @@ const MeetingPage = () => {
     updateAgendaOrder(data?.agendaResponse || []);
   }, [data, refetchAgendaList]);
 
-  const { mutate } = useReorderAgendaList({
-    token: getCookie('token'),
-    meetingId
-  });
-
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) {
       return null;
@@ -76,11 +86,20 @@ const MeetingPage = () => {
     const [removed] = reorderedAgendaList.splice(result.source.index, 1);
     reorderedAgendaList.splice(result.destination.index, 0, removed);
 
-    mutate({ agendaIds: reorderedAgendaList.map((agenda) => agenda.agendaId) });
+    reorderAgendaList({
+      agendaIds: reorderedAgendaList.map((agenda) => agenda.agendaId)
+    });
 
     updateAgendaOrder(reorderedAgendaList);
   };
 
+  const firstPendingAgendaId = agendaList.find(
+    (agenda) => agenda.status !== 'COMPLETED'
+  )?.agendaId;
+
+  const isDragDisabled = agendaList.some(
+    (agenda) => agenda.status === 'INPROGRESS'
+  );
   return (
     <Wrapper direction="column" justify="flex-start">
       {/* TODO Header onClick 핸들러 연결, background-color */}
@@ -118,6 +137,9 @@ const MeetingPage = () => {
                         currentDuration={agenda.currentDuration}
                         remainingDuration={agenda.remainingDuration}
                         status={agenda.status}
+                        isFirstPendingAgenda={
+                          firstPendingAgendaId === agenda.agendaId
+                        }
                         refetchAgendaList={refetchAgendaList}
                       />
                       <Space height={10} />
@@ -126,8 +148,9 @@ const MeetingPage = () => {
 
                   {agenda.status !== 'COMPLETED' && (
                     <Draggable
+                      index={index}
                       draggableId={agenda.agendaId.toString()}
-                      index={index}>
+                      isDragDisabled={isDragDisabled}>
                       {(provided) => (
                         <div
                           ref={provided.innerRef}
@@ -141,6 +164,9 @@ const MeetingPage = () => {
                             currentDuration={agenda.currentDuration}
                             remainingDuration={agenda.remainingDuration}
                             status={agenda.status}
+                            isFirstPendingAgenda={
+                              firstPendingAgendaId === agenda.agendaId
+                            }
                             refetchAgendaList={refetchAgendaList}
                           />
                           <Space height={10} />
@@ -167,7 +193,10 @@ const MeetingPage = () => {
               size={'sm'}
               fullWidth
               backgroundColor={'main'}
-              onClick={() => {}}>
+              onClick={() => {
+                // endMeeting();
+                navigate(`/meeting/${meetingId}/complete`);
+              }}>
               회의 종료
             </Button>
           </ButtonWrapper>
