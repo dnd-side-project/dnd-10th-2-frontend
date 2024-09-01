@@ -195,7 +195,9 @@ export const Agenda = ({
                     border-bottom: 1px solid #e7ebef;
                   `}
                   // onClick={() => mutate()}
-                  onClick={() => openModal(modalContent)}>
+                  onClick={() => {
+                    openModal(modalContent);
+                  }}>
                   삭제하기
                 </Text>
                 <Text
@@ -208,7 +210,7 @@ export const Agenda = ({
                     height: 4rem;
                     border-top: 1px solid #e7ebef;
                   `}
-                  onClick={() =>
+                  onClick={() => {
                     openBottomSheet({
                       content: (
                         <EditSheet
@@ -216,12 +218,11 @@ export const Agenda = ({
                           meetingId={meetingId}
                           agendaId={agendaId}
                           title={title}
-                          allocatedDuration={remainingDuration}
-                          refetchAgendaList={refetchAgendaList}
+                          isFirstPendingAgenda={isFirstPendingAgenda}
                         />
                       )
-                    })
-                  }>
+                    });
+                  }}>
                   수정하기
                 </Text>
               </div>
@@ -260,7 +261,20 @@ export const Agenda = ({
                 size="md"
                 backgroundColor="skyblue"
                 textColor="main_blue"
-                onClick={() => console.log('modify')}>
+                onClick={() => {
+                  sendMessage('pause');
+                  openBottomSheet({
+                    content: (
+                      <EditSheet
+                        type={type}
+                        meetingId={meetingId}
+                        agendaId={agendaId}
+                        title={title}
+                        isFirstPendingAgenda={isFirstPendingAgenda}
+                      />
+                    )
+                  });
+                }}>
                 시간 수정
               </Button>
             </StyledButton>
