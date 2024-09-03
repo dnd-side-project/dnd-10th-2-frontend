@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 import {
   DragDropContext,
@@ -22,7 +22,7 @@ import { useOpen, useBottomSheet } from '@shared/common/hooks';
 import { getCookie } from '@shared/common/utils';
 import { AgendaResponse } from '@shared/meeting/apis/types';
 import {
-  // useEndMeeting,
+  useEndMeeting,
   useGetAgendaList,
   useReorderAgendaList
 } from '@shared/meeting/apis';
@@ -42,8 +42,8 @@ export interface AgendaResponseWithOrder extends AgendaResponse {
 const MeetingPage = () => {
   const meetingId = useParams().meetingId || '';
 
-  const navigate = useNavigate();
   const { open, onOpen, onClose } = useOpen();
+
   const { openBottomSheet } = useBottomSheet();
 
   const { data, refetch: refetchAgendaList } = useGetAgendaList({
@@ -56,10 +56,10 @@ const MeetingPage = () => {
     meetingId
   });
 
-  // const { mutate: endMeeting } = useEndMeeting({
-  //   token: getCookie('token'),
-  //   meetingId
-  // });
+  const { mutate: endMeeting } = useEndMeeting({
+    token: getCookie('token'),
+    meetingId
+  });
 
   const [agendaList, setAgendaList] = useState<AgendaResponseWithOrder[]>([]);
 
@@ -194,8 +194,7 @@ const MeetingPage = () => {
               fullWidth
               backgroundColor={'main'}
               onClick={() => {
-                // endMeeting();
-                navigate(`/meeting/${meetingId}/complete`);
+                endMeeting();
               }}>
               회의 종료
             </Button>

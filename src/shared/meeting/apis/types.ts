@@ -132,3 +132,24 @@ export interface ReorderAgendaListResponse {
     agendaResponse: AgendaResponse[];
   };
 }
+
+export interface EndMeetingRequest {
+  token: string | null;
+  meetingId: string;
+}
+
+export interface EndAgendaResponse {
+  agendaId: string;
+  title: string;
+  diff: string;
+}
+
+export interface EndMeetingResponse {
+  response: {
+    report: {
+      totalDiff: string;
+      agendas: EndAgendaResponse[];
+      memos: string; // 작성했던 메모 불러오기 (구현 예정)
+    };
+  };
+}
