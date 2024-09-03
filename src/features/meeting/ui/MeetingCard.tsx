@@ -1,9 +1,14 @@
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { keyframes } from '@emotion/react';
 
 import { Flex, Space, Text, SvgIcon } from '@shared/common/ui';
-import { useGetMeeting, useGetMeetingMemberList } from '@shared/meeting/apis';
+import {
+  useGetMeeting,
+  // useGetMeetingDuration,
+  useGetMeetingMemberList
+} from '@shared/meeting/apis';
 import { getCookie } from '@shared/common/utils';
 import { useBottomSheet } from '@shared/common/hooks';
 
@@ -12,16 +17,46 @@ import { UserListSheet } from './UserListSheet';
 
 export const MeetingCard = () => {
   const meetingId = useParams().meetingId || '';
+
   const { openBottomSheet } = useBottomSheet();
+
   const { data: meetingData } = useGetMeeting({
     meetingId,
     token: getCookie('token')
   });
+
   const { data: meetingMemberListData } = useGetMeetingMemberList({
     meetingId,
     token: getCookie('token')
   });
 
+  // WebSocket
+  const [currentDuration, setCurrentDuration] = useState<string | undefined>(
+    undefined
+  );
+
+  const incrementCurrentDuration = useCallback(() => {
+    if (!currentDuration) return;
+
+    const [hours, minutes, seconds] = currentDuration.split(':').map(Number);
+
+    const date = new Date();
+    date.setHours(hours);
+    date.setMinutes(minutes);
+    date.setSeconds(seconds + 1);
+
+    const newCurrentDuration = date.toTimeString().split(' ')[0]; // HH:mm:ss 형식으로 변환
+    setCurrentDuration(newCurrentDuration);
+  }, [currentDuration]);
+
+  useEffect(() => {
+    setCurrentDuration(meetingData?.currentDuration);
+  }, [meetingData]);
+
+  useEffect(() => {
+    const interval = setInterval(incrementCurrentDuration, 1000);
+    return () => clearInterval(interval);
+  }, [incrementCurrentDuration]);
   return (
     <MeetingCardWrapper
       direction="column"
@@ -72,7 +107,8 @@ export const MeetingCard = () => {
           회의가 시작한지
         </Text>
         <Text typo="T4" color="white">
-          {meetingData?.currentDuration}
+          {/* {meetingData?.currentDuration} */}
+          {currentDuration}
         </Text>
         <Text typo="BM3" color="white">
           지났어요
