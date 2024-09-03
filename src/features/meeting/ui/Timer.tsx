@@ -13,6 +13,7 @@ import { formatSeconds, formatEndTime } from '@features/meeting/utils';
 interface TimerProps {
   time: number;
   serverTime: Date;
+  isPlaying: boolean;
   sendMessage: (action: string) => void;
 }
 
@@ -22,7 +23,12 @@ interface TimerProps {
  * @param time 타이머 총 시간(sec)
  * @param serverTime 서버 시간 Date
  * */
-export const Timer = ({ time, serverTime, sendMessage }: TimerProps) => {
+export const Timer = ({
+  time,
+  serverTime,
+  isPlaying,
+  sendMessage
+}: TimerProps) => {
   return (
     <TimerWrapper justify="flex-start" direction="column">
       <Chip>
@@ -31,7 +37,7 @@ export const Timer = ({ time, serverTime, sendMessage }: TimerProps) => {
       <Gradient />
       <CountdownCircleTimer
         colors={'url(#blue-gradient)'}
-        isPlaying
+        isPlaying={isPlaying}
         size={260}
         rotation="counterclockwise"
         isGrowing={true}

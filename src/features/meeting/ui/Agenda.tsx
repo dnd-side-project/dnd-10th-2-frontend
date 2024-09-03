@@ -95,9 +95,9 @@ export const Agenda = ({
     isFirstPendingAgenda
   );
 
-  const isAgendaInProgress = isFirstPendingAgenda && status === 'INPROGRESS';
+  const isAgendaInProgress =
+    isFirstPendingAgenda && (status === 'INPROGRESS' || status === 'PAUSED');
 
-  // console.log(status, isFirstPendingAgenda, meetingId, agendaId);
   return (
     <StyledAgenda isDone={status === 'COMPLETED'}>
       {status === 'INPROGRESS' && <StyledNowChip>now</StyledNowChip>}
@@ -150,11 +150,7 @@ export const Agenda = ({
             width={30}
             height={30}
             onClick={() => {
-              if (status === 'PENDING') {
-                sendMessage('start');
-              } else if (status === 'PAUSED') {
-                sendMessage('resume');
-              }
+              sendMessage('start');
             }}
           />
         )}
@@ -238,6 +234,7 @@ export const Agenda = ({
           <Timer
             time={formatTimeToSecond(remainingDuration)}
             serverTime={new Date()}
+            isPlaying={status === 'INPROGRESS'}
             sendMessage={sendMessage}
           />
 
@@ -250,9 +247,14 @@ export const Agenda = ({
                 backgroundColor="skyblue"
                 textColor="main_blue"
                 onClick={() => {
-                  sendMessage('pause');
+                  if (status === 'INPROGRESS') {
+                    sendMessage('pause');
+                  } else if (status === 'PAUSED') {
+                    sendMessage('resume');
+                  }
                 }}>
-                <SvgIcon id="pause" size={12} />
+                {status === 'INPROGRESS' && <SvgIcon id="pause" size={12} />}
+                {status === 'PAUSED' && <SvgIcon id="play" size={12} />}
               </Button>
             </StyledButton>
 
@@ -314,7 +316,7 @@ const StyledAgenda = styled.div<{ isDone: boolean }>`
 
 const StyledNowChip = styled.div`
   position: absolute;
-  top: -1rem;
+  top: -0.7rem;
   right: 1.6rem;
   ${({ theme }) => theme.typo.B2}
   background-color: ${({ theme }) => theme.palette.error};
