@@ -254,7 +254,7 @@ export const Agenda = ({
                   }
                 }}>
                 {status === 'INPROGRESS' && <SvgIcon id="pause" size={12} />}
-                {status === 'PAUSED' && <SvgIcon id="play" size={12} />}
+                {status === 'PAUSED' && <SvgIcon id="play_blue" size={16} />}
               </Button>
             </StyledButton>
 
