@@ -12,21 +12,22 @@ import { formatSeconds, formatEndTime } from '@features/meeting/utils';
 
 interface TimerProps {
   time: number;
-  initialRemainingTime?: number;
   serverTime: Date;
+  isPlaying: boolean;
+  sendMessage: (action: string) => void;
 }
 
 /**
  * @default button: (button 태그 속성 그대로)
  *
  * @param time 타이머 총 시간(sec)
- * @param initialRemainingTime 흐른 시간(sec)
  * @param serverTime 서버 시간 Date
  * */
 export const Timer = ({
   time,
-  initialRemainingTime = 0,
-  serverTime
+  serverTime,
+  isPlaying,
+  sendMessage
 }: TimerProps) => {
   return (
     <TimerWrapper justify="flex-start" direction="column">
@@ -36,14 +37,16 @@ export const Timer = ({
       <Gradient />
       <CountdownCircleTimer
         colors={'url(#blue-gradient)'}
-        isPlaying
+        isPlaying={isPlaying}
         size={260}
         rotation="counterclockwise"
         isGrowing={true}
-        initialRemainingTime={initialRemainingTime}
         duration={time}
         trailColor={theme.palette.timer_trail as ColorFormat}
-        strokeWidth={13}>
+        strokeWidth={13}
+        onComplete={() => {
+          sendMessage('end');
+        }}>
         {({ remainingTime }) => formatSeconds(remainingTime)}
       </CountdownCircleTimer>
     </TimerWrapper>

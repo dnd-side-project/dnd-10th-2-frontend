@@ -3,13 +3,14 @@ import * as StompJs from '@stomp/stompjs';
 // import SockJS from 'sockjs-client';
 
 import { getCookie } from '@shared/common/utils';
+import { BROKER_URL } from '@shared/common/constants';
 
 export const useGetMeetingDuration = () => {
   const client = useRef<StompJs.Client | null>();
 
   const connect = () => {
     client.current = new StompJs.Client({
-      brokerURL: 'ws://facerain-dev.iptime.org:8080/ws',
+      brokerURL: BROKER_URL,
       connectHeaders: {
         Authorization: `${getCookie('token')}`
       },

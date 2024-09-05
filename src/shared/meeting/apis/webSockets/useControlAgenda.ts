@@ -62,12 +62,13 @@ export const useControlAgenda = (
     // changeClient(client.current); // 클라이언트 갱신
   }, [meetingId, agendaId, refetchAgendaList]);
 
-  const sendMessage = (action: string) => {
+  const sendMessage = (action: string, modifiedDuration?: string) => {
     // console.log('[메세지 전송]', client.current);
     client.current?.publish({
       destination: `/app/meeting/${meetingId}/agendas/${agendaId}/action`,
       body: JSON.stringify({
-        action
+        action,
+        modifiedDuration
       })
     });
   };

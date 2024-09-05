@@ -3,10 +3,10 @@ import { useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 
-import { Space, Text, SvgIcon } from '@shared/common/ui';
+import { Space, Text, SvgIcon, Button } from '@shared/common/ui';
 
-import { useBottomSheet, useModal, useOpen } from '@shared/common/hooks';
-import { useDeleteAgenda } from '@shared/meeting/apis';
+import { useBottomSheet, useModal } from '@shared/common/hooks';
+import { useDeleteAgenda, useControlAgenda } from '@shared/meeting/apis';
 import { getCookie } from '@shared/common/utils';
 
 import { EditSheet, Timer } from '@features/meeting/ui';
@@ -20,7 +20,8 @@ import {
 
 import { AgendaResponseWithOrder } from '@pages/meeting/MeetingPage';
 
-interface AgendaResponseWithRefetch extends AgendaResponseWithOrder {
+interface AgendaResponseWithProps extends AgendaResponseWithOrder {
+  isFirstPendingAgenda: boolean;
   refetchAgendaList: () => void;
 }
 
@@ -32,11 +33,11 @@ export const Agenda = ({
   // currentDuration,
   remainingDuration,
   status,
+  isFirstPendingAgenda,
   refetchAgendaList
-}: AgendaResponseWithRefetch) => {
+}: AgendaResponseWithProps) => {
   const meetingId = useParams().meetingId || '';
 
-  const { open, onOpen } = useOpen();
   const { openBottomSheet } = useBottomSheet();
 
   const { mutate } = useDeleteAgenda({
@@ -71,20 +72,36 @@ export const Agenda = ({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isPopupOpen]);
-  //
 
-  const { openModal } = useModal();
+  // Modal 코드
+  const { openModal, closeModal } = useModal();
 
   const modalContent = {
     title: '\n\n정말 안건을 삭제하시겠어요?',
     description: '\n\n',
     button: {
       text: '삭제하기',
-      onClick: mutate
+      onClick: () => {
+        mutate();
+        closeModal();
+      }
     }
   };
+
+  // WebSocket 코드
+  const { sendMessage } = useControlAgenda(
+    meetingId,
+    agendaId,
+    isFirstPendingAgenda
+  );
+
+  const isAgendaInProgress =
+    isFirstPendingAgenda && (status === 'INPROGRESS' || status === 'PAUSED');
+
   return (
     <StyledAgenda isDone={status === 'COMPLETED'}>
+      {status === 'INPROGRESS' && <StyledNowChip>now</StyledNowChip>}
+
       <StyledAgendaContent>
         {type === 'AGENDA' && status !== 'COMPLETED' && (
           <AgendaAbleIcon width="40" height="40" />
@@ -101,12 +118,12 @@ export const Agenda = ({
 
         <HorizonSpace width={10} />
 
-        <AgendaWrapper>
+        <StyledAgendaWrapper>
           {type === 'AGENDA' && status !== 'COMPLETED' && (
-            <AgendaChip isDone={false}>안건 {order}</AgendaChip>
+            <StyledAgendaChip isDone={false}>안건 {order}</StyledAgendaChip>
           )}
           {type === 'AGENDA' && status === 'COMPLETED' && (
-            <AgendaChip isDone={true}>논의완료</AgendaChip>
+            <StyledAgendaChip isDone={true}>논의완료</StyledAgendaChip>
           )}
 
           <Space height={6} />
@@ -118,26 +135,32 @@ export const Agenda = ({
 
           <Space height={4} />
 
-          {!open && (
+          {!isAgendaInProgress && (
             <Text typo="B2" color="light_gray4" height={16}>
               {remainingDuration}
             </Text>
           )}
-        </AgendaWrapper>
+        </StyledAgendaWrapper>
 
         <HorizonSpace width={21} />
 
-        {status === 'PENDING' && (
-          <SvgIcon id="play" width={30} height={30} onClick={onOpen} />
+        {isFirstPendingAgenda && !isAgendaInProgress && (
+          <SvgIcon
+            id="play"
+            width={30}
+            height={30}
+            onClick={() => {
+              sendMessage('start');
+            }}
+          />
         )}
-        {/* {status === 'INPROGRESS' && (
-          <SvgIcon id="play" width={30} height={30} />
-        )} */}
-        {/* {status === 'PAUSED' && <SvgIcon id='paused' width={30} height={30} />} */}
+        {status !== 'COMPLETED' && !isFirstPendingAgenda && (
+          <SvgIcon id="play_disabled" width={30} height={30} />
+        )}
 
         <HorizonSpace width={16} />
 
-        {status !== 'COMPLETED' && (
+        {status !== 'COMPLETED' && !isAgendaInProgress && (
           <div
             css={css`
               position: relative;
@@ -168,7 +191,9 @@ export const Agenda = ({
                     border-bottom: 1px solid #e7ebef;
                   `}
                   // onClick={() => mutate()}
-                  onClick={() => openModal(modalContent)}>
+                  onClick={() => {
+                    openModal(modalContent);
+                  }}>
                   삭제하기
                 </Text>
                 <Text
@@ -181,7 +206,7 @@ export const Agenda = ({
                     height: 4rem;
                     border-top: 1px solid #e7ebef;
                   `}
-                  onClick={() =>
+                  onClick={() => {
                     openBottomSheet({
                       content: (
                         <EditSheet
@@ -189,12 +214,11 @@ export const Agenda = ({
                           meetingId={meetingId}
                           agendaId={agendaId}
                           title={title}
-                          allocatedDuration={remainingDuration}
-                          refetchAgendaList={refetchAgendaList}
+                          isFirstPendingAgenda={isFirstPendingAgenda}
                         />
                       )
-                    })
-                  }>
+                    });
+                  }}>
                   수정하기
                 </Text>
               </div>
@@ -203,14 +227,71 @@ export const Agenda = ({
         )}
       </StyledAgendaContent>
 
-      {open && (
+      {isAgendaInProgress && (
         <>
           <Space height={30} />
+
           <Timer
             time={formatTimeToSecond(remainingDuration)}
-            initialRemainingTime={formatTimeToSecond(remainingDuration)}
             serverTime={new Date()}
+            isPlaying={status === 'INPROGRESS'}
+            sendMessage={sendMessage}
           />
+
+          <Space height={30} />
+
+          <StyledButtonContainer>
+            <StyledButton>
+              <Button
+                size="sm"
+                backgroundColor="skyblue"
+                textColor="main_blue"
+                onClick={() => {
+                  if (status === 'INPROGRESS') {
+                    sendMessage('pause');
+                  } else if (status === 'PAUSED') {
+                    sendMessage('resume');
+                  }
+                }}>
+                {status === 'INPROGRESS' && <SvgIcon id="pause" size={12} />}
+                {status === 'PAUSED' && <SvgIcon id="play_blue" size={16} />}
+              </Button>
+            </StyledButton>
+
+            <StyledButton>
+              <Button
+                size="md"
+                backgroundColor="skyblue"
+                textColor="main_blue"
+                onClick={() => {
+                  sendMessage('pause');
+                  openBottomSheet({
+                    content: (
+                      <EditSheet
+                        type={type}
+                        meetingId={meetingId}
+                        agendaId={agendaId}
+                        title={title}
+                        isFirstPendingAgenda={isFirstPendingAgenda}
+                      />
+                    )
+                  });
+                }}>
+                시간 수정
+              </Button>
+            </StyledButton>
+
+            <StyledButton>
+              <Button
+                size="md"
+                backgroundColor="main_blue"
+                onClick={() => {
+                  sendMessage('end');
+                }}>
+                안건 종료
+              </Button>
+            </StyledButton>
+          </StyledButtonContainer>
         </>
       )}
     </StyledAgenda>
@@ -218,6 +299,7 @@ export const Agenda = ({
 };
 
 const StyledAgenda = styled.div<{ isDone: boolean }>`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -232,26 +314,34 @@ const StyledAgenda = styled.div<{ isDone: boolean }>`
   border: ${({ isDone }) => isDone && '2px solid #d3d9ee'};
 `;
 
+const StyledNowChip = styled.div`
+  position: absolute;
+  top: -0.7rem;
+  right: 1.6rem;
+  ${({ theme }) => theme.typo.B2}
+  background-color: ${({ theme }) => theme.palette.error};
+  color: ${({ theme }) => theme.palette.white};
+  padding: 0.5rem 1rem 0.6rem;
+  border-radius: 2.4rem;
+`;
+
 const StyledAgendaContent = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
   width: 100%;
 `;
 
-const AgendaWrapper = styled.div`
+const StyledAgendaWrapper = styled.div`
   width: calc(100% - 131px);
 `;
 
-const AgendaChip = styled.div<{ isDone: boolean }>`
+const StyledAgendaChip = styled.div<{ isDone: boolean }>`
   padding: 5px 8px;
   box-sizing: border-box;
   border-radius: 8px;
   width: fit-content;
   ${({ theme }) => theme.typo.B6}
   background-color: ${({ theme }) => theme.palette.light_white};
-  color: ${({ theme }) => theme.palette.middle_gray3};
-
   color: ${({ isDone, theme }) =>
     isDone ? `${theme.palette.light_gray4}` : `${theme.palette.middle_gray3}`};
 `;
@@ -260,4 +350,23 @@ const HorizonSpace = styled.div<{
   width: number;
 }>`
   width: ${({ width }) => `${width}px`};
+`;
+
+const StyledButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 5rem;
+  gap: 0.7rem;
+`;
+
+const StyledButton = styled.div`
+  flex-grow: 1;
+  height: 100%;
+
+  :first-of-type {
+    flex-grow: 0;
+    width: 5rem;
+  }
 `;
