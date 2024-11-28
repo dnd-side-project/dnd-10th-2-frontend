@@ -62,6 +62,8 @@ const MeetingPage = () => {
     meetingId
   });
 
+  const { sendAddAgendaMessage } = useAddAgenda(meetingId);
+
   const [agendaList, setAgendaList] = useState<AgendaResponseWithOrder[]>([]);
 
   const updateAgendaOrder = (agendaList: AgendaResponse[]) => {
@@ -101,8 +103,6 @@ const MeetingPage = () => {
   const isDragDisabled = agendaList.some(
     (agenda) => agenda.status === 'INPROGRESS' || agenda.status === 'PAUSED'
   );
-
-  const { sendAddAgendaMessage } = useAddAgenda(meetingId);
 
   return (
     <Wrapper direction="column" justify="flex-start">

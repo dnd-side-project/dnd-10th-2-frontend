@@ -30,7 +30,6 @@ export const useDeleteAgenda = (meetingId: string, agendaId: number) => {
           `/topic/meeting/${meetingId}/agendas/${agendaId}/delete`,
           (message) => {
             if (message.body) {
-              console.log('삭제');
               refetchAgendaList();
             }
           }

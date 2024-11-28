@@ -1,10 +1,14 @@
 import { useCallback, useEffect, useRef } from 'react';
 import * as StompJs from '@stomp/stompjs';
-// import SockJS from 'sockjs-client';
 
 import { getCookie } from '@shared/common/utils';
 import { useGetAgendaList } from '@shared/meeting/apis';
 import { BROKER_URL } from '@shared/common/constants';
+
+export interface ControlAgendaMessage {
+  action: 'start' | 'pause' | 'resume' | 'extend' | 'reduce' | 'end';
+  modifiedDuration?: string;
+}
 
 export const useControlAgenda = (
   meetingId: string,
@@ -12,6 +16,7 @@ export const useControlAgenda = (
   isFirstPendingAgenda: boolean
 ) => {
   const client = useRef<StompJs.Client | null>();
+  const subscription = useRef<StompJs.StompSubscription>();
 
   const { refetch: refetchAgendaList } = useGetAgendaList({
     token: getCookie('token'),
@@ -19,74 +24,63 @@ export const useControlAgenda = (
   });
 
   const connect = useCallback(() => {
+    if (client.current?.active) return;
+
     client.current = new StompJs.Client({
       brokerURL: BROKER_URL,
       connectHeaders: {
         Authorization: `${getCookie('token')}`
       },
-      // debug: (str) => {
-      //   console.log(str);
-      // },
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000
-    });
-
-    // client.current.webSocketFactory = function () {
-    //   return new SockJS(
-    //     'http://facerain-dev.iptime.org:8080/ws'
-    //   );
-    // };
-
-    const callback = (message: StompJs.Message) => {
-      if (message.body) {
-        // console.log(JSON.parse(message.body));
-        refetchAgendaList();
+      heartbeatOutgoing: 4000,
+      onConnect: () => {
+        subscription.current = client.current?.subscribe(
+          `/topic/meeting/${meetingId}/agendas/${agendaId}/status`,
+          (message) => {
+            if (message.body) {
+              refetchAgendaList();
+            }
+          }
+        );
+      },
+      onStompError: (frame) => {
+        console.error('STOMP Error:', frame);
       }
-    };
-
-    const subscribe = () => {
-      // console.log('[구독]', client.current);
-      client.current?.subscribe(
-        `/topic/meeting/${meetingId}/agendas/${agendaId}/status`,
-        callback
-      );
-    };
-
-    client.current.onConnect = () => {
-      subscribe();
-    };
+    });
 
     client.current.activate();
-
-    // changeClient(client.current); // 클라이언트 갱신
   }, [meetingId, agendaId, refetchAgendaList]);
 
-  const sendMessage = (action: string, modifiedDuration?: string) => {
-    // console.log('[메세지 전송]', client.current);
-    client.current?.publish({
-      destination: `/app/meeting/${meetingId}/agendas/${agendaId}/action`,
-      body: JSON.stringify({
-        action,
-        modifiedDuration
-      })
-    });
-  };
+  const sendControlAgendaMessage = useCallback(
+    (message: ControlAgendaMessage) => {
+      if (!client.current?.active) {
+        console.warn('WebSocket connection not active');
+        return;
+      }
 
-  const disConnect = () => {
-    if (client.current === null) {
-      return;
-    }
+      client.current.publish({
+        destination: `/app/meeting/${meetingId}/agendas/${agendaId}/action`,
+        body: JSON.stringify(message)
+      });
+    },
+    [meetingId, agendaId]
+  );
+
+  const disconnect = useCallback(() => {
+    subscription.current?.unsubscribe();
     client.current?.deactivate();
-  };
+  }, []);
 
   useEffect(() => {
     if (isFirstPendingAgenda) {
-      // console.log(isFirstPendingAgenda, agendaId);
       connect();
     }
-    // return () => disConnect();
-  }, [isFirstPendingAgenda, connect]);
+    return () => disconnect();
+  }, [isFirstPendingAgenda, connect, disconnect]);
 
-  return { connect, disConnect, sendMessage };
+  return {
+    sendControlAgendaMessage,
+    isConnected: !!client.current?.active
+  };
 };
