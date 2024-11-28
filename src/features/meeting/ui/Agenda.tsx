@@ -7,7 +7,6 @@ import { Space, Text, SvgIcon, Button } from '@shared/common/ui';
 
 import { useBottomSheet, useModal } from '@shared/common/hooks';
 import { useDeleteAgenda, useControlAgenda } from '@shared/meeting/apis';
-import { getCookie } from '@shared/common/utils';
 
 import { EditSheet, Timer } from '@features/meeting/ui';
 import { formatTimeToSecond } from '@features/meeting/utils';
@@ -30,22 +29,15 @@ export const Agenda = ({
   order,
   title,
   type,
-  // currentDuration,
   remainingDuration,
   status,
-  isFirstPendingAgenda,
-  refetchAgendaList
+  isFirstPendingAgenda
 }: AgendaResponseWithProps) => {
   const meetingId = useParams().meetingId || '';
 
   const { openBottomSheet } = useBottomSheet();
 
-  const { mutate } = useDeleteAgenda({
-    token: getCookie('token'),
-    meetingId,
-    agendaId: String(agendaId),
-    refetchAgendaList
-  });
+  const { sendDeleteAgendaMessage } = useDeleteAgenda(meetingId, agendaId);
 
   // 삭제하기, 수정하기 모달 hook
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -82,7 +74,7 @@ export const Agenda = ({
     button: {
       text: '삭제하기',
       onClick: () => {
-        mutate();
+        sendDeleteAgendaMessage();
         closeModal();
       }
     }

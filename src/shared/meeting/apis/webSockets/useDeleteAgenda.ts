@@ -5,14 +5,8 @@ import { getCookie } from '@shared/common/utils';
 import { useGetAgendaList } from '@shared/meeting/apis';
 import { BROKER_URL } from '@shared/common/constants';
 
-export interface AddAgendaMessage {
-  title: string;
-  type: 'AGENDA' | 'BREAK';
-  allocatedDuration: string;
-}
-
-export const useAddAgenda = (meetingId: string) => {
-  const client = useRef<StompJs.Client>();
+export const useDeleteAgenda = (meetingId: string, agendaId: number) => {
+  const client = useRef<StompJs.Client | null>();
   const subscription = useRef<StompJs.StompSubscription>();
 
   const { refetch: refetchAgendaList } = useGetAgendaList({
@@ -33,9 +27,10 @@ export const useAddAgenda = (meetingId: string) => {
       heartbeatOutgoing: 4000,
       onConnect: () => {
         subscription.current = client.current?.subscribe(
-          `/topic/meeting/${meetingId}/agendas/create`,
+          `/topic/meeting/${meetingId}/agendas/${agendaId}/delete`,
           (message) => {
             if (message.body) {
+              console.log('삭제');
               refetchAgendaList();
             }
           }
@@ -47,22 +42,18 @@ export const useAddAgenda = (meetingId: string) => {
     });
 
     client.current.activate();
-  }, [meetingId, refetchAgendaList]);
+  }, [meetingId, agendaId, refetchAgendaList]);
 
-  const sendAddAgendaMessage = useCallback(
-    (message: AddAgendaMessage) => {
-      if (!client.current?.active) {
-        console.warn('WebSocket connection not active');
-        return;
-      }
+  const sendDeleteAgendaMessage = useCallback(() => {
+    if (!client.current?.active) {
+      console.warn('WebSocket connection not active');
+      return;
+    }
 
-      client.current.publish({
-        destination: `/app/meeting/${meetingId}/agendas/create`,
-        body: JSON.stringify(message)
-      });
-    },
-    [meetingId]
-  );
+    client.current.publish({
+      destination: `/app/meeting/${meetingId}/agendas/${agendaId}/delete`
+    });
+  }, [meetingId, agendaId]);
 
   const disconnect = useCallback(() => {
     subscription.current?.unsubscribe();
@@ -75,7 +66,7 @@ export const useAddAgenda = (meetingId: string) => {
   }, [connect, disconnect]);
 
   return {
-    sendAddAgendaMessage,
+    sendDeleteAgendaMessage,
     isConnected: !!client.current?.active
   };
 };
