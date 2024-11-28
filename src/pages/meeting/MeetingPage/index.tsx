@@ -25,7 +25,7 @@ import {
   useAddAgenda,
   useEndMeeting,
   useGetAgendaList,
-  useReorderAgendaList
+  useReorderAgenda
 } from '@shared/meeting/apis';
 
 import {
@@ -52,17 +52,14 @@ const MeetingPage = () => {
     meetingId
   });
 
-  const { mutate: reorderAgendaList } = useReorderAgendaList({
-    token: getCookie('token'),
-    meetingId
-  });
-
   const { mutate: endMeeting } = useEndMeeting({
     token: getCookie('token'),
     meetingId
   });
 
   const { sendAddAgendaMessage } = useAddAgenda(meetingId);
+
+  const { sendReorderAgendaMessage } = useReorderAgenda(meetingId);
 
   const [agendaList, setAgendaList] = useState<AgendaResponseWithOrder[]>([]);
 
@@ -89,7 +86,7 @@ const MeetingPage = () => {
     const [removed] = reorderedAgendaList.splice(result.source.index, 1);
     reorderedAgendaList.splice(result.destination.index, 0, removed);
 
-    reorderAgendaList({
+    sendReorderAgendaMessage({
       agendaIds: reorderedAgendaList.map((agenda) => agenda.agendaId)
     });
 
