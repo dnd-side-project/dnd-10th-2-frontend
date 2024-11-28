@@ -22,6 +22,7 @@ import { useOpen, useBottomSheet } from '@shared/common/hooks';
 import { getCookie } from '@shared/common/utils';
 import { AgendaResponse } from '@shared/meeting/apis/types';
 import {
+  useAddAgenda,
   useEndMeeting,
   useGetAgendaList,
   useReorderAgendaList
@@ -98,8 +99,11 @@ const MeetingPage = () => {
   )?.agendaId;
 
   const isDragDisabled = agendaList.some(
-    (agenda) => agenda.status === 'INPROGRESS'
+    (agenda) => agenda.status === 'INPROGRESS' || agenda.status === 'PAUSED'
   );
+
+  const { sendAddAgendaMessage } = useAddAgenda(meetingId);
+
   return (
     <Wrapper direction="column" justify="flex-start">
       {/* TODO Header onClick 핸들러 연결, background-color */}
@@ -217,8 +221,7 @@ const MeetingPage = () => {
                 content: (
                   <AgendaSheet
                     type="AGENDA"
-                    meetingId={meetingId}
-                    refetchAgendaList={refetchAgendaList}
+                    sendAddAgendaMessage={sendAddAgendaMessage}
                   />
                 )
               })
@@ -228,8 +231,7 @@ const MeetingPage = () => {
                 content: (
                   <AgendaSheet
                     type="BREAK"
-                    meetingId={meetingId}
-                    refetchAgendaList={refetchAgendaList}
+                    sendAddAgendaMessage={sendAddAgendaMessage}
                   />
                 )
               })
