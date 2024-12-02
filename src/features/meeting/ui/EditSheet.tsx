@@ -42,12 +42,6 @@ export const EditSheet = ({
     closeTimePicker
   } = useTimePicker();
 
-  // const { sendMessage } = useControlAgenda(
-  //   meetingId,
-  //   agendaId,
-  //   isFirstPendingAgenda
-  // );
-
   const handleComplete = async () => {
     if (!editState) return;
 
@@ -62,7 +56,6 @@ export const EditSheet = ({
         modifiedDuration: modifiedDuration
       });
       closeBottomSheet();
-      sendControlAgendaMessage({ action: 'resume' });
     } catch (error) {
       console.log(`Error: ${error}`);
       throw error;
