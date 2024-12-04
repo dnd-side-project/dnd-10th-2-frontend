@@ -3,7 +3,10 @@ import styled from '@emotion/styled';
 
 import { SvgIcon } from '@shared/common/ui';
 import { media } from '@shared/common/styles';
-import { KAKAO_LOGIN_URL } from '@shared/onboarding/constants';
+import {
+  GOOGLE_LOGIN_URL,
+  KAKAO_LOGIN_URL
+} from '@shared/onboarding/constants';
 
 import { BackgroundIcon } from '@features/onboarding/assets';
 
@@ -13,6 +16,12 @@ const OnboardingPage = () => {
       <StyledGraphic>
         <BackgroundIcon />
       </StyledGraphic>
+
+      <Link to={GOOGLE_LOGIN_URL}>
+        <div>
+          <SvgIcon id="kakao" /> 구글로 계속하기
+        </div>
+      </Link>
 
       <Link to={KAKAO_LOGIN_URL}>
         <StyledButton>

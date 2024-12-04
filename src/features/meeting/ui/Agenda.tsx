@@ -7,7 +7,6 @@ import { Space, Text, SvgIcon, Button } from '@shared/common/ui';
 
 import { useBottomSheet, useModal } from '@shared/common/hooks';
 import { useDeleteAgenda, useControlAgenda } from '@shared/meeting/apis';
-import { getCookie } from '@shared/common/utils';
 
 import { EditSheet, Timer } from '@features/meeting/ui';
 import { formatTimeToSecond } from '@features/meeting/utils';
@@ -30,22 +29,21 @@ export const Agenda = ({
   order,
   title,
   type,
-  // currentDuration,
   remainingDuration,
   status,
-  isFirstPendingAgenda,
-  refetchAgendaList
+  isFirstPendingAgenda
 }: AgendaResponseWithProps) => {
   const meetingId = useParams().meetingId || '';
 
   const { openBottomSheet } = useBottomSheet();
 
-  const { mutate } = useDeleteAgenda({
-    token: getCookie('token'),
+  const { sendDeleteAgendaMessage } = useDeleteAgenda(meetingId, agendaId);
+
+  const { sendControlAgendaMessage } = useControlAgenda(
     meetingId,
-    agendaId: String(agendaId),
-    refetchAgendaList
-  });
+    agendaId,
+    isFirstPendingAgenda
+  );
 
   // 삭제하기, 수정하기 모달 hook
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -82,18 +80,11 @@ export const Agenda = ({
     button: {
       text: '삭제하기',
       onClick: () => {
-        mutate();
+        sendDeleteAgendaMessage();
         closeModal();
       }
     }
   };
-
-  // WebSocket 코드
-  const { sendMessage } = useControlAgenda(
-    meetingId,
-    agendaId,
-    isFirstPendingAgenda
-  );
 
   const isAgendaInProgress =
     isFirstPendingAgenda && (status === 'INPROGRESS' || status === 'PAUSED');
@@ -150,7 +141,7 @@ export const Agenda = ({
             width={30}
             height={30}
             onClick={() => {
-              sendMessage('start');
+              sendControlAgendaMessage({ action: 'start' });
             }}
           />
         )}
@@ -190,7 +181,6 @@ export const Agenda = ({
                     height: 4rem;
                     border-bottom: 1px solid #e7ebef;
                   `}
-                  // onClick={() => mutate()}
                   onClick={() => {
                     openModal(modalContent);
                   }}>
@@ -211,10 +201,8 @@ export const Agenda = ({
                       content: (
                         <EditSheet
                           type={type}
-                          meetingId={meetingId}
-                          agendaId={agendaId}
                           title={title}
-                          isFirstPendingAgenda={isFirstPendingAgenda}
+                          sendControlAgendaMessage={sendControlAgendaMessage}
                         />
                       )
                     });
@@ -235,7 +223,7 @@ export const Agenda = ({
             time={formatTimeToSecond(remainingDuration)}
             serverTime={new Date()}
             isPlaying={status === 'INPROGRESS'}
-            sendMessage={sendMessage}
+            sendControlAgendaMessage={sendControlAgendaMessage}
           />
 
           <Space height={30} />
@@ -248,9 +236,9 @@ export const Agenda = ({
                 textColor="main_blue"
                 onClick={() => {
                   if (status === 'INPROGRESS') {
-                    sendMessage('pause');
+                    sendControlAgendaMessage({ action: 'pause' });
                   } else if (status === 'PAUSED') {
-                    sendMessage('resume');
+                    sendControlAgendaMessage({ action: 'resume' });
                   }
                 }}>
                 {status === 'INPROGRESS' && <SvgIcon id="pause" size={12} />}
@@ -264,15 +252,13 @@ export const Agenda = ({
                 backgroundColor="skyblue"
                 textColor="main_blue"
                 onClick={() => {
-                  sendMessage('pause');
+                  sendControlAgendaMessage({ action: 'pause' });
                   openBottomSheet({
                     content: (
                       <EditSheet
                         type={type}
-                        meetingId={meetingId}
-                        agendaId={agendaId}
                         title={title}
-                        isFirstPendingAgenda={isFirstPendingAgenda}
+                        sendControlAgendaMessage={sendControlAgendaMessage}
                       />
                     )
                   });
@@ -286,7 +272,7 @@ export const Agenda = ({
                 size="md"
                 backgroundColor="main_blue"
                 onClick={() => {
-                  sendMessage('end');
+                  sendControlAgendaMessage({ action: 'end' });
                 }}>
                 안건 종료
               </Button>

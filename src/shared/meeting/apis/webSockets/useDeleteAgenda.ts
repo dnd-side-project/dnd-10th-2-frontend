@@ -5,16 +5,7 @@ import { getCookie } from '@shared/common/utils';
 import { useGetAgendaList } from '@shared/meeting/apis';
 import { BROKER_URL } from '@shared/common/constants';
 
-export interface ControlAgendaMessage {
-  action: 'start' | 'pause' | 'resume' | 'extend' | 'reduce' | 'end';
-  modifiedDuration?: string;
-}
-
-export const useControlAgenda = (
-  meetingId: string,
-  agendaId: number,
-  isFirstPendingAgenda: boolean
-) => {
+export const useDeleteAgenda = (meetingId: string, agendaId: number) => {
   const client = useRef<StompJs.Client | null>();
   const subscription = useRef<StompJs.StompSubscription>();
 
@@ -36,7 +27,7 @@ export const useControlAgenda = (
       heartbeatOutgoing: 4000,
       onConnect: () => {
         subscription.current = client.current?.subscribe(
-          `/topic/meeting/${meetingId}/agendas/${agendaId}/status`,
+          `/topic/meeting/${meetingId}/agendas/${agendaId}/delete`,
           (message) => {
             if (message.body) {
               refetchAgendaList();
@@ -52,20 +43,16 @@ export const useControlAgenda = (
     client.current.activate();
   }, [meetingId, agendaId, refetchAgendaList]);
 
-  const sendControlAgendaMessage = useCallback(
-    (message: ControlAgendaMessage) => {
-      if (!client.current?.active) {
-        console.warn('WebSocket connection not active');
-        return;
-      }
+  const sendDeleteAgendaMessage = useCallback(() => {
+    if (!client.current?.active) {
+      console.warn('WebSocket connection not active');
+      return;
+    }
 
-      client.current.publish({
-        destination: `/app/meeting/${meetingId}/agendas/${agendaId}/action`,
-        body: JSON.stringify(message)
-      });
-    },
-    [meetingId, agendaId]
-  );
+    client.current.publish({
+      destination: `/app/meeting/${meetingId}/agendas/${agendaId}/delete`
+    });
+  }, [meetingId, agendaId]);
 
   const disconnect = useCallback(() => {
     subscription.current?.unsubscribe();
@@ -73,14 +60,12 @@ export const useControlAgenda = (
   }, []);
 
   useEffect(() => {
-    if (isFirstPendingAgenda) {
-      connect();
-    }
+    connect();
     return () => disconnect();
-  }, [isFirstPendingAgenda, connect, disconnect]);
+  }, [connect, disconnect]);
 
   return {
-    sendControlAgendaMessage,
+    sendDeleteAgendaMessage,
     isConnected: !!client.current?.active
   };
 };

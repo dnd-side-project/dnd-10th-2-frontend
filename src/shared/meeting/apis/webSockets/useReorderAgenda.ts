@@ -5,17 +5,12 @@ import { getCookie } from '@shared/common/utils';
 import { useGetAgendaList } from '@shared/meeting/apis';
 import { BROKER_URL } from '@shared/common/constants';
 
-export interface ControlAgendaMessage {
-  action: 'start' | 'pause' | 'resume' | 'extend' | 'reduce' | 'end';
-  modifiedDuration?: string;
+export interface ReorderAgendaMessage {
+  agendaIds: number[];
 }
 
-export const useControlAgenda = (
-  meetingId: string,
-  agendaId: number,
-  isFirstPendingAgenda: boolean
-) => {
-  const client = useRef<StompJs.Client | null>();
+export const useReorderAgenda = (meetingId: string) => {
+  const client = useRef<StompJs.Client>();
   const subscription = useRef<StompJs.StompSubscription>();
 
   const { refetch: refetchAgendaList } = useGetAgendaList({
@@ -36,7 +31,7 @@ export const useControlAgenda = (
       heartbeatOutgoing: 4000,
       onConnect: () => {
         subscription.current = client.current?.subscribe(
-          `/topic/meeting/${meetingId}/agendas/${agendaId}/status`,
+          `/topic/meeting/${meetingId}/agendas/order`,
           (message) => {
             if (message.body) {
               refetchAgendaList();
@@ -50,21 +45,21 @@ export const useControlAgenda = (
     });
 
     client.current.activate();
-  }, [meetingId, agendaId, refetchAgendaList]);
+  }, [meetingId, refetchAgendaList]);
 
-  const sendControlAgendaMessage = useCallback(
-    (message: ControlAgendaMessage) => {
+  const sendReorderAgendaMessage = useCallback(
+    (message: ReorderAgendaMessage) => {
       if (!client.current?.active) {
         console.warn('WebSocket connection not active');
         return;
       }
 
       client.current.publish({
-        destination: `/app/meeting/${meetingId}/agendas/${agendaId}/action`,
+        destination: `/app/meeting/${meetingId}/agendas/order`,
         body: JSON.stringify(message)
       });
     },
-    [meetingId, agendaId]
+    [meetingId]
   );
 
   const disconnect = useCallback(() => {
@@ -73,14 +68,12 @@ export const useControlAgenda = (
   }, []);
 
   useEffect(() => {
-    if (isFirstPendingAgenda) {
-      connect();
-    }
+    connect();
     return () => disconnect();
-  }, [isFirstPendingAgenda, connect, disconnect]);
+  }, [connect, disconnect]);
 
   return {
-    sendControlAgendaMessage,
+    sendReorderAgendaMessage,
     isConnected: !!client.current?.active
   };
 };

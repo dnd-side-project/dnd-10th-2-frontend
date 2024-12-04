@@ -22,9 +22,10 @@ import { useOpen, useBottomSheet } from '@shared/common/hooks';
 import { getCookie } from '@shared/common/utils';
 import { AgendaResponse } from '@shared/meeting/apis/types';
 import {
+  useAddAgenda,
   useEndMeeting,
   useGetAgendaList,
-  useReorderAgendaList
+  useReorderAgenda
 } from '@shared/meeting/apis';
 
 import {
@@ -51,15 +52,14 @@ const MeetingPage = () => {
     meetingId
   });
 
-  const { mutate: reorderAgendaList } = useReorderAgendaList({
-    token: getCookie('token'),
-    meetingId
-  });
-
   const { mutate: endMeeting } = useEndMeeting({
     token: getCookie('token'),
     meetingId
   });
+
+  const { sendAddAgendaMessage } = useAddAgenda(meetingId);
+
+  const { sendReorderAgendaMessage } = useReorderAgenda(meetingId);
 
   const [agendaList, setAgendaList] = useState<AgendaResponseWithOrder[]>([]);
 
@@ -86,7 +86,7 @@ const MeetingPage = () => {
     const [removed] = reorderedAgendaList.splice(result.source.index, 1);
     reorderedAgendaList.splice(result.destination.index, 0, removed);
 
-    reorderAgendaList({
+    sendReorderAgendaMessage({
       agendaIds: reorderedAgendaList.map((agenda) => agenda.agendaId)
     });
 
@@ -98,8 +98,9 @@ const MeetingPage = () => {
   )?.agendaId;
 
   const isDragDisabled = agendaList.some(
-    (agenda) => agenda.status === 'INPROGRESS'
+    (agenda) => agenda.status === 'INPROGRESS' || agenda.status === 'PAUSED'
   );
+
   return (
     <Wrapper direction="column" justify="flex-start">
       {/* TODO Header onClick 핸들러 연결, background-color */}
@@ -217,8 +218,7 @@ const MeetingPage = () => {
                 content: (
                   <AgendaSheet
                     type="AGENDA"
-                    meetingId={meetingId}
-                    refetchAgendaList={refetchAgendaList}
+                    sendAddAgendaMessage={sendAddAgendaMessage}
                   />
                 )
               })
@@ -228,8 +228,7 @@ const MeetingPage = () => {
                 content: (
                   <AgendaSheet
                     type="BREAK"
-                    meetingId={meetingId}
-                    refetchAgendaList={refetchAgendaList}
+                    sendAddAgendaMessage={sendAddAgendaMessage}
                   />
                 )
               })

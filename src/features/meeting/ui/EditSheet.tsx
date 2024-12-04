@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import styled from '@emotion/styled';
 
 import {
   Flex,
@@ -9,24 +11,18 @@ import {
   TimePicker
 } from '@shared/common/ui';
 import { useBottomSheet, useTimePicker } from '@shared/common/hooks';
-import { useControlAgenda } from '@shared/meeting/apis';
+import { ControlAgendaMessage } from '@shared/meeting/apis';
 
 import { formatDuration } from '@features/meeting-create/utils';
-import styled from '@emotion/styled';
-import { useState } from 'react';
 
 export const EditSheet = ({
   type,
-  meetingId,
-  agendaId,
   title,
-  isFirstPendingAgenda
+  sendControlAgendaMessage
 }: {
   type: 'AGENDA' | 'BREAK';
-  meetingId: string;
-  agendaId: number;
   title: string;
-  isFirstPendingAgenda: boolean;
+  sendControlAgendaMessage: (message: ControlAgendaMessage) => void;
 }) => {
   const [editState, setEditState] = useState<'extend' | 'reduce' | null>(null);
 
@@ -46,12 +42,6 @@ export const EditSheet = ({
     closeTimePicker
   } = useTimePicker();
 
-  const { sendMessage } = useControlAgenda(
-    meetingId,
-    agendaId,
-    isFirstPendingAgenda
-  );
-
   const handleComplete = async () => {
     if (!editState) return;
 
@@ -61,9 +51,11 @@ export const EditSheet = ({
         minute: minute || '00'
       });
 
-      sendMessage(editState, modifiedDuration);
+      sendControlAgendaMessage({
+        action: editState,
+        modifiedDuration: modifiedDuration
+      });
       closeBottomSheet();
-      sendMessage('resume');
     } catch (error) {
       console.log(`Error: ${error}`);
       throw error;

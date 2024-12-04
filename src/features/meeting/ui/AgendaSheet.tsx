@@ -9,19 +9,16 @@ import {
   TimePicker
 } from '@shared/common/ui';
 import { useBottomSheet, useTimePicker } from '@shared/common/hooks';
-import { useAddAgenda } from '@shared/meeting/apis';
-import { getCookie } from '@shared/common/utils';
 
 import { formatDuration } from '@features/meeting-create/utils';
+import { AddAgendaMessage } from '@/shared/meeting/apis';
 
 export const AgendaSheet = ({
   type,
-  meetingId,
-  refetchAgendaList
+  sendAddAgendaMessage
 }: {
   type: 'AGENDA' | 'BREAK';
-  meetingId: string;
-  refetchAgendaList: () => void;
+  sendAddAgendaMessage: (message: AddAgendaMessage) => void;
 }) => {
   const {
     register,
@@ -29,24 +26,23 @@ export const AgendaSheet = ({
     getValues,
     formState: { errors }
   } = useForm({ defaultValues: { agendaTitle: '' }, mode: 'onChange' });
+
   const { closeBottomSheet } = useBottomSheet();
+
   const { timePicker, setTime, closeTimePicker } = useTimePicker();
 
-  const { mutate } = useAddAgenda({
-    token: getCookie('token'),
-    meetingId,
+  const addAgendaMessage = {
     title: getValues('agendaTitle'),
     type,
     allocatedDuration: formatDuration({
       hour: timePicker.time.hour,
       minute: timePicker.time.minute
-    }),
-    refetchAgendaList
-  });
+    })
+  };
 
-  const handleButton = async () => {
+  const handleComplete = async () => {
     try {
-      mutate();
+      sendAddAgendaMessage(addAgendaMessage);
       closeBottomSheet();
     } catch (error) {
       console.log(`Error: ${error}`);
@@ -86,7 +82,7 @@ export const AgendaSheet = ({
 
       <Space height={24} />
 
-      <Button size={'lg'} backgroundColor={'main'} onClick={handleButton}>
+      <Button size={'lg'} backgroundColor={'main'} onClick={handleComplete}>
         완료하기
       </Button>
 

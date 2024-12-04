@@ -7,15 +7,9 @@ import {
 
 import { Flex } from '@shared/common/ui';
 import { theme } from '@shared/common/styles';
+import { ControlAgendaMessage } from '@shared/meeting/apis';
 
 import { formatSeconds, formatEndTime } from '@features/meeting/utils';
-
-interface TimerProps {
-  time: number;
-  serverTime: Date;
-  isPlaying: boolean;
-  sendMessage: (action: string) => void;
-}
 
 /**
  * @default button: (button 태그 속성 그대로)
@@ -27,8 +21,13 @@ export const Timer = ({
   time,
   serverTime,
   isPlaying,
-  sendMessage
-}: TimerProps) => {
+  sendControlAgendaMessage
+}: {
+  time: number;
+  serverTime: Date;
+  isPlaying: boolean;
+  sendControlAgendaMessage: (message: ControlAgendaMessage) => void;
+}) => {
   return (
     <TimerWrapper justify="flex-start" direction="column">
       <Chip>
@@ -45,7 +44,7 @@ export const Timer = ({
         trailColor={theme.palette.timer_trail as ColorFormat}
         strokeWidth={13}
         onComplete={() => {
-          sendMessage('end');
+          sendControlAgendaMessage({ action: 'end' });
         }}>
         {({ remainingTime }) => formatSeconds(remainingTime)}
       </CountdownCircleTimer>
