@@ -45,7 +45,7 @@ export const Toast = () => {
 const StyledToast = styled(motion.div)`
   ${({ theme }) => theme.typo.T7}
   color: ${({ theme }) => theme.palette.white};
-  position: absolute;
+  position: fixed;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
