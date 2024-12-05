@@ -55,6 +55,7 @@ export const EditSheet = ({
         action: editState,
         modifiedDuration: modifiedDuration
       });
+
       closeBottomSheet();
     } catch (error) {
       console.log(`Error: ${error}`);
