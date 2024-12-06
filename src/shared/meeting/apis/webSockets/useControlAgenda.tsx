@@ -74,7 +74,7 @@ export const useControlAgenda = (
           showToast({
             content: (
               <>
-                <SvgIcon id="check_circle" />
+                <SvgIcon id="check" />
                 <span>안건이 시작되었어요</span>
               </>
             )
@@ -104,7 +104,7 @@ export const useControlAgenda = (
           showToast({
             content: (
               <>
-                <SvgIcon id="check_circle" />
+                <SvgIcon id="check" />
                 <span>시간이 추가되었어요</span>
               </>
             )
@@ -114,7 +114,7 @@ export const useControlAgenda = (
           showToast({
             content: (
               <>
-                <SvgIcon id="check_circle" />
+                <SvgIcon id="check" />
                 <span>시간이 단축되었어요</span>
               </>
             )
@@ -124,7 +124,7 @@ export const useControlAgenda = (
           showToast({
             content: (
               <>
-                <SvgIcon id="check_circle" />
+                <SvgIcon id="check" />
                 <span>안건이 종료되었어요</span>
               </>
             )
