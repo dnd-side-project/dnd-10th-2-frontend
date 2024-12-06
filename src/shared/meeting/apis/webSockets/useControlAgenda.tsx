@@ -4,6 +4,8 @@ import * as StompJs from '@stomp/stompjs';
 import { getCookie } from '@shared/common/utils';
 import { useGetAgendaList } from '@shared/meeting/apis';
 import { BROKER_URL } from '@shared/common/constants';
+import { useToast } from '@shared/common/hooks';
+import { SvgIcon } from '@shared/common/ui';
 
 export interface ControlAgendaMessage {
   action: 'start' | 'pause' | 'resume' | 'extend' | 'reduce' | 'end';
@@ -22,6 +24,8 @@ export const useControlAgenda = (
     token: getCookie('token'),
     meetingId
   });
+
+  const { showToast } = useToast();
 
   const connect = useCallback(() => {
     if (client.current?.active) return;
@@ -63,8 +67,72 @@ export const useControlAgenda = (
         destination: `/app/meeting/${meetingId}/agendas/${agendaId}/action`,
         body: JSON.stringify(message)
       });
+
+      // console.log(message.action);
+      switch (message.action) {
+        case 'start':
+          showToast({
+            content: (
+              <>
+                <SvgIcon id="check" />
+                <span>안건이 시작되었어요</span>
+              </>
+            )
+          });
+          break;
+        case 'pause':
+          showToast({
+            content: (
+              <>
+                <SvgIcon id="warning" />
+                <span>일시정지 되었어요</span>
+              </>
+            )
+          });
+          break;
+        case 'resume':
+          showToast({
+            content: (
+              <>
+                <SvgIcon id="check" />
+                <span>안건이 재개되었어요</span>
+              </>
+            )
+          });
+          break;
+        case 'extend':
+          showToast({
+            content: (
+              <>
+                <SvgIcon id="check" />
+                <span>시간이 추가되었어요</span>
+              </>
+            )
+          });
+          break;
+        case 'reduce':
+          showToast({
+            content: (
+              <>
+                <SvgIcon id="check" />
+                <span>시간이 단축되었어요</span>
+              </>
+            )
+          });
+          break;
+        case 'end':
+          showToast({
+            content: (
+              <>
+                <SvgIcon id="check" />
+                <span>안건이 종료되었어요</span>
+              </>
+            )
+          });
+          break;
+      }
     },
-    [meetingId, agendaId]
+    [meetingId, agendaId, showToast]
   );
 
   const disconnect = useCallback(() => {
