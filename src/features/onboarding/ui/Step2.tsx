@@ -104,6 +104,7 @@ const StyledTitle2 = styled.div`
   font-weight: 700;
   line-height: 4.4rem;
   letter-spacing: -0.6px;
+  color: ${({ theme }) => theme.palette.dark_gray2};
 `;
 
 const StyledFeature = styled.div`
