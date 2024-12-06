@@ -6,3 +6,4 @@ export * from './Step2Feature3';
 export * from './Step2Graphic';
 export * from './Step3Content';
 export * from './Step4Content';
+export * from './Step5Content';
