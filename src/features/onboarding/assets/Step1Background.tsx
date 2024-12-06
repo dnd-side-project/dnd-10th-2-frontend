@@ -1,4 +1,4 @@
-export const BackgroundIcon = () => (
+export const Step1Background = () => (
   <svg viewBox="0 0 375 649" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M375 0H0V618H375V0Z" fill="#5784FD" />
     <path d="M0 436.803L375 399V649H0V436.803Z" fill="white" />
