@@ -1,6 +1,9 @@
-// import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
+import { css } from '@emotion/react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+// import { type Swiper as SwiperRef } from 'swiper';
+import 'swiper/css';
 
 import { SvgIcon } from '@shared/common/ui';
 import { media } from '@shared/common/styles';
@@ -9,14 +12,32 @@ import {
   KAKAO_LOGIN_URL
 } from '@shared/onboarding/constants';
 
-import { Step1, Step2 } from '@features/onboarding/ui';
+import { Step1, Step2, Step3, Step4, Step5 } from '@features/onboarding/ui';
 
 const OnboardingPage = () => {
-  // const [step, setStep] = useState(2);
   return (
     <StyledContainer>
-      <Step1 />
-      <Step2 />
+      <Swiper
+        css={css`
+          width: 100%;
+          height: 100%;
+        `}>
+        <SwiperSlide>
+          <Step1 />
+        </SwiperSlide>
+        <SwiperSlide>
+          <Step2 />
+        </SwiperSlide>
+        <SwiperSlide>
+          <Step3 />
+        </SwiperSlide>
+        <SwiperSlide>
+          <Step4 />
+        </SwiperSlide>
+        <SwiperSlide>
+          <Step5 />
+        </SwiperSlide>
+      </Swiper>
 
       {/* <Link to={GOOGLE_LOGIN_URL}>
         <div>
@@ -62,6 +83,8 @@ const StyledButton = styled.button`
   color: ${(props) => props.theme.palette.black};
   gap: 1rem;
   transition: opacity 0.1s ease-in-out;
+  z-index: 1;
+
   &:hover,
   &:focus {
     opacity: 0.8;
