@@ -4,6 +4,8 @@ import { css } from '@emotion/react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 // import { type Swiper as SwiperRef } from 'swiper';
 import 'swiper/css';
+import 'swiper/css/pagination';
+import { Pagination } from 'swiper/modules';
 
 import { SvgIcon } from '@shared/common/ui';
 import { media } from '@shared/common/styles';
@@ -14,10 +16,14 @@ import {
 
 import { Step1, Step2, Step3, Step4, Step5 } from '@features/onboarding/ui';
 
+import '@features/onboarding/styles/pagination.css';
+
 const OnboardingPage = () => {
   return (
     <StyledContainer>
       <Swiper
+        pagination
+        modules={[Pagination]}
         css={css`
           width: 100%;
           height: 100%;
