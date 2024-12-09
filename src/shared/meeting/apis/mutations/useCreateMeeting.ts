@@ -45,7 +45,7 @@ export const useCreateMeeting = ({
       console.log('error');
     },
     onSuccess: ({ meetingId }) => {
-      navigate(`/meeting-room/${meetingId}`);
+      navigate(`/meeting/${meetingId}`);
     }
   });
 

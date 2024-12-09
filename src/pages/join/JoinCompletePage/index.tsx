@@ -36,7 +36,7 @@ const JoinComplete = () => {
         <Button
           size="lg"
           backgroundColor="main"
-          onClick={() => navigate('/create-meeting-room')}>
+          onClick={() => navigate('/meeting/create')}>
           회의 만들기
         </Button>
       </StyledButton>
