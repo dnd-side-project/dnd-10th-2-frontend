@@ -1,6 +1,8 @@
 // import App from '@/App';
 import { LoginLayout } from '@shared/common/ui';
 
+import MainPage from '@pages/main/MainPage';
+
 import Onboarding from '@pages/onboarding/OnboardingPage';
 
 import Join from '@pages/join/JoinPage';
@@ -23,14 +25,14 @@ type RouteChildren = {
 const routeChildren: RouteChildren[] = [
   {
     path: '/',
+    element: <MainPage />,
+    auth: false
+  },
+  {
+    path: '/onboarding',
     element: <Onboarding />,
     auth: false
   },
-  // {
-  //   path: '/onboarding',
-  //   element: <Onboarding />,
-  //   auth: false
-  // },
   {
     path: '/join',
     element: <Join />,
