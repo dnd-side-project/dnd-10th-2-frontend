@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import { useForm } from 'react-hook-form';
@@ -15,6 +15,8 @@ import { formatDateTime, formatDuration } from '@features/meeting-create/utils';
 
 const MeetingCreatePage = () => {
   const { stepList, currentStep, prevStep, nextStep } = useStep();
+
+  const navigate = useNavigate();
 
   const {
     register,
@@ -75,10 +77,14 @@ const MeetingCreatePage = () => {
   });
 
   const handlePrev = useCallback(() => {
+    if (currentStep === 1) {
+      navigate('/');
+    }
     if (currentStep > 1) {
       prevStep();
+      return;
     }
-  }, [currentStep, prevStep]);
+  }, [currentStep, prevStep, navigate]);
 
   const handleButton = () => {
     switch (currentStep) {

@@ -55,7 +55,6 @@ const Join = () => {
   }, [token, setValue, navigate]);
 
   useEffect(() => {
-    console.log('mount');
     getUserData();
   }, [getUserData]);
 

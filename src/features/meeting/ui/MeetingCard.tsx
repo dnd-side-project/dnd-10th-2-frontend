@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { keyframes } from '@emotion/react';
 
 import { Flex, Space, Text, SvgIcon } from '@shared/common/ui';
 import {
   useGetMeeting,
-  // useGetMeetingDuration,
+  useGetMeetingDuration,
   useGetMeetingMemberList
 } from '@shared/meeting/apis';
 import { getCookie } from '@shared/common/utils';
@@ -17,6 +17,8 @@ import { UserListSheet } from './UserListSheet';
 
 export const MeetingCard = () => {
   const meetingId = useParams().meetingId || '';
+
+  const navigate = useNavigate();
 
   const { openBottomSheet } = useBottomSheet();
 
@@ -30,33 +32,19 @@ export const MeetingCard = () => {
     token: getCookie('token')
   });
 
-  // WebSocket
-  const [currentDuration, setCurrentDuration] = useState<string | undefined>(
-    undefined
-  );
-
-  const incrementCurrentDuration = useCallback(() => {
-    if (!currentDuration) return;
-
-    const [hours, minutes, seconds] = currentDuration.split(':').map(Number);
-
-    const date = new Date();
-    date.setHours(hours);
-    date.setMinutes(minutes);
-    date.setSeconds(seconds + 1);
-
-    const newCurrentDuration = date.toTimeString().split(' ')[0]; // HH:mm:ss 형식으로 변환
-    setCurrentDuration(newCurrentDuration);
-  }, [currentDuration]);
+  const { meetingDuration, sendGetMeetingDurationMessage } =
+    useGetMeetingDuration(meetingId);
 
   useEffect(() => {
-    setCurrentDuration(meetingData?.currentDuration);
-  }, [meetingData]);
-
-  useEffect(() => {
-    const interval = setInterval(incrementCurrentDuration, 1000);
+    const interval = setInterval(sendGetMeetingDurationMessage, 1000);
     return () => clearInterval(interval);
-  }, [incrementCurrentDuration]);
+  }, [sendGetMeetingDurationMessage]);
+
+  useEffect(() => {
+    if (meetingData?.meetingStatus === 'COMPLETED') {
+      navigate(`/meeting/${meetingId}/complete`);
+    }
+  });
   return (
     <MeetingCardWrapper
       direction="column"
@@ -75,7 +63,7 @@ export const MeetingCard = () => {
         <Text typo="T3" color="white">
           {meetingData?.title}
         </Text>
-        {/* <UserListButton onClick={onClickUserList}>참여자 목록</UserListButton> */}
+
         <UserListButton
           onClick={() =>
             openBottomSheet({
@@ -107,8 +95,7 @@ export const MeetingCard = () => {
           회의가 시작한지
         </Text>
         <Text typo="T4" color="white">
-          {/* {meetingData?.currentDuration} */}
-          {currentDuration}
+          {meetingDuration}
         </Text>
         <Text typo="BM3" color="white">
           지났어요

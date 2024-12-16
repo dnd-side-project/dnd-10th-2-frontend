@@ -1,70 +1,69 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import * as StompJs from '@stomp/stompjs';
-// import SockJS from 'sockjs-client';
 
 import { getCookie } from '@shared/common/utils';
 import { BROKER_URL } from '@shared/common/constants';
 
-export const useGetMeetingDuration = () => {
-  const client = useRef<StompJs.Client | null>();
+export const useGetMeetingDuration = (meetingId: string) => {
+  const client = useRef<StompJs.Client>();
+  const subscription = useRef<StompJs.StompSubscription>();
+  const [meetingDuration, setMeetingDuration] = useState('00:00:00');
 
-  const connect = () => {
+  const connect = useCallback(() => {
+    if (client.current?.active) return;
+
     client.current = new StompJs.Client({
       brokerURL: BROKER_URL,
       connectHeaders: {
         Authorization: `${getCookie('token')}`
       },
-      debug: (str) => {
-        console.log(str);
-      },
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000
+      heartbeatOutgoing: 4000,
+      onConnect: () => {
+        subscription.current = client.current?.subscribe(
+          `/topic/meeting/${meetingId}/current-duration`,
+          (message) => {
+            if (message.body) {
+              setMeetingDuration(
+                JSON.parse(message.body).body.response.currentDuration
+              );
+            }
+          }
+        );
+      },
+      onStompError: (frame) => {
+        console.error('STOMP Error:', frame);
+      }
     });
 
-    // client.current.webSocketFactory = function () {
-    //   return new SockJS(
-    //     'http://facerain-dev.iptime.org:8080/ws/app/meeting/65/agendas/59/action?action=resume'
-    //   );
-    // };
-
-    const callback = (message: StompJs.Message) => {
-      if (message.body) {
-        console.log('[회의실 입장]', JSON.parse(message.body));
-        // let msg = JSON.parse(message.body);
-      }
-    };
-
-    const subscribe = () => {
-      client.current?.subscribe('/topic/meeting/65/current-duration', callback);
-    };
-
-    const sendMessage = () => {
-      client.current?.publish({
-        destination: '/app/meeting/65/current-duration',
-        body: JSON.stringify({})
-      });
-    };
-
-    client.current.onConnect = () => {
-      subscribe();
-      sendMessage();
-    };
-
     client.current.activate();
+  }, [meetingId]);
 
-    // changeClient(client.current); // 클라이언트 갱신
-  };
-
-  const disConnect = () => {
-    if (client.current === null) {
+  const sendGetMeetingDurationMessage = useCallback(() => {
+    if (!client.current?.active) {
+      console.warn('WebSocket connection not active');
       return;
     }
+
+    client.current.publish({
+      destination: `/app/meeting/${meetingId}/current-duration`
+    });
+  }, [meetingId]);
+
+  const disconnect = useCallback(() => {
+    subscription.current?.unsubscribe();
     client.current?.deactivate();
-  };
+  }, []);
 
   useEffect(() => {
     connect();
-    return () => disConnect();
-  }, []);
+    return () => disconnect();
+  }, [connect, disconnect]);
+
+  return {
+    meetingDuration,
+    sendGetMeetingDurationMessage,
+    isConnected: !!client.current?.active
+  };
 };
