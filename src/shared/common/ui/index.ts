@@ -1,5 +1,5 @@
 export * from './Layout/Layout';
-export * from './Layout/LoginLayout';
+export * from './Layout/AuthLayout';
 export * from './Wrapper';
 export * from './BottomSheet/BottomSheet';
 export * from './Button/Button';

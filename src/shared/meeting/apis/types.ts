@@ -26,7 +26,7 @@ export interface GetMeetingResponse {
     meetingId: number;
     title: string;
     description: string;
-    meetingStatus: string;
+    meetingStatus: 'SCHEDULED' | 'INPROGRESS' | 'COMPLETED' | 'CANCELED';
     hostMemberId: number;
     startTime: string;
     totalEstimatedDuration: string; // 회의 예상 소요시간

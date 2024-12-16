@@ -1,5 +1,5 @@
 // import App from '@/App';
-import { LoginLayout } from '@shared/common/ui';
+import { AuthLayout } from '@shared/common/ui';
 
 import MainPage from '@pages/main/MainPage';
 
@@ -26,7 +26,7 @@ const routeChildren: RouteChildren[] = [
   {
     path: '/',
     element: <MainPage />,
-    auth: false
+    auth: true
   },
   {
     path: '/onboarding',
@@ -41,7 +41,7 @@ const routeChildren: RouteChildren[] = [
   {
     path: '/join/complete',
     element: <JoinComplete />,
-    auth: false
+    auth: true
   },
   {
     path: '/meeting/create',
@@ -63,7 +63,7 @@ const routeChildren: RouteChildren[] = [
 const browserRouter = routeChildren.map(({ path, element, auth }) => {
   return {
     path,
-    element: auth ? <LoginLayout>{element}</LoginLayout> : element
+    element: <AuthLayout auth={auth}>{element}</AuthLayout>
   };
 });
 

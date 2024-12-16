@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 import {
   DragDropContext,
@@ -41,6 +41,8 @@ export interface AgendaResponseWithOrder extends AgendaResponse {
 }
 
 const MeetingPage = () => {
+  const navigate = useNavigate();
+
   const meetingId = useParams().meetingId || '';
 
   const { open, onOpen, onClose } = useOpen();
@@ -205,7 +207,7 @@ const MeetingPage = () => {
           </ExitButtonChip>
         </Flex>
 
-        <ExitButton>회의실 나가기</ExitButton>
+        <ExitButton onClick={() => navigate('/')}>회의실 나가기</ExitButton>
 
         <Space height={220} />
       </Flex>
