@@ -1,59 +1,82 @@
 import { useNavigate } from 'react-router-dom';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import { motion, AnimatePresence } from 'framer-motion';
 
 import { SvgIcon } from '@shared/common/ui';
 
 import { UserProfileIcon } from '@features/meeting/assets';
 import { MyMeetingRoomIcon } from './MyMeetingRoomIcon';
 
-export const HamburgerMenu = ({ onClose }: { onClose: () => void }) => {
+export const HamburgerMenu = ({
+  open,
+  onClose
+}: {
+  open: boolean;
+  onClose: () => void;
+}) => {
   const navigate = useNavigate();
 
   return (
-    <StyledContainer>
-      <div
-        css={css`
-          width: 27rem;
-          height: 100%;
-        `}>
-        <StyledProfile>
-          <UserProfileIcon id={0} />
-          <StyledProfileNickname>이동현</StyledProfileNickname>
-        </StyledProfile>
+    <AnimatePresence>
+      {open && (
+        <StyledContainer
+          initial={{ translateX: '-27rem' }}
+          animate={{ translateX: 0 }}
+          exit={{ translateX: '-27rem' }}
+          transition={{ ease: 'linear' }}>
+          <motion.div
+            css={css`
+              width: 27rem;
+              height: 100%;
+            `}>
+            <StyledProfile>
+              <UserProfileIcon id={0} />
+              <StyledProfileNickname>이동현</StyledProfileNickname>
+            </StyledProfile>
 
-        <div
-          css={css`
-            height: calc(100% - 11rem);
-            background-color: #f7f8f9;
-            padding-top: 3rem;
-            padding-left: 1.6rem;
-            padding-right: 1.6rem;
-          `}>
-          <StyledMyMeetingButton
-            onClick={() => {
-              navigate('/');
-            }}>
-            <MyMeetingRoomIcon />
-            <StyledMyMeetingButtonText>나의 회의실</StyledMyMeetingButtonText>
-            <SvgIcon id="arrow_right" />
-          </StyledMyMeetingButton>
+            <div
+              css={css`
+                height: calc(100% - 11rem);
+                background-color: #f7f8f9;
+                padding-top: 3rem;
+                padding-left: 1.6rem;
+                padding-right: 1.6rem;
+              `}>
+              <StyledMyMeetingButton
+                onClick={() => {
+                  navigate('/');
+                }}>
+                <MyMeetingRoomIcon />
+                <StyledMyMeetingButtonText>
+                  나의 회의실
+                </StyledMyMeetingButtonText>
+                <SvgIcon id="arrow_right" />
+              </StyledMyMeetingButton>
 
-          <StyledCreateMeetingButton
-            onClick={() => {
-              navigate('/meeting/create');
-            }}>
-            회의 만들기
-          </StyledCreateMeetingButton>
-        </div>
-      </div>
+              <StyledCreateMeetingButton
+                onClick={() => {
+                  navigate('/meeting/create');
+                }}>
+                회의 만들기
+              </StyledCreateMeetingButton>
+            </div>
+          </motion.div>
 
-      <StyledDim onClick={onClose} />
-    </StyledContainer>
+          <StyledDim
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ ease: 'linear', delay: 0.3 }}
+            onClick={onClose}
+          />
+        </StyledContainer>
+      )}
+    </AnimatePresence>
   );
 };
 
-const StyledContainer = styled.div`
+const StyledContainer = styled(motion.div)`
   position: absolute;
   top: 0;
   left: 0;
@@ -106,7 +129,7 @@ const StyledCreateMeetingButton = styled.div`
   margin-top: 1rem;
 `;
 
-const StyledDim = styled.div`
+const StyledDim = styled(motion.div)`
   width: calc(100% - 27rem);
   height: 100%;
   background-color: rgba(10, 17, 28, 0.6);
