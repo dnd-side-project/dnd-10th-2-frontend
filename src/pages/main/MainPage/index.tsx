@@ -4,7 +4,15 @@ import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 
-import { Button, Flex, Header, Space, SvgIcon } from '@shared/common/ui';
+import {
+  Button,
+  Flex,
+  HamburgerMenu,
+  Header,
+  Space,
+  SvgIcon
+} from '@shared/common/ui';
+import { useOpen } from '@shared/common/hooks';
 // import { useGetMeetingList } from '@shared/main/apis';
 // import { getCookie } from '@shared/common/utils';
 
@@ -27,6 +35,8 @@ const MainPage = () => {
 
   const navigate = useNavigate();
 
+  const { open, onOpen, onClose } = useOpen();
+
   // const handleMenu = (status: 'ongoing' | 'upcoming' | 'concluded') => {
   //   setCurrentStatus(status);
   // };
@@ -38,44 +48,45 @@ const MainPage = () => {
   // console.log(data);
 
   return (
-    <Flex
-      direction="column"
-      justify="space-between"
-      css={css`
-        min-height: 100vh;
-      `}>
-      {/* <div
+    <>
+      <Flex
+        direction="column"
+        justify="space-between"
+        css={css`
+          min-height: 100vh;
+        `}>
+        {/* <div
         css={css`
           width: 100%;
           margin-bottom: 11.4rem;
         `}> */}
-      <Header>
-        <Header.Left>
-          <SvgIcon id="hamburger_menu" />
-        </Header.Left>
-        <Header.Center>나의 회의실</Header.Center>
-      </Header>
+        <Header>
+          <Header.Left>
+            <SvgIcon id="hamburger_menu" onClick={onOpen} />
+          </Header.Left>
+          <Header.Center>나의 회의실</Header.Center>
+        </Header>
 
-      <Space height={15.5} />
+        <Space height={15.5} />
 
-      <div>
-        <FolderIcon />
+        <div>
+          <FolderIcon />
 
-        <div
-          css={css`
-            color: #989fae;
-            text-align: center;
-            font-size: 18px;
-            font-weight: 500;
-            line-height: 28px;
-            letter-spacing: -0.6px;
-            margin-top: 1.4rem;
-          `}>
-          아직 준비 중에요
+          <div
+            css={css`
+              color: #989fae;
+              text-align: center;
+              font-size: 18px;
+              font-weight: 500;
+              line-height: 28px;
+              letter-spacing: -0.6px;
+              margin-top: 1.4rem;
+            `}>
+            아직 준비 중에요
+          </div>
         </div>
-      </div>
 
-      {/* <StyledMenuList>
+        {/* <StyledMenuList>
           {menuList.map((menu) => (
             <StyledMenu key={menu.id} onClick={() => handleMenu(menu.status)}>
               <StyledMenuText isCurrentStatus={menu.status === currentStatus}>
@@ -87,18 +98,21 @@ const MainPage = () => {
           ))}
         </StyledMenuList> */}
 
-      <Space height={30} />
-      {/* </div> */}
+        <Space height={30} />
+        {/* </div> */}
 
-      <StyledButton>
-        <Button
-          size="lg"
-          backgroundColor="main"
-          onClick={() => navigate('/meeting/create')}>
-          회의 만들기
-        </Button>
-      </StyledButton>
-    </Flex>
+        <StyledButton>
+          <Button
+            size="lg"
+            backgroundColor="main"
+            onClick={() => navigate('/meeting/create')}>
+            회의 만들기
+          </Button>
+        </StyledButton>
+      </Flex>
+
+      {open && <HamburgerMenu open={open} onClose={onClose} />}
+    </>
   );
 };
 
