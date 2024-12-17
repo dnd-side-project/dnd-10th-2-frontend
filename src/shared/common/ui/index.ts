@@ -12,3 +12,4 @@ export * from './TimePicker/TimePicker';
 export * from './Toast/Toast';
 export * from './DatePicker/DatePicker';
 export * from './Dialog/Dialog';
+export * from './HamburgerMenu/HamburgerMenu';
