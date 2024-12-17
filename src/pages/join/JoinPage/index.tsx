@@ -5,7 +5,8 @@ import { useForm } from 'react-hook-form';
 
 import { Space, Button, Header, Input, SvgIcon } from '@shared/common/ui';
 import { media } from '@shared/common/styles';
-import { getUserInfo, updateNickname } from 'shared/join/apis';
+import { getUserInfo, updateNickname } from '@shared/join/apis';
+import { setCookie } from '@shared/common/utils';
 
 const Join = () => {
   const {
@@ -33,7 +34,7 @@ const Join = () => {
 
     try {
       await updateNickname(nickname, token);
-      document.cookie = `token=${token}`;
+      setCookie('token', token);
       navigate('/join/complete');
     } catch {
       navigate('/onboarding');
