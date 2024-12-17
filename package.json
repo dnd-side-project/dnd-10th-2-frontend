@@ -29,6 +29,7 @@
     "msw": "^2.1.4",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
+    "react-cookie": "^7.2.2",
     "react-countdown-circle-timer": "^3.2.1",
     "react-dom": "^18.2.0",
     "react-hook-form": "7.43.9",

@@ -1,2 +1,2 @@
-export * from './getCookie';
+export * from './cookie';
 export * from './getToday';
