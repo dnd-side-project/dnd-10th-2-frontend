@@ -14,9 +14,9 @@ import { useStep } from '@features/meeting-create/hooks';
 import { formatDateTime, formatDuration } from '@features/meeting-create/utils';
 
 const MeetingCreatePage = () => {
-  const { stepList, currentStep, prevStep, nextStep } = useStep();
-
   const navigate = useNavigate();
+
+  const { stepList, currentStep, prevStep, nextStep } = useStep();
 
   const {
     register,

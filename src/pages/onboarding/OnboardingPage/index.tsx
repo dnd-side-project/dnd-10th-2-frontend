@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-// import { type Swiper as SwiperRef } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
@@ -46,8 +45,13 @@ const OnboardingPage = () => {
       </Swiper>
 
       {/* <Link to={GOOGLE_LOGIN_URL}>
-        <div>
-          <SvgIcon id="kakao" /> 구글로 계속하기
+        <div
+          css={css`
+            position: absolute;
+            bottom: 15rem;
+            z-index: 10;
+          `}>
+          구글로 계속하기
         </div>
       </Link> */}
 
