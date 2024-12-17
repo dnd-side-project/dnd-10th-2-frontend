@@ -76,19 +76,16 @@ export const Step1 = ({ register, watch, errors, setValue }: Step1Props) => {
 
         <StyledThumbnailList>
           {thumbnailList.map((thumbnail) => (
-            <button
+            <StyledThumbnail
               key={thumbnail.id}
-              onClick={() =>
-                setValue('step1.meetingThumbnail', String(thumbnail.id + 1))
-              }
-              css={css`
-                border: ${thumbnail.id + 1 ===
-                  Number(watch('step1.meetingThumbnail')) &&
-                `2px solid ${theme.palette.main_blue}`};
-                border-radius: 14px;
-              `}>
+              onClick={() => {
+                setValue('step1.meetingThumbnail', String(thumbnail.id + 1));
+              }}
+              isSelected={
+                thumbnail.id + 1 === Number(watch('step1.meetingThumbnail'))
+              }>
               {thumbnail.icon()}
-            </button>
+            </StyledThumbnail>
           ))}
         </StyledThumbnailList>
       </div>
@@ -109,5 +106,15 @@ const StyledThumbnailList = styled.div`
   display: grid;
   width: 100%;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1rem;
+  gap: 1.2rem;
+`;
+
+const StyledThumbnail = styled.button<{ isSelected: boolean }>`
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  border: ${({ isSelected }) =>
+    isSelected
+      ? `2px solid ${theme.palette.main_blue}`
+      : '2px solid transparent'};
+  border-radius: 14px;
 `;
