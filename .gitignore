@@ -23,6 +23,11 @@ dist-ssr
 *.sln
 *.sw?
 
+# dotenv environment variable files
+.env
+.env.development
+.env.production
+
 # Use Zero-Install
 .yarn/*
 !.yarn/cache
@@ -36,3 +41,5 @@ dist-ssr
 .vite
 
 .eslintcache
+
+.env

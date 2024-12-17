@@ -1,8 +1,9 @@
 import styled from '@emotion/styled';
+import { css } from '@emotion/react';
 
 import { Space } from '@shared/common/ui';
 
-import { Step4Content } from '@features/onboarding/assets';
+import Step4Image from '@features/onboarding/assets/Step4Image.png';
 
 export const Step4 = () => {
   return (
@@ -16,7 +17,18 @@ export const Step4 = () => {
 
       <Space height={20} />
 
-      <Step4Content />
+      <div
+        css={css`
+          width: 26rem;
+        `}>
+        <img
+          src={Step4Image}
+          alt="회의 중 이미지"
+          css={css`
+            width: 100%;
+          `}
+        />
+      </div>
     </StyledBackground>
   );
 };
