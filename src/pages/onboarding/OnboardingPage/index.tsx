@@ -12,12 +12,14 @@ import {
   // GOOGLE_LOGIN_URL,
   KAKAO_LOGIN_URL
 } from '@shared/onboarding/constants';
+import { useResizeHeight } from '@/shared/common/hooks';
 
 import { Step1, Step2, Step3, Step4, Step5 } from '@features/onboarding/ui';
-
 import '@features/onboarding/styles/pagination.css';
 
 const OnboardingPage = () => {
+  useResizeHeight();
+
   return (
     <StyledContainer>
       <Swiper
@@ -79,7 +81,7 @@ const StyledContainer = styled.div`
 const StyledButton = styled.button`
   position: fixed;
   left: 50%;
-  bottom: 4.4rem;
+  bottom: 4rem;
   transform: translateX(-50%);
   display: flex;
   justify-content: center;
@@ -94,11 +96,6 @@ const StyledButton = styled.button`
   gap: 1rem;
   transition: opacity 0.1s ease-in-out;
   z-index: 1;
-
-  &:hover,
-  &:focus {
-    opacity: 0.8;
-  }
 
   ${media.mobile} {
     max-width: calc(100% - 4rem);
