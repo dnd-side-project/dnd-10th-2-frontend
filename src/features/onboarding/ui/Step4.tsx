@@ -7,33 +7,35 @@ import Step4Image from '@features/onboarding/assets/Step4Image.png';
 
 export const Step4 = () => {
   return (
-    <StyledBackground>
-      <StyledType>회의 중</StyledType>
+    <StyledContainer>
+      <StyledContent>
+        <StyledType>회의 중</StyledType>
 
-      <Space height={15} />
+        <Space height={15} />
 
-      <StyledTitle>시간이 얼마나 지났을까요?</StyledTitle>
-      <StyledTitle>안건 별로 시간을 관리해요</StyledTitle>
+        <StyledTitle>시간이 얼마나 지났을까요?</StyledTitle>
+        <StyledTitle>안건 별로 시간을 관리해요</StyledTitle>
 
-      <Space height={20} />
+        <Space height={20} />
 
-      <div
-        css={css`
-          width: 26rem;
-        `}>
-        <img
-          src={Step4Image}
-          alt="회의 중 이미지"
+        <div
           css={css`
-            width: 100%;
-          `}
-        />
-      </div>
-    </StyledBackground>
+            width: 28vh;
+          `}>
+          <img
+            src={Step4Image}
+            alt="회의 중 이미지"
+            css={css`
+              width: 100%;
+            `}
+          />
+        </div>
+      </StyledContent>
+    </StyledContainer>
   );
 };
 
-const StyledBackground = styled.div`
+const StyledContainer = styled.div`
   position: absolute;
   top: 0;
   left: 0;
@@ -42,8 +44,16 @@ const StyledBackground = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 9rem;
   background-color: ${({ theme }) => theme.palette.skyblue};
+`;
+
+const StyledContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: calc(100% - 12rem);
+  padding-top: 10vh;
+  box-sizing: border-box;
 `;
 
 const StyledType = styled.div`

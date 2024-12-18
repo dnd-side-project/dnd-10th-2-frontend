@@ -12,7 +12,7 @@ import { Space } from '@/shared/common/ui';
 
 export const Step2 = () => {
   return (
-    <>
+    <StyledContainer>
       <StyledBackground>
         <Step2Background />
       </StyledBackground>
@@ -66,9 +66,16 @@ export const Step2 = () => {
           <Step2Feature3 />
         </StyledFeature>
       </StyledContent>
-    </>
+    </StyledContainer>
   );
 };
+
+const StyledContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100% - 12rem);
+`;
 
 const StyledBackground = styled.div`
   position: absolute;
@@ -88,7 +95,6 @@ const StyledContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 12rem;
 `;
 
 const StyledTitle1 = styled.div`
