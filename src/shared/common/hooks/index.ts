@@ -5,3 +5,4 @@ export * from './useDatePicker';
 export * from './useTimePicker';
 export * from './useOpen';
 export * from './useDialog';
+export * from './useResizeHeight';
