@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
@@ -18,6 +19,8 @@ import { Step1, Step2, Step3, Step4, Step5 } from '@features/onboarding/ui';
 import '@features/onboarding/styles/pagination.css';
 
 const OnboardingPage = () => {
+  const [isAlertOpened, setIsAlertOpened] = useState(true);
+
   useResizeHeight();
 
   return (
@@ -25,12 +28,17 @@ const OnboardingPage = () => {
       <Swiper
         pagination
         modules={[Pagination]}
+        onSliderFirstMove={() => {
+          if (isAlertOpened) {
+            setIsAlertOpened(false);
+          }
+        }}
         css={css`
           width: 100%;
           height: 100%;
         `}>
         <SwiperSlide>
-          <Step1 />
+          <Step1 isAlertOpened={isAlertOpened} />
         </SwiperSlide>
         <SwiperSlide>
           <Step2 />
