@@ -217,7 +217,7 @@ const StyledStepName = styled.div<{ isCurrentStep: boolean }>`
 
 const StyledButton = styled.div`
   width: 100%;
-  transform: translateY(-4.4rem);
+  transform: translateY(-4rem);
 `;
 
 export default MeetingCreatePage;

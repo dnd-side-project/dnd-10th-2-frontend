@@ -8,27 +8,29 @@ import Step5Image from '@features/onboarding/assets/Step5Image.png';
 export const Step5 = () => {
   return (
     <StyledBackground>
-      <StyledType>회의 후</StyledType>
+      <StyledContent>
+        <StyledType>회의 후</StyledType>
 
-      <Space height={15} />
+        <Space height={15} />
 
-      <StyledTitle>공유 메모를 보고</StyledTitle>
-      <StyledTitle>다음 회의를 준비해요</StyledTitle>
+        <StyledTitle>공유 메모를 보고</StyledTitle>
+        <StyledTitle>다음 회의를 준비해요</StyledTitle>
 
-      <Space height={85} />
+        <Space height={50} />
 
-      <div
-        css={css`
-          width: 28rem;
-        `}>
-        <img
-          src={Step5Image}
-          alt="회의 후 이미지"
+        <div
           css={css`
-            width: 100%;
-          `}
-        />
-      </div>
+            width: 35vh;
+          `}>
+          <img
+            src={Step5Image}
+            alt="회의 후 이미지"
+            css={css`
+              width: 100%;
+            `}
+          />
+        </div>
+      </StyledContent>
     </StyledBackground>
   );
 };
@@ -42,8 +44,16 @@ const StyledBackground = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 9rem;
   background-color: ${({ theme }) => theme.palette.skyblue};
+`;
+
+const StyledContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: calc(100% - 12rem);
+  padding-top: 10vh;
+  box-sizing: border-box;
 `;
 
 const StyledType = styled.div`

@@ -7,33 +7,35 @@ import Step3Image from '@features/onboarding/assets/Step3Image.png';
 
 export const Step3 = () => {
   return (
-    <StyledBackground>
-      <StyledType>회의 전</StyledType>
+    <StyledContainer>
+      <StyledContent>
+        <StyledType>회의 전</StyledType>
 
-      <Space height={15} />
+        <Space height={15} />
 
-      <StyledTitle>회의 전, 링크로 빠르게,</StyledTitle>
-      <StyledTitle>회의에 대한 모든 정보를 공유하고</StyledTitle>
+        <StyledTitle>회의 전, 링크로 빠르게,</StyledTitle>
+        <StyledTitle>회의에 대한 모든 정보를 공유하고</StyledTitle>
 
-      <Space height={55} />
+        <Space height={40} />
 
-      <div
-        css={css`
-          width: 27rem;
-        `}>
-        <img
-          src={Step3Image}
-          alt="회의 전 이미지"
+        <div
           css={css`
-            width: 100%;
-          `}
-        />
-      </div>
-    </StyledBackground>
+            width: 30vh;
+          `}>
+          <img
+            src={Step3Image}
+            alt="회의 전 이미지"
+            css={css`
+              width: 100%;
+            `}
+          />
+        </div>
+      </StyledContent>
+    </StyledContainer>
   );
 };
 
-const StyledBackground = styled.div`
+const StyledContainer = styled.div`
   position: absolute;
   top: 0;
   left: 0;
@@ -42,8 +44,16 @@ const StyledBackground = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 9rem;
   background-color: ${({ theme }) => theme.palette.skyblue};
+`;
+
+const StyledContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: calc(100% - 12rem);
+  padding-top: 10vh;
+  box-sizing: border-box;
 `;
 
 const StyledType = styled.div`

@@ -74,7 +74,7 @@ const StyledTitle = styled.div`
 
 const StyledButton = styled.div`
   position: absolute;
-  bottom: 4.4rem;
+  bottom: 4rem;
   width: 100%;
   max-width: calc(37.5rem - 4rem);
 
