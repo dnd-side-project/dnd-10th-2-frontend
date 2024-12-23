@@ -163,11 +163,6 @@ export const DatePicker = ({ date, setDate, onClose }: DatePickerProps) => {
                     getToday().month >= date.month &&
                     getToday().date > dateOfMonth
                   }>
-                  {console.log(
-                    getToday().year >= date.year &&
-                      getToday().month >= date.month &&
-                      getToday().date > dateOfMonth
-                  )}
                   {dateOfMonth}
                 </StyledDateNum>
               ))}
@@ -186,7 +181,6 @@ const StyledDatePicker = styled.div`
   background-color: ${({ theme }) => theme.palette.light_white};
   border-radius: 0.8rem;
   padding: 2rem;
-  box-sizing: border-box;
 `;
 
 const StyledHeader = styled.div`

@@ -50,7 +50,6 @@ const StyledToast = styled(motion.div)`
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  box-sizing: border-box;
   width: calc(37.5rem - 1.9rem);
   height: 5.2rem;
   padding: 0 2.4rem;

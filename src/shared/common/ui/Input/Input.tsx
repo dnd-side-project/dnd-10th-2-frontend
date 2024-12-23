@@ -233,8 +233,6 @@ const StyledInput = styled.input<{
   height: ${({ height }) => (height ? height : 50)}px;
   padding: 16px 12px 16px 12px;
 
-  box-sizing: border-box;
-
   background: ${theme.palette.light_white};
   border-radius: 8px;
 
@@ -270,8 +268,6 @@ const StyledTextArea = styled.textarea<{
   width: 100%;
   height: ${({ height }) => (height ? height : 92)}px;
   padding: 16px 48px 16px 12px;
-
-  box-sizing: border-box;
 
   background: ${theme.palette.light_white};
   border-radius: 8px;

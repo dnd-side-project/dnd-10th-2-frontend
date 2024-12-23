@@ -79,7 +79,6 @@ const Wrapper = styled(Flex)`
     width: 100vw;
   }
 
-  box-sizing: border-box;
   padding: 0px 20px;
 `;
 

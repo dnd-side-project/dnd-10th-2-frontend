@@ -53,7 +53,6 @@ const StyledContent = styled.div`
   align-items: center;
   height: calc(100% - 12rem);
   padding-top: 10vh;
-  box-sizing: border-box;
 `;
 
 const StyledType = styled.div`

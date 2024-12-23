@@ -247,7 +247,6 @@ const Wrapper = styled(Flex)`
   background-color: #f2f4f6;
   min-height: 100vh;
   width: 375px;
-  box-sizing: border-box;
   margin: 0px -20px;
   padding: 0px 20px;
 

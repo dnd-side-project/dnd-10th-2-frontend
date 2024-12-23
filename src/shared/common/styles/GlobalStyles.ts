@@ -21,12 +21,17 @@ export const GlobalStyle = css`
     background-color: gray;
   }
 
+  div {
+    box-sizing: border-box;
+  }
+
   button {
     background: inherit;
     border: none;
     box-shadow: none;
     border-radius: 0;
     padding: 0;
+    box-sizing: border-box;
     overflow: visible;
     cursor: pointer;
     user-select: none;
@@ -50,5 +55,6 @@ export const GlobalStyle = css`
   textarea {
     border: none;
     margin: 0;
+    box-sizing: border-box;
   }
 `;

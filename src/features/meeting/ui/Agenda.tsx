@@ -293,7 +293,6 @@ const StyledAgenda = styled.div<{ isDone: boolean }>`
   height: fit-content;
   border-radius: 18px;
   padding: 20px 10px 20px 20px;
-  box-sizing: border-box;
   flex-shrink: 0;
   background-color: ${({ isDone, theme }) =>
     isDone ? theme.palette.light_gray2 : theme.palette.white};
@@ -323,7 +322,6 @@ const StyledAgendaWrapper = styled.div`
 
 const StyledAgendaChip = styled.div<{ isDone: boolean }>`
   padding: 5px 8px;
-  box-sizing: border-box;
   border-radius: 8px;
   width: fit-content;
   ${({ theme }) => theme.typo.B6}
