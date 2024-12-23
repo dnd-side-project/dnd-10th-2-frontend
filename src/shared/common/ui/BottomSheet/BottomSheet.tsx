@@ -54,7 +54,6 @@ const StyledContent = styled(Drawer.Content)`
   background-color: ${({ theme }) => theme.palette.white};
   border-radius: 1rem 1rem 0 0;
   width: 37.5rem;
-  box-sizing: border-box;
   outline: none;
 
   ${media.mobile} {

@@ -23,8 +23,6 @@ const Wrapper = styled.div`
   background-color: ${theme.palette.white};
   padding: 0px 20px 0px 20px;
 
-  box-sizing: border-box;
-
   @media (min-width: 768px) {
     width: 375px;
   }

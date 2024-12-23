@@ -108,7 +108,6 @@ export const MeetingCard = () => {
 const MeetingCardWrapper = styled(Flex)`
   border-radius: 16px;
   padding: 25px 15px;
-  box-sizing: border-box;
   background-color: ${({ theme }) => theme.palette.main_blue};
   color: ${({ theme }) => theme.palette.white};
 `;
@@ -126,7 +125,6 @@ const TimeWrapper = styled(Flex)`
   height: 48px;
   border-radius: 12px;
   padding: 0px 20px;
-  box-sizing: border-box;
 `;
 
 const marqueeAnimation = keyframes`
@@ -139,7 +137,6 @@ const Marquee = styled.div`
   height: 24px;
   white-space: nowrap;
   overflow: hidden;
-  box-sizing: border-box;
 `;
 
 const Description = styled(Text)`

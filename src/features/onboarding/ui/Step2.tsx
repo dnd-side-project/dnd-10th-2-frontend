@@ -123,7 +123,6 @@ const StyledFeature = styled.div`
   background: rgba(255, 255, 255, 0.38);
   backdrop-filter: blur(1.2px);
   padding-left: 2.95rem;
-  box-sizing: border-box;
 `;
 
 const StyledFeatureText1 = styled.div`

@@ -104,7 +104,7 @@ const OnboardingPage = () => {
 const StyledContainer = styled.div`
   position: absolute;
   width: 37.5rem;
-  height: 100vh;
+  height: calc(var(--vh) * 100);
   margin-left: -2rem;
   overflow: hidden;
 

@@ -81,7 +81,6 @@ const Wrapper = styled(Flex)<{ isDone: boolean }>`
   border-radius: 18px;
 
   padding: 20px 10px 20px 20px;
-  box-sizing: border-box;
 
   flex-shrink: 0;
 
@@ -106,7 +105,6 @@ const AgendaWrapper = styled.div`
 
 const AgendaChip = styled.div<{ isDone: boolean }>`
   padding: 5px 8px;
-  box-sizing: border-box;
   border-radius: 8px;
   width: fit-content;
 
