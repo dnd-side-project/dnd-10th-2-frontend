@@ -103,6 +103,8 @@ export const DatePicker = ({ date, setDate, onClose }: DatePickerProps) => {
     });
   };
 
+  console.log(getToday());
+
   return (
     <StyledDatePicker>
       {/* 달력 헤더 영역(달, 년도, 화살표 아이콘) Start */}
@@ -137,7 +139,12 @@ export const DatePicker = ({ date, setDate, onClose }: DatePickerProps) => {
             <StyledDateNumList>
               {/* 빈 칸 */}
               {createArray1ToN(slide.firstDayOfMonth).map((index) => (
-                <StyledDateNum key={index} isSelected={false} isToday={false} />
+                <StyledDateNum
+                  key={index}
+                  isSelected={false}
+                  isToday={false}
+                  isPreviousDate={false}
+                />
               ))}
 
               {/* 1 ~ 31 */}
@@ -150,7 +157,17 @@ export const DatePicker = ({ date, setDate, onClose }: DatePickerProps) => {
                     getToday().year === date.year &&
                     getToday().month === date.month &&
                     getToday().date === dateOfMonth
+                  }
+                  isPreviousDate={
+                    getToday().year >= date.year &&
+                    getToday().month >= date.month &&
+                    getToday().date > dateOfMonth
                   }>
+                  {console.log(
+                    getToday().year >= date.year &&
+                      getToday().month >= date.month &&
+                      getToday().date > dateOfMonth
+                  )}
                   {dateOfMonth}
                 </StyledDateNum>
               ))}
@@ -207,7 +224,11 @@ const StyledDateNumList = styled.div`
   gap: 0.4rem;
 `;
 
-const StyledDateNum = styled.div<{ isSelected: boolean; isToday: boolean }>`
+const StyledDateNum = styled.div<{
+  isSelected: boolean;
+  isToday: boolean;
+  isPreviousDate: boolean;
+}>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -215,7 +236,11 @@ const StyledDateNum = styled.div<{ isSelected: boolean; isToday: boolean }>`
   background-color: ${({ isSelected, isToday, theme }) =>
     isSelected ? theme.palette.main_blue : isToday && theme.palette.skyblue};
   border-radius: 1.2rem;
-  color: ${({ isSelected, isToday, theme }) =>
-    isSelected ? theme.palette.white : isToday && theme.palette.main_blue};
+  color: ${({ isSelected, isToday, isPreviousDate, theme }) =>
+    isPreviousDate
+      ? theme.palette.light_gray4
+      : isSelected
+        ? theme.palette.white
+        : isToday && theme.palette.main_blue};
   cursor: pointer;
 `;

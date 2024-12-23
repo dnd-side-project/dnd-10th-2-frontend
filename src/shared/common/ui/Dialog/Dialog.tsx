@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 
 import { Button } from '@shared/common/ui';
+import { useResizeHeight } from '@shared/common/hooks';
 
 interface DialogTimerProps {
   time: number;
@@ -106,6 +107,8 @@ interface DialogMainProps {
   children?: ReactNode;
 }
 const DialogMain = ({ children }: DialogMainProps) => {
+  useResizeHeight();
+
   const el = document.getElementById('dialog');
   if (!el) {
     return null;
@@ -191,7 +194,7 @@ const StyledDialogOverlay = styled.div`
   justify-content: center;
   align-items: center;
   width: 100vw;
-  height: 100vh;
+  height: calc(var(--vh) * 100);
   background-color: rgba(10, 17, 28, 0.6);
   padding: 0 2rem;
   z-index: 99;

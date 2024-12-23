@@ -1,8 +1,8 @@
 export const FolderIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="348"
-    height="173"
+    // width="348"
+    // height="173"
     viewBox="0 0 348 173"
     fill="none">
     <g clipPath="url(#clip0_1970_12265)">

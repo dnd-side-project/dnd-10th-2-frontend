@@ -3,9 +3,11 @@ import { createPortal } from 'react-dom';
 import styled from '@emotion/styled';
 
 import { Button } from '@shared/common/ui';
-import { useModal } from '@shared/common/hooks';
+import { useModal, useResizeHeight } from '@shared/common/hooks';
 
 export const Modal = () => {
+  useResizeHeight();
+
   const {
     modal: {
       isOpened,
@@ -91,7 +93,7 @@ const StyledOverlay = styled.div`
   justify-content: center;
   align-items: center;
   width: 100vw;
-  height: 100vh;
+  height: calc(var(--vh) * 100);
   background-color: rgba(10, 17, 28, 0.6);
   padding: 0 2rem;
   z-index: 99;

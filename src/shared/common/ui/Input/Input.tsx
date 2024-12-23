@@ -231,7 +231,7 @@ const StyledInput = styled.input<{
 }>`
   width: 100%;
   height: ${({ height }) => (height ? height : 50)}px;
-  padding: 16px 59px 16px 12px;
+  padding: 16px 12px 16px 12px;
 
   box-sizing: border-box;
 
