@@ -267,7 +267,7 @@ const StyledTextArea = styled.textarea<{
 }>`
   width: 100%;
   height: ${({ height }) => (height ? height : 92)}px;
-  padding: 16px 48px 16px 12px;
+  padding: 16px 12px 16px 12px;
 
   background: ${theme.palette.light_white};
   border-radius: 8px;
