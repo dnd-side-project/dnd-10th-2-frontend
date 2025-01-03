@@ -55,6 +55,7 @@ const MeetingCompletePage = () => {
 
 const StyledContainer = styled.div`
   width: 37.5rem;
+  min-height: calc(var(--vh) * 100);
   background-color: ${({ theme }) => theme.palette.light_white};
   margin: 0px -20px;
   padding: 0px 20px;
