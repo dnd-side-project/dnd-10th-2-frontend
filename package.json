@@ -87,5 +87,10 @@
       "prettier --cache --write",
       "eslint --cache --fix --max-warnings=0"
     ]
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }

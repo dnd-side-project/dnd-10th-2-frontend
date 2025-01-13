@@ -9,6 +9,17 @@ import { Routers } from '@routes/index.tsx';
 import { Layout, Modal, Toast, BottomSheet } from '@shared/common/ui';
 import { theme, GlobalStyle } from '@shared/common/styles';
 
+const enableMocking = async () => {
+  if (process.env.NODE_ENV !== 'development') {
+    return;
+  }
+
+  if (import.meta.env.VITE_APP_API_MOCKING === 'enabled') {
+    const { worker } = await import('./mocks/browser');
+    worker.start();
+  }
+};
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -18,21 +29,23 @@ const queryClient = new QueryClient({
   }
 });
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <CookiesProvider>
-    <QueryClientProvider client={queryClient}>
-      <RecoilRoot>
-        <Global styles={GlobalStyle} />
-        <ThemeProvider theme={theme}>
-          <Layout>
-            <Routers />
-            <BottomSheet />
-            <Modal />
-            <Toast />
-          </Layout>
-        </ThemeProvider>
-      </RecoilRoot>
-      <ReactQueryDevtools />
-    </QueryClientProvider>
-  </CookiesProvider>
+enableMocking().then(() =>
+  ReactDOM.createRoot(document.getElementById('root')!).render(
+    <CookiesProvider>
+      <QueryClientProvider client={queryClient}>
+        <RecoilRoot>
+          <Global styles={GlobalStyle} />
+          <ThemeProvider theme={theme}>
+            <Layout>
+              <Routers />
+              <BottomSheet />
+              <Modal />
+              <Toast />
+            </Layout>
+          </ThemeProvider>
+        </RecoilRoot>
+        <ReactQueryDevtools />
+      </QueryClientProvider>
+    </CookiesProvider>
+  )
 );
