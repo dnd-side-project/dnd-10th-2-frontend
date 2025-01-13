@@ -9,6 +9,15 @@ import { Routers } from '@routes/index.tsx';
 import { Layout, Modal, Toast, BottomSheet } from '@shared/common/ui';
 import { theme, GlobalStyle } from '@shared/common/styles';
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      refetchOnWindowFocus: false
+    }
+  }
+});
+
 const enableMocking = async () => {
   if (process.env.NODE_ENV !== 'development') {
     return;
@@ -19,15 +28,6 @@ const enableMocking = async () => {
     worker.start();
   }
 };
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: false,
-      refetchOnWindowFocus: false
-    }
-  }
-});
 
 enableMocking().then(() =>
   ReactDOM.createRoot(document.getElementById('root')!).render(
