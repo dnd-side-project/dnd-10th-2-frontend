@@ -103,8 +103,6 @@ export const DatePicker = ({ date, setDate, onClose }: DatePickerProps) => {
     });
   };
 
-  console.log(getToday());
-
   return (
     <StyledDatePicker>
       {/* 달력 헤더 영역(달, 년도, 화살표 아이콘) Start */}
