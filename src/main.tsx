@@ -18,21 +18,34 @@ const queryClient = new QueryClient({
   }
 });
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <CookiesProvider>
-    <QueryClientProvider client={queryClient}>
-      <RecoilRoot>
-        <Global styles={GlobalStyle} />
-        <ThemeProvider theme={theme}>
-          <Layout>
-            <Routers />
-            <BottomSheet />
-            <Modal />
-            <Toast />
-          </Layout>
-        </ThemeProvider>
-      </RecoilRoot>
-      <ReactQueryDevtools />
-    </QueryClientProvider>
-  </CookiesProvider>
+const enableMocking = async () => {
+  if (process.env.NODE_ENV !== 'development') {
+    return;
+  }
+
+  if (import.meta.env.VITE_APP_API_MOCKING === 'enabled') {
+    const { worker } = await import('./mocks/browser');
+    worker.start();
+  }
+};
+
+enableMocking().then(() =>
+  ReactDOM.createRoot(document.getElementById('root')!).render(
+    <CookiesProvider>
+      <QueryClientProvider client={queryClient}>
+        <RecoilRoot>
+          <Global styles={GlobalStyle} />
+          <ThemeProvider theme={theme}>
+            <Layout>
+              <Routers />
+              <BottomSheet />
+              <Modal />
+              <Toast />
+            </Layout>
+          </ThemeProvider>
+        </RecoilRoot>
+        <ReactQueryDevtools />
+      </QueryClientProvider>
+    </CookiesProvider>
+  )
 );

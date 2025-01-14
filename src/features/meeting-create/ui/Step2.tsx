@@ -58,7 +58,7 @@ export const Step2 = ({ register, watch, errors, setValue }: Step2Props) => {
     const { year, month, date } = datePicker.date;
     setValue('step2.meetingRoomDate', {
       date: { year, month, date },
-      dateString: `${month}월 ${date}일 ${getDayOfWeek(`${year}-${month}-${date}`)}요일`
+      dateString: `${month}월 ${date}일 ${getDayOfWeek(`${year}/${month}/${date}`)}요일`
     });
   }, [datePicker.date, setValue]);
 
