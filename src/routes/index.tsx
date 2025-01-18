@@ -1,4 +1,3 @@
-// import App from '@/App';
 import { AuthLayout } from '@shared/common/ui';
 
 import MainPage from '@pages/main/MainPage';

@@ -1,11 +1,9 @@
-import {
-  getMeetingListOngoing,
-  getMeetingListUpcoming,
-  getMeetingListConcluded
-} from './meetingList';
+import { delay, http } from 'msw';
+import * as meetingList from './meetingList';
 
 export const handlers = [
-  ...Object.values(getMeetingListOngoing),
-  ...Object.values(getMeetingListUpcoming),
-  ...Object.values(getMeetingListConcluded)
+  http.all('*', async () => {
+    await delay(100);
+  }),
+  ...Object.values(meetingList)
 ];

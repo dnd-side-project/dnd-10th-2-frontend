@@ -7,14 +7,11 @@ import { theme } from '@shared/common/styles';
 export const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <Flex>
-      {/* Header */}
-      {/* <Wrapper align="flex-start">{children}</Wrapper> */}
       <Wrapper>{children}</Wrapper>
     </Flex>
   );
 };
 
-// const Wrapper = styled(Flex)`
 const Wrapper = styled.div`
   align-items: flex-start;
   min-height: 100vh;
