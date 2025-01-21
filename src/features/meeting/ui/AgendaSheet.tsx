@@ -12,6 +12,7 @@ import { useBottomSheet, useTimePicker } from '@shared/common/hooks';
 
 import { formatDuration } from '@features/meeting-create/utils';
 import { AddAgendaMessage } from '@/shared/meeting/apis';
+import { css } from '@emotion/react';
 
 export const AgendaSheet = ({
   type,
@@ -27,9 +28,10 @@ export const AgendaSheet = ({
     formState: { errors }
   } = useForm({ defaultValues: { agendaTitle: '' }, mode: 'onChange' });
 
-  const { closeBottomSheet } = useBottomSheet();
+  const { closeBottomSheet, setDismissibleTrue, setDismissibleFalse } =
+    useBottomSheet();
 
-  const { timePicker, setTime, closeTimePicker } = useTimePicker();
+  const { timePicker, setTime } = useTimePicker();
 
   const addAgendaMessage = {
     title: getValues('agendaTitle'),
@@ -78,7 +80,14 @@ export const AgendaSheet = ({
 
       <Space height={16} />
 
-      <TimePicker type="duration" setTime={setTime} onClose={closeTimePicker} />
+      <div
+        onPointerEnter={setDismissibleFalse}
+        onPointerLeave={setDismissibleTrue}
+        css={css`
+          width: 100%;
+        `}>
+        <TimePicker type="duration" setTime={setTime} />
+      </div>
 
       <Space height={24} />
 
