@@ -6,11 +6,11 @@ import { media } from '@shared/common/styles';
 
 export const BottomSheet = () => {
   const {
-    bottomSheet: { isOpened, content },
+    bottomSheet: { isOpened, dismissible, content },
     closeBottomSheet
   } = useBottomSheet();
   return (
-    <Drawer.Root open={isOpened}>
+    <Drawer.Root open={isOpened} dismissible={dismissible}>
       <Drawer.Portal>
         <StyledOverlay />
         <StyledContent
