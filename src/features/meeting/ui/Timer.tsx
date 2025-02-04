@@ -10,6 +10,7 @@ import { theme } from '@shared/common/styles';
 import { ControlAgendaMessage } from '@shared/meeting/apis';
 
 import { formatSeconds, formatEndTime } from '@features/meeting/utils';
+import { useEffect, useState } from 'react';
 
 /**
  * @default button: (button 태그 속성 그대로)
@@ -28,6 +29,14 @@ export const Timer = ({
   isPlaying: boolean;
   sendControlAgendaMessage: (message: ControlAgendaMessage) => void;
 }) => {
+  const [timerKey, setTimerKey] = useState(0);
+
+  // isPlaying이 false로 변경될 때 타이머 상태를 리셋
+  useEffect(() => {
+    if (!isPlaying) {
+      setTimerKey((prev) => prev + 1);
+    }
+  }, [isPlaying]);
   return (
     <TimerWrapper justify="flex-start" direction="column">
       <Chip>
@@ -35,12 +44,14 @@ export const Timer = ({
       </Chip>
       <Gradient />
       <CountdownCircleTimer
+        key={timerKey}
         colors={'url(#blue-gradient)'}
         isPlaying={isPlaying}
         size={260}
         rotation="counterclockwise"
         isGrowing={true}
         duration={time}
+        initialRemainingTime={time}
         trailColor={theme.palette.timer_trail as ColorFormat}
         strokeWidth={13}
         onComplete={() => {
