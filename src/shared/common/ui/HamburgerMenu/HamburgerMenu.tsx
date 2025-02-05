@@ -4,7 +4,6 @@ import styled from '@emotion/styled';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { SvgIcon } from '@shared/common/ui';
-import { useResizeHeight } from '@shared/common/hooks';
 
 import { UserProfileIcon } from '@features/meeting/assets';
 import { MyMeetingRoomIcon } from './MyMeetingRoomIcon';
@@ -17,8 +16,6 @@ export const HamburgerMenu = ({
   onClose: () => void;
 }) => {
   const navigate = useNavigate();
-
-  useResizeHeight();
 
   return (
     <AnimatePresence>
@@ -85,7 +82,7 @@ const StyledContainer = styled(motion.div)`
   left: 0;
   display: flex;
   width: 100vw;
-  height: calc(var(--vh) * 100);
+  height: 100dvh;
 `;
 
 const StyledProfile = styled.div`

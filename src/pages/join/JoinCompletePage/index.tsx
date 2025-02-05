@@ -3,14 +3,11 @@ import styled from '@emotion/styled';
 
 import { Space, Button, Header, SvgIcon } from '@shared/common/ui';
 import { media } from '@shared/common/styles';
-import { useResizeHeight } from '@shared/common/hooks';
 
 import { JoinCompleteIcon } from '@features/join-complete/assets';
 
 const JoinComplete = () => {
   const navigate = useNavigate();
-
-  useResizeHeight();
 
   return (
     <StyledContainer>
@@ -49,7 +46,7 @@ const JoinComplete = () => {
 
 const StyledContainer = styled.div`
   width: 100%;
-  height: calc(var(--vh) * 100);
+  height: 100dvh;
 `;
 
 const StyledGraphic = styled.div`

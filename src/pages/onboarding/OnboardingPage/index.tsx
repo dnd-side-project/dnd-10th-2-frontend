@@ -14,15 +14,12 @@ import {
   // GOOGLE_LOGIN_URL,
   KAKAO_LOGIN_URL
 } from '@shared/onboarding/constants';
-import { useResizeHeight } from '@/shared/common/hooks';
 
 import { Step1, Step2, Step3, Step4, Step5 } from '@features/onboarding/ui';
 import '@features/onboarding/styles/pagination.css';
 
 const OnboardingPage = () => {
   const [isAlertOpened, setIsAlertOpened] = useState(true);
-
-  useResizeHeight();
 
   return (
     <StyledContainer>
@@ -104,7 +101,7 @@ const OnboardingPage = () => {
 const StyledContainer = styled.div`
   position: absolute;
   width: 37.5rem;
-  height: calc(var(--vh) * 100);
+  height: 100dvh;
   margin-left: -2rem;
   overflow: hidden;
 
