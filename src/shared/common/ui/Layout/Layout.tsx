@@ -14,7 +14,7 @@ export const Layout = ({ children }: { children: ReactNode }) => {
 
 const Wrapper = styled.div`
   align-items: flex-start;
-  min-height: 100vh;
+  min-height: 100dvh;
   width: 100%;
 
   background-color: ${theme.palette.white};

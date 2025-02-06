@@ -7,11 +7,8 @@ import { Space, Button, Header, Input, SvgIcon } from '@shared/common/ui';
 import { media } from '@shared/common/styles';
 import { getUserInfo, updateNickname } from '@shared/join/apis';
 import { setCookie } from '@shared/common/utils';
-import { useResizeHeight } from '@shared/common/hooks';
 
 const Join = () => {
-  useResizeHeight();
-
   const {
     register,
     watch,
@@ -117,7 +114,7 @@ const Join = () => {
 
 const StyledContainer = styled.div`
   width: 100%;
-  height: calc(var(--vh) * 100);
+  height: 100dvh;
 `;
 
 const StyledTitle = styled.div`

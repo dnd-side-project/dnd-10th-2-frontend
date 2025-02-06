@@ -123,7 +123,7 @@ const MeetingCreatePage = () => {
       direction="column"
       justify="space-between"
       css={css`
-        min-height: 100vh;
+        min-height: 100dvh;
       `}>
       <div
         css={css`

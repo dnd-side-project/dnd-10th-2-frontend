@@ -11,7 +11,7 @@ export const GlobalStyle = css`
   body {
     position: relative;
     height: 100%;
-    min-height: 100vh;
+    min-height: 100dvh;
     @supports (-webkit-appearance: none) and (stroke-color: transparent) {
       min-height: -webkit-fill-available;
       scroll: smooth;

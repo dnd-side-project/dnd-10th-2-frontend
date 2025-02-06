@@ -245,7 +245,7 @@ const MeetingPage = () => {
 
 const Wrapper = styled(Flex)`
   background-color: #f2f4f6;
-  min-height: 100vh;
+  min-height: 100dvh;
   width: 375px;
   margin: 0px -20px;
   padding: 0px 20px;
